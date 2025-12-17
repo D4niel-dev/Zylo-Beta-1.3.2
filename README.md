@@ -28,6 +28,3 @@ when the full release of the app is out!
 - Please also noted that on `Pydroid 3`, it runs kinda slow so it might take some time to load to the main page of the app.
 
 > **[ 6:12 PM 10/18/2025 ]**
-
-Developer of Zylo - Head of the Zylo Project!
-If found any bugs/problems with the app, please contact this account or Zylo Support Official!
