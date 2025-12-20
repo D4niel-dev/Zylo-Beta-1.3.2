@@ -70,6 +70,7 @@
 - Settings: Rework the settings, now they work fine without any bugs.
 - Theme Editor: Implemented custom high-visibility scrollbars for the modal.
 - Theme Editor: Restructured modal layout for better accessibility.
+- Backend Stability: Improved the backend server so that it x2 times faster with the processing.
 
 *[FIXES]:*
 - DM Chat: Removed redundant border-top from the message input container.
