@@ -1,5 +1,5 @@
 # *Zylo Changelogs* 🛠
->> *This is where all the changes are announced/archive for future official release.*
+> *This is where all the changes are announced/archive for future official release of the app.*
 
 
 ## **Zylo-Beta-1.0.0**
