@@ -2,7 +2,7 @@
   <img src="frontend/images/Zylo_icon.png" 
     width="140"
     style="border-radius: 24px;"/>
-  <h1 style="margin-top: 12px;">Zylo</h1>
+  <h1><b><i>Zylo</i></b></h1>
   <p><strong>The Ultimate Community Workspace</strong></p>
   <p>
     A modern, high-performance platform for communication, collaboration,<br>
