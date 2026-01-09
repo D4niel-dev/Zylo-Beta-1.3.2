@@ -48,11 +48,11 @@
 
 ### FIX :
 - Stability fixes to chat send/file receive.
-- Fixed shareActivity listener resilience and settings sync.
+- Fixed ``shareActivity`` listener resilience and settings sync.
 - Fixed signup eye icon toggle with Feather icons.
-- Theme: Solid BG works for all modes; improved avatar fallbacks in chats.
-- Backend cleanup: removed duplicates/unreachable code, added migrations.
-- Signup : fix the bug with the icon not changing to the right version when toggle.
+- **Theme**: Solid BG works for all modes; improved avatar fallbacks in chats.
+- **Backend cleanup**: removed duplicates/unreachable code, added migrations.
+- **Signup**: fix the bug with the icon not changing to the right version when toggle.
 - Performance tweaks and minor bug fixes.
 
 ---
