@@ -2,7 +2,7 @@
   <img src="frontend/images/Zylo_banner_2.png" 
     width="100%"
     height="100%"/>
-  <p><strong>The Ultimate Community Workspace</strong></p>
+  <h1><strong>The Ultimate Community Workspace</strong></h1>
   <p>
     A modern, high-performance platform for communication, collaboration,<br>
     and personal productivity — built with Python & Flask.
