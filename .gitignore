@@ -2,7 +2,7 @@ node_modules/
 backend/uploads/
 backend/data/
 backend/__pycache__/
-script/future_plans/
+scripts/future_plans/
 .env
 dist/
 *.json
