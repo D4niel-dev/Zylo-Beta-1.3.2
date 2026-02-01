@@ -146,6 +146,7 @@
 ### IMPROVEMENT :
 - **Sidebar Persistence**: Sidebar now maintains its collapsed/expanded state when switching between tabs.
 - **Cloud Search**: Added real-time filtering for cloud files.
+- **Increase Cloud** : The storge of personal cloud has been increase from ```500MB``` to ```10GB```.
 - **Cloud Uploads**: Implemented debounce logic to prevent duplicate file uploads.
 - **Optimistic UI**: Implemented instant feedback for "Like" and "Comment" actions in Moments to prevent feed reloads.
 
