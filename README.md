@@ -60,9 +60,9 @@ utilities, and AI assistance into a single unified workspace.
 3. **Launch Zylo**:
    You can start the server by running:
    ```bash
-   python main.py
+   python main.pyw
    ```
-   Or double-click `main.py` in `script/main.py` if you are on Windows.
+   Or double-click `main.pyw` in `script/main.pyw` if you are on Windows.
 
 ## 📱 Mobile Support (Pydroid 3/Pyramid)
 
