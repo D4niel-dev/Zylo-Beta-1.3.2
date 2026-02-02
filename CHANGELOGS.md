@@ -121,7 +121,7 @@
 
 ---
 
-## **Zylo-Beta-v1.4.2** — *The Intelligents Update*
+## **Zylo-Beta-v1.4.2** — *The Intelligence Update*
 
 ### NEW :
 - **Dual AI Persona System**: Choose between **Diszi** (Analytical) and **Zily** (Creative) assistants.
