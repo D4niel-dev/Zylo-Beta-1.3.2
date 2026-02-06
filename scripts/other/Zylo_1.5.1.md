@@ -253,7 +253,7 @@ document.getElementById('sendAiBtn').addEventListener('click', sendAiMessage);
 
 ---
 
-## 6. Additional Suggestions & Optimizations 🚀
+## 6. Additional Optimizations 🚀
 
 ### 6.1 HTML/Accessibility Improvements
 
@@ -1400,7 +1400,28 @@ const perfMonitor = new PerformanceMonitor();
 ```
 ---
 
-## 7. Implementation Checklist ✅
+## 7. AI Modes 🛫
+*Add new new modes for AI's and modals that run with their modes :*
+
+- Diszi : Thinking/Coder (`qwen3-coder`), Planning (`lfm2.5-thinking`), Debug (`qwen3-coder/glm-ocr`).
+
+- Zily : Thinking (`lfm2.5-thinking`), Writer (`qwen3:4b`), Review (`gemm3:latest/gemma3:1b`).
+
+---
+
+## 8. Performance Benchmarks 📊
+
+**Target metrics for optimal performance:**
+- **First Paint**: < 1s
+- **Time to Interactive**: < 2s
+- **API Response Time**: < 500ms
+- **Textarea Resize**: < 16ms (60fps)
+- **Dropdown Toggle**: < 100ms
+- **Bundle Size**: < 50KB (minified + gzipped)
+
+---
+
+## 9. Implementation Checklist ✅
 
 - [ ] Update HTML with accessibility features
 - [ ] Implement enhanced CSS with animations
@@ -1419,13 +1440,3 @@ const perfMonitor = new PerformanceMonitor();
 - [ ] Add analytics tracking (optional)
 - [ ] Document API endpoints
 - [ ] Create user guide for new features
-
-## 8. Performance Benchmarks 📊
-
-**Target metrics for optimal performance:**
-- **First Paint**: < 1s
-- **Time to Interactive**: < 2s
-- **API Response Time**: < 500ms
-- **Textarea Resize**: < 16ms (60fps)
-- **Dropdown Toggle**: < 100ms
-- **Bundle Size**: < 50KB (minified + gzipped)
