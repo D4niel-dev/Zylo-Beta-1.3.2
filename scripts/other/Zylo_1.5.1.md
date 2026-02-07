@@ -1408,7 +1408,9 @@ const perfMonitor = new PerformanceMonitor();
 
 - **Zily :** Thinking (`lfm2.5-thinking`), Writer (`qwen3:4b`), Fast (`gemma3:1b`).
 
-- **Also add a new dropdown menu that shows the thoughts of the AI's when they are in `Thinking` mode in their message when they are running.**
+- Also add a new dropdown menu that shows the thoughts of the AI's when they are in `Thinking` mode in their message when they are running.
+
+- Add a new `Strands` python library to backend and use as a fallback if users don't have `Ollama` and it's modals installed, also will add a capability checker to backend.
 
 - The `Fast` mode will be set as the `defaultMode` for all the AI's when the app starts. But if a mode is selected, it'll be saved and loaded.
 
