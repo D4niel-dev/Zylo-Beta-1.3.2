@@ -1404,7 +1404,7 @@ const perfMonitor = new PerformanceMonitor();
 ## 7. AI Modes 🛫 (IMPORTANT)
 **Add new new modes for AI's and modals that run with their modes :**
 
-- **Diszi :** Thinking (`qwen3-coder`), Planning (`lfm2.5-thinking`), Fast (`glm-ocr`).
+- **Diszi :** Thinking (`qwen3-coder`), Planning (`lfm2.5-thinking`), Fast (`qwen3:4b`).
 
 - **Zily :** Thinking (`lfm2.5-thinking`), Writer (`qwen3:4b`), Fast (`gemma3:1b`).
 
