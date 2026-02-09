@@ -1,12 +1,12 @@
 # Character Concept: Zylia
 
-<table width="100%">
+<table align="center">
   <tr>
-    <td width="20%" align="center">
+    <td align="center">
       <img src="/scripts/Sisters/assets/Zylia.png" width="150"><br>
       <b>Zylia</b>
     </td>
-    <td width="80%">
+    <td>
       <strong>Role:</strong> The Younger Sister<br>
       <strong>Archetype:</strong> The Energetic Spark<br>
       <strong>Personality:</strong> Energetic, Bright, Street-Smart<br>

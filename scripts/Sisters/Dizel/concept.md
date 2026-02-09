@@ -1,12 +1,12 @@
 # Character Concept: Dizel
 
-<table width="100%">
+<table align="center">
   <tr>
-    <td width="20%" align="center">
+    <td align="center">
       <img src="/scripts/Sisters/assets/Dizel.png" width="150"><br>
       <b>Dizel</b>
     </td>
-    <td width="80%">
+    <td>
       <strong>Role:</strong> The Big Sister<br>
       <strong>Archetype:</strong> The Analytical Anchor<br>
       <strong>Personality:</strong> Calm, Cool, Analytical<br>

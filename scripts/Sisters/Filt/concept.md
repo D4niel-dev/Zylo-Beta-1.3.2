@@ -1,12 +1,12 @@
 # Character Concept: Filt
 
-<table width="100%">
+<table align="center">
   <tr>
-    <td width="20%" align="center">
+    <td align="center">
       <img src="/scripts/Sisters/assets/Filt.png" width="150"><br>
       <b>Filt</b>
     </td>
-    <td width="80%">
+    <td>
       <strong>Role:</strong> The Quiet Observer<br>
       <strong>Archetype:</strong> The Silent Storm<br>
       <strong>Personality:</strong> Extremely Calm, Melodic Voice, "Disappointingly Quiet" Anger<br>
