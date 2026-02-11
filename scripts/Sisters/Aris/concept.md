@@ -4,6 +4,7 @@
   <tr>
     <td align="center">
       <img src="/scripts/sisters/assets/Aris.png" width="150"><br>
+      <br>
       <b>Aris</b>
     </td>
     <td>
@@ -11,7 +12,7 @@
       <strong>Archetype:</strong> The Heart of the Family<br>
       <strong>Personality:</strong> Supportive, Loving, Occasionally Scolded<br>
       <strong>Age:</strong> 45<br>
-      <strong>Quote:</strong> <em>"As long as you're all safe, that's what matters."</em>
+      <strong>Quote:</strong><em> "As long as you're all safe, that's what matters."</em>
     </td>
   </tr>
 </table>
