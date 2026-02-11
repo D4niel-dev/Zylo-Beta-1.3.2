@@ -645,7 +645,11 @@
             onclick="toggleSidebar()"
             aria-label="Open Mobile Menu"
           >
-            <i id="mobileMenuIcon" data-feather="menu" class="w-6 h-6"></i>
+            <i
+              id="mobileMenuIcon"
+              data-feather="menu"
+              class="w-6 h-6 hidden"
+            ></i>
           </button>
           <button
             onclick="toggleSidebarCollapse()"
@@ -922,11 +926,60 @@
               </h2>
               <span
                 class="bg-discord-blurple px-3 py-1 rounded-full text-xs font-bold text-white"
-                >v1.5.0</span
+                >v1.5.1</span
               >
             </div>
 
             <div class="space-y-4">
+              <!-- v1.5.1 -->
+              <div
+                class="bg-discord-gray-800 p-4 rounded-xl border border-discord-gray-700 shadow-xl overflow-hidden relative"
+              >
+                <div
+                  class="absolute top-0 right-0 w-32 h-32 bg-discord-blurple/10 rounded-full -mr-16 -mt-16 blur-3xl pointer-events-none"
+                ></div>
+                <div class="flex items-center justify-between mb-2">
+                  <h3 class="font-bold text-white text-lg">
+                    v1.5.1 — The Specialized Modes Update
+                  </h3>
+                  <span
+                    class="text-xs font-bold text-discord-blurple bg-discord-blurple/10 px-2 py-1 rounded"
+                    >Feb 11, 2026</span
+                  >
+                </div>
+                <ul class="text-sm text-discord-gray-300 space-y-2 list-none">
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>AI Specialized Modes</strong>: Task-specific modes (Thinking, Planning, Code, Review) for Diszi and Zily assistants.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Refined AI UI</strong>: New pill-shaped input box with a sleek translucent look and fixed mobile positioning.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Manual Input Toggle</strong>: Added discrete "Hide/Show" controls for the AI chat to maximize screen space.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Mobile UX Fixes</strong>: Improved Cloud file spacing (grid adjustment) and resolved overlapping UI elements.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Light Mode Refinement</strong>: Full theme support for Moments and improved group modal visibility.</span
+                    >
+                  </li>
+                </ul>
+              </div>
               <!-- v1.5.0 -->
               <div
                 class="bg-discord-gray-800 p-4 rounded-xl border border-discord-gray-700 shadow-xl overflow-hidden relative"
@@ -1031,24 +1084,33 @@
                   <h3 class="font-bold text-white text-lg">
                     v1.3.2 — The Visual Polish
                   </h3>
-                  <span class="text-xs text-discord-gray-400"
+                  <span class="text-xs font-bold text-discord-blurple bg-discord-blurple/10 px-2 py-1 rounded"
                     >Jan 15, 2026</span
                   >
                 </div>
-                <ul
-                  class="text-sm text-discord-gray-300 space-y-1 list-disc list-inside"
-                >
-                  <li>
-                    ✨ <strong>Visual Overhaul</strong>: Refined sidebar
-                    interactions and tab animations.
+                <ul class="text-sm text-discord-gray-300 space-y-2 list-none">
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Visual Overhaul</strong>: Refined sidebar interactions and tab animations.</span>
                   </li>
-                  <li>
-                    📸 <strong>Zylo Moments</strong>: Introduced a clean, social
-                    feed interface.
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Zylo Moments</strong>: Introduced a clean, socialfeed interface.</span
+                    >
                   </li>
-                  <li>
-                    🎨 <strong>Avatar Sync</strong>: Consistent user imagery
-                    across all application panels.
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Avatar Sync</strong>: Consistent user imagery across all application panels.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Bug Fixes</strong>: Fix some small bugs.</span
+                    >
                   </li>
                 </ul>
               </div>
@@ -1073,30 +1135,31 @@
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>Global I18n</strong>: Full internationalization
-                      support for Settings (Appearance, Sound, About,
-                      Security).</span
+                      ><strong>Global I18n</strong>: Full internationalization support for Settings (Appearance, Sound, About, Security).</span
                     >
                   </li>
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>Multi-step Signup</strong>: New 4-step wizard for
-                      a smoother onboarding experience.</span
+                      ><strong>Multi-step Signup</strong>: New 4-step wizard for a smoother onboarding experience.</span
                     >
                   </li>
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>Enhanced Security</strong>: Added 2FA, Email
-                      Verification (simulated), and Session Management.</span
+                      ><strong>Enhanced Security</strong>: Added 2FA, Email Verification (simulated), and Session Management.</span
                     >
                   </li>
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>Social Login</strong>: Integrated OAuth support
-                      for Google, GitHub, and Discord.</span
+                      ><strong>Social Login</strong>: Integrated OAuth support for Google, GitHub, and Discord.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Bug Fixes</strong>: Fix some small bugs.</span
                     >
                   </li>
                 </ul>
@@ -1122,33 +1185,31 @@
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>Profile Refinement</strong>: Unified sidebar
-                      navigation with internal profile tabs for a seamless
-                      experience.</span
+                      ><strong>Profile Refinement</strong>: Unified sidebar navigation with internal profile tabs for a seamless experience.</span
                     >
                   </li>
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>Enhanced QnA</strong>: Massively expanded
-                      Frequently Asked Questions section to help new
-                      users.</span
+                      ><strong>Enhanced QnA</strong>: Massively expanded Frequently Asked Questions section to help new users.</span
                     >
                   </li>
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>New Home Layout</strong>: Streamlined Home tab
-                      with stats removed (to avoid clutter) and inlined
-                      content.</span
+                      ><strong>New Home Layout</strong>: Streamlined Home tab with stats removed (to avoid clutter) and inlined content.</span
                     >
                   </li>
                   <li class="flex gap-2">
                     <span class="text-discord-blurple">•</span>
                     <span
-                      ><strong>Documentation</strong>: Completely rewritten
-                      README.md with professional styling and clear setup
-                      guides.</span
+                      ><strong>Documentation</strong>: Completely rewritten README.md with professional styling and clear setup guides.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Bug Fixes</strong>: Fix some small bugs.</span
                     >
                   </li>
                 </ul>
@@ -1159,26 +1220,50 @@
                 class="bg-discord-gray-800 p-4 rounded-xl border border-discord-gray-700"
               >
                 <div class="flex items-center justify-between mb-2">
-                  <h3 class="font-bold text-white">v1.2.1 — Latest Stable</h3>
-                  <span class="text-xs text-discord-gray-400">Dec 2025</span>
+                  <h3 class="font-bold text-white text-lg">v1.2.1 — Latest Stable</h3>
+                  <span class="text-xs font-bold text-discord-blurple bg-discord-blurple/10 px-2 py-1 rounded">Dec 2025</span>
                 </div>
-                <ul
-                  class="text-sm text-discord-gray-300 space-y-1 list-disc list-inside"
-                >
-                  <li>🎨 Completely redesigned UI with a modern look.</li>
-                  <li>
-                    🖼️ Group/Server icons: Choose an image for your group.
+                <ul class="text-sm text-discord-gray-300 space-y-2 list-none">
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Visual Improvements</strong>: Completely redesigned UI with a modern look.</span>
                   </li>
-                  <li>📎 DM file sharing: Upload files and images in DMs.</li>
-                  <li>😊 Emoji picker everywhere!</li>
-                  <li>
-                    🎨 Theme Editor: "Main Background" color, "Reset to
-                    Default", "Midnight" preset.
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Groups/Servers Tweaks</strong>: Choose an image for your group, add descriptions.</span
+                    >
                   </li>
-                  <li>⚡ Backend stability: 2x faster processing.</li>
-                  <li>
-                    🐛 Fixes: Mobile sidebar, profile bio saving, DM input
-                    border.
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>DMs Improvements</strong>: Upload files and images in DMs.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Emoji Tweaks</strong>: Added the ability to use emojis in every chats.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Theme Editer</strong>: Added "Main Background" color, "Reset to Default", "Midnight" preset.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Backend stability</strong>: Improved backend so now it's 2x faster processing.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Bug Fixes</strong>: Mobile sidebar, profile bio saving, DM input border.</span
+                    >
                   </li>
                 </ul>
               </div>
@@ -1188,25 +1273,45 @@
                 class="bg-discord-gray-800 p-4 rounded-xl border border-discord-gray-700"
               >
                 <div class="flex items-center justify-between mb-2">
-                  <h3 class="font-bold text-white">v1.2.0</h3>
-                  <span class="text-xs text-discord-gray-400">Nov 2025</span>
+                  <h3 class="font-bold text-white text-lg">v1.2.0</h3>
+                  <span class="text-xs font-bold text-discord-blurple bg-discord-blurple/10 px-2 py-1 rounded">Nov 2025</span>
                 </div>
-                <ul
-                  class="text-sm text-discord-gray-300 space-y-1 list-disc list-inside"
-                >
-                  <li>
-                    👤 Profile editing: Avatar/banner upload and persistence.
+                <ul class="text-sm text-discord-gray-300 space-y-2 list-none">
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Profile Editing</strong>: Avatar/banner upload and persistence.</span>
                   </li>
-                  <li>
-                    💬 Direct Messages: API + sockets for 1:1 chats with
-                    history.
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Direct Messages</strong>: API + sockets for 1:1 chats with history.</span
+                    >
                   </li>
-                  <li>👥 Friends API: Request, accept, decline, remove.</li>
-                  <li>
-                    🏠 Groups API: Create, join/leave, group chat and file
-                    share.
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>DMs/Friends API</strong>: Request, accept, decline, remove.</span
+                    >
                   </li>
-                  <li>📴 Offline banner and queued send support.</li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Groups API</strong>: Create, join/leave, group chat and file share.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Offline Accessibly</strong>: Offline banner and queued send support.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Bug Fixes</strong>: Fix some small bugs.</span
+                    >
+                  </li>
                 </ul>
               </div>
 
@@ -1215,15 +1320,33 @@
                 class="bg-discord-gray-800 p-4 rounded-xl border border-discord-gray-700"
               >
                 <div class="flex items-center justify-between mb-2">
-                  <h3 class="font-bold text-white">v1.1.0</h3>
-                  <span class="text-xs text-discord-gray-400">Oct 2025</span>
+                  <h3 class="font-bold text-white text-lg">v1.1.0</h3>
+                  <span class="text-xs font-bold text-discord-blurple bg-discord-blurple/10 px-2 py-1 rounded">Oct 2025</span>
                 </div>
-                <ul
-                  class="text-sm text-discord-gray-300 space-y-1 list-disc list-inside"
-                >
-                  <li>👥 Friends and Groups basics in UI.</li>
-                  <li>📊 Community room stats on Home.</li>
-                  <li>⚙️ Initial settings structure and quick panel.</li>
+                <ul class="text-sm text-discord-gray-300 space-y-2 list-none">
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Basic Assets</strong>: Friends and Groups basics in UI.</span>
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Community Tweaks</strong>: Community room stats on Home.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Settings Added</strong>: Initial settings structure and quick panel.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Bug Fixes</strong>: Fix some small bugs.</span
+                    >
+                  </li>
                 </ul>
               </div>
 
@@ -1232,17 +1355,45 @@
                 class="bg-discord-gray-800 p-4 rounded-xl border border-discord-gray-700"
               >
                 <div class="flex items-center justify-between mb-2">
-                  <h3 class="font-bold text-white">v1.0.0 — Initial Beta</h3>
-                  <span class="text-xs text-discord-gray-400">Sep 2025</span>
+                  <h3 class="font-bold text-white text-lg">v1.0.0 — Initial Beta</h3>
+                  <span class="text-xs font-bold text-discord-blurple bg-discord-blurple/10 px-2 py-1 rounded">Sep 2025</span>
                 </div>
-                <ul
-                  class="text-sm text-discord-gray-300 space-y-1 list-disc list-inside"
-                >
-                  <li>🚀 Initial beta release.</li>
-                  <li>🔐 Core auth pages (login, signup, forgot/reset).</li>
-                  <li>💬 Basic community chat with Socket.IO.</li>
-                  <li>👤 User profile card with avatar and banner.</li>
-                  <li>🌙 Theme toggle (light/dark).</li>
+                <ul class="text-sm text-discord-gray-300 space-y-2 list-none">
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Beta Initialize</strong>: Initial beta release.</span>
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Core Basics</strong>: Core auth pages (login, signup, forgot/reset).</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Community UI/UX</strong>: Basic community chat with Socket.IO.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Users Profile</strong>: User profile card with avatar and banner.</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Core Themes</strong>: Theme toggle (light/dark).</span
+                    >
+                  </li>
+                  <li class="flex gap-2">
+                    <span class="text-discord-blurple">•</span>
+                    <span
+                      ><strong>Bug Fixes</strong>: None (Really ? It's init lol)</span
+                    >
+                  </li>
                 </ul>
               </div>
             </div>
@@ -1250,31 +1401,17 @@
         </section>
 
         <!-- Moments Tab -->
-
-        <div
-          id="tab-messages"
-          class="tab-content chat-area flex flex-col h-full"
-        >
+        <div id="tab-messages" class="tab-content chat-area flex flex-col h-full">
           <div id="chatMessagesCommunity" class="chat-messages"></div>
-          <div
-            id="aiTabBar"
-            class="hidden flex-shrink-0 h-10 bg-discord-gray-700 border-b border-discord-gray-900 flex items-center px-2 gap-2 overflow-x-auto"
-          >
+          <div id="aiTabBar" class="hidden flex-shrink-0 h-10 bg-discord-gray-700 border-b border-discord-gray-900 flex items-center px-2 gap-2 overflow-x-auto">
+
             <!-- Dynamic Tabs will be added here -->
+
           </div>
-          <div
-            id="chatMessagesAI"
-            class="hidden flex-1 relative overflow-hidden"
-          >
+          <div id="chatMessagesAI" class="hidden flex-1 relative overflow-hidden">
             <!-- Specific Containers for each AI -->
-            <div
-              id="aiTabContent_diszi"
-              class="chat-messages w-full h-full hidden overflow-y-auto"
-            ></div>
-            <div
-              id="aiTabContent_zily"
-              class="chat-messages w-full h-full hidden overflow-y-auto"
-            ></div>
+            <div id="aiTabContent_diszi" class="chat-messages w-full h-full hidden overflow-y-auto"></div>
+            <div id="aiTabContent_zily" class="chat-messages w-full h-full hidden overflow-y-auto"></div>
           </div>
 
           <!-- New Messages Indicator -->
@@ -1288,13 +1425,8 @@
 
           <div id="typingIndicator" class="typing-indicator"></div>
 
-          <div
-            id="communityInputContainer"
-            class="flex-shrink-0 p-4 border-t border-discord-gray-900"
-          >
-            <div
-              class="flex items-center gap-2 bg-discord-gray-600 rounded-lg p-2 relative"
-            >
+          <div id="communityInputContainer" class="flex-shrink-0 p-4 border-t border-discord-gray-900">
+            <div class="flex items-center gap-2 bg-discord-gray-600 rounded-lg p-2 relative">
               <label
                 class="p-2 rounded-full hover:bg-discord-gray-500/70 cursor-pointer transition"
                 title="Attach a file"
@@ -1307,6 +1439,7 @@
                   onchange="sendFile(event)"
                 />
               </label>
+
               <button
                 class="p-2 rounded-full hover:bg-discord-gray-500/70 transition"
                 onclick="openAppModal('menu')"
@@ -1314,6 +1447,7 @@
               >
                 <i data-feather="grid" class="w-5 h-5 text-gray-200"></i>
               </button>
+
               <!-- Reply Bar -->
               <div
                 id="replyBar"
@@ -1385,11 +1519,26 @@
               ></div>
             </div>
           </div>
+
           <!-- AI Input Area -->
+
+          <!-- Minimized Show Button (Floating) -->
+          <button
+            id="showAiInputBtn"
+            onclick="toggleAIInputVisibility()"
+            class="fixed bottom-24 right-4 bg-discord-blurple hover:bg-discord-blurple-hover text-white px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-2 transition transform scale-0 origin-bottom-right"
+          >
+            <i data-feather="message-square" class="w-4 h-4"></i>
+            <span class="font-bold text-sm">Show Input</span>
+          </button>
+
           <div class="ai-input-wrapper">
             <!-- AI Attachment Preview (New) -->
-            <div id="aiAttachmentPreview" class="hidden flex gap-2 p-2 mb-2 bg-discord-gray-700/90 backdrop-blur rounded-lg border border-discord-gray-600 overflow-x-auto mx-4 max-w-3xl"></div>
-            
+            <div
+              id="aiAttachmentPreview"
+              class="hidden flex gap-2 p-2 mb-2 bg-discord-gray-700/90 backdrop-blur rounded-lg border border-discord-gray-600 overflow-x-auto mx-4 max-w-3xl"
+            ></div>
+
             <!-- Matched Community Input Style & Added Uploads -->
             <div class="ai-input-container">
               <!-- File Upload Button (New) -->
@@ -1468,6 +1617,15 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Minimize Button (Inside Wrapper) -->
+              <button
+                 onclick="toggleAIInputVisibility()"
+                 class="absolute -top-3 right-0 bg-discord-gray-700 text-gray-400 hover:text-white rounded-full p-1 shadow-md border border-gray-600 z-50 h-6 w-6 flex items-center justify-center transition hover:scale-110"
+                 title="Hide Input"
+              >
+                <i data-feather="minus" class="w-4 h-4"></i>
+              </button>
 
               <textarea
                 id="aiUserInput"
@@ -1651,6 +1809,7 @@
                 >
                   <i data-feather="grid" class="w-5 h-5 text-gray-200"></i>
                 </button>
+                
                 <!-- Friends Reply Bar -->
                 <div
                   id="friendsReplyBar"
@@ -1712,14 +1871,14 @@
 
         <div
           id="tab-profile"
-          class="tab-content h-full overflow-hidden animate-fadeIn bg-discord-gray-900"
+          class="tab-content h-full overflow-y-auto md:overflow-hidden animate-fadeIn bg-discord-gray-900"
         >
           <div
-            class="flex flex-col md:flex-row h-full max-w-7xl mx-auto p-4 md:p-6 gap-6"
+            class="flex flex-col md:flex-row h-auto md:h-full max-w-7xl mx-auto p-4 md:p-6 gap-6"
           >
             <!-- Left Column: Identity Card -->
             <div
-              class="w-full md:w-80 flex-shrink-0 flex flex-col gap-4 overflow-y-auto scrollbar-hide"
+              class="w-full md:w-80 flex-shrink-0 flex flex-col gap-4 md:overflow-y-auto scrollbar-hide"
             >
               <div
                 class="bg-discord-gray-800 rounded-2xl overflow-hidden shadow-xl border border-discord-gray-700/50 relative group"
@@ -1976,7 +2135,7 @@
               <!-- Tab Content -->
               <div
                 id="profileTabContent"
-                class="flex-1 overflow-y-auto p-6 bg-discord-gray-800/30"
+                class="flex-1 md:overflow-y-auto p-6 bg-discord-gray-800/30"
               >
                 <!-- About Tab -->
                 <div class="tab-pane h-full animate-fadeIn" data-tab="about">
@@ -2171,7 +2330,8 @@
         >
           <!-- Background Gradient -->
           <div
-            class="fixed inset-0 bg-gradient-to-br from-indigo-900/20 via-discord-gray-900 to-black z-0 pointer-events-none"
+            class="fixed inset-0 z-0 pointer-events-none"
+            style="background: linear-gradient(to bottom right, var(--moments-bg-from), var(--moments-bg-via), var(--moments-bg-to));"
           ></div>
 
           <div
@@ -2179,7 +2339,8 @@
           >
             <!-- Header / Input Card -->
             <div
-              class="bg-discord-gray-800/60 backdrop-blur-md border border-discord-gray-700/50 p-6 rounded-2xl shadow-2xl animate-slideDown"
+              class="backdrop-blur-md p-6 rounded-2xl shadow-2xl animate-slideDown"
+              style="background: var(--moments-input-bg); border: 1px solid var(--moments-input-border);"
             >
               <div class="flex items-start gap-4">
                 <div class="flex-shrink-0">
@@ -2214,9 +2375,7 @@
                     </button>
                   </div>
 
-                  <div
-                    class="flex items-center justify-between border-t border-discord-gray-700/50 pt-3"
-                  >
+                  <div class="flex items-center justify-between border-t border-discord-gray-700/50 pt-3">
                     <div class="flex gap-2">
                       <label
                         class="p-2 text-discord-blurple hover:bg-discord-blurple/10 rounded-full cursor-pointer transition"
@@ -2354,7 +2513,7 @@
           <div class="flex-1">
             <div
               id="filesListContainer"
-              class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4"
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-4"
             >
               <!-- Files loading placeholder -->
               <div
@@ -2742,18 +2901,19 @@
                   <option value="heroicons">Heroicons (Outline)</option>
                 </select>
                 <div class="text-xs text-gray-400 mt-1">
-                    <i data-feather="info" class="w-3 h-3 inline"></i> 
-                    Requires page reload to fully apply.
+                  <i data-feather="info" class="w-3 h-3 inline"></i>
+                  Requires page reload to fully apply.
                 </div>
               </div>
 
               <script>
-                  // Initialize dropdown state
-                  document.addEventListener('DOMContentLoaded', () => {
-                      const savedProvider = localStorage.getItem('icon_provider') || 'feather';
-                      const select = document.getElementById('iconSetSelect');
-                      if (select) select.value = savedProvider;
-                  });
+                // Initialize dropdown state
+                document.addEventListener("DOMContentLoaded", () => {
+                  const savedProvider =
+                    localStorage.getItem("icon_provider") || "feather";
+                  const select = document.getElementById("iconSetSelect");
+                  if (select) select.value = savedProvider;
+                });
               </script>
 
               <!-- Moved Controls -->
@@ -3079,7 +3239,7 @@
               </h2>
               <div class="p-3 bg-discord-gray-800 rounded-lg">
                 <p class="text-discord-gray-300">
-                  <strong>Zylo v1.5.0</strong> — Created by D4niel-dev
+                  <strong>Zylo v1.5.1</strong> — Created by D4niel-dev
                 </p>
                 <p class="text-discord-gray-400 text-sm mt-1">
                   © 2025 Zylo. All rights reserved.
@@ -3095,7 +3255,7 @@
                 <ul
                   class="list-disc list-inside text-discord-gray-300 text-sm space-y-1"
                 >
-                  <li>Build: 1.5.0-stable</li>
+                  <li>Build: 1.5.1-stable</li>
                   <li>Release Date: August 2025</li>
                   <li>UI Framework: Tailwind CSS</li>
                   <li>Backend: Python (Flask)</li>
@@ -7386,6 +7546,7 @@
         const primary = document.getElementById("primarySidebar");
         const secondary = document.getElementById("subPanelContainer");
         const overlay = document.getElementById("overlay");
+        const aiInput = document.querySelector(".ai-input-wrapper");
 
         if (!primary) return;
 
@@ -7396,12 +7557,26 @@
           primary.classList.remove("-translate-x-full");
           if (secondary) secondary.classList.remove("-translate-x-full");
           overlay?.classList.remove("hidden");
+          document.body.classList.add("sidebar-open");
+          // Hide AI input on mobile when sidebar opens
+          if (aiInput && window.innerWidth < 768) {
+            aiInput.dataset.wasVisible = aiInput.style.display;
+            aiInput.style.setProperty("display", "none", "important");
+          }
           localStorage.setItem("sidebarState", "open");
         } else {
           // Close Sidebars
           primary.classList.add("-translate-x-full");
           if (secondary) secondary.classList.add("-translate-x-full");
           overlay?.classList.add("hidden");
+          document.body.classList.remove("sidebar-open");
+          // Restore AI input visibility on mobile when sidebar closes
+          if (aiInput && window.innerWidth < 768) {
+            const prev = aiInput.dataset.wasVisible;
+            if (prev !== undefined && prev !== "none") {
+              aiInput.style.display = prev;
+            }
+          }
           localStorage.setItem("sidebarState", "closed");
         }
       }
@@ -7421,10 +7596,14 @@
 
         if (shouldBeOpen) {
           panel.classList.remove("-translate-x-full");
-          if (isMobile) overlay?.classList.remove("hidden");
+          if (isMobile) {
+            overlay?.classList.remove("hidden");
+            document.body.classList.add("sidebar-open");
+          }
         } else {
           panel.classList.add("-translate-x-full");
           overlay?.classList.add("hidden");
+          document.body.classList.remove("sidebar-open");
         }
       }
 
@@ -7953,16 +8132,29 @@
         // This function NOW toggles Column 2 on mobile
         const subPanel = document.getElementById("subPanelContainer");
         const overlay = document.getElementById("overlay");
+        const aiInput = document.querySelector(".ai-input-wrapper");
         const isOpening = subPanel.classList.contains("-translate-x-full");
 
         if (isOpening) {
           subPanel.classList.remove("-translate-x-full");
           overlay.classList.remove("hidden");
           document.body.classList.add("overflow-hidden");
+          // Hide AI input on mobile
+          if (aiInput && window.innerWidth < 768) {
+            aiInput.dataset.wasVisible = aiInput.style.display;
+            aiInput.style.setProperty("display", "none", "important");
+          }
         } else {
           subPanel.classList.add("-translate-x-full");
           overlay.classList.add("hidden");
           document.body.classList.remove("overflow-hidden");
+          // Restore AI input on mobile
+          if (aiInput && window.innerWidth < 768) {
+            const prev = aiInput.dataset.wasVisible;
+            if (prev !== undefined && prev !== "none") {
+              aiInput.style.display = prev;
+            }
+          }
         }
       }
 
@@ -10566,14 +10758,14 @@
       class="fixed inset-0 bg-black/70 z-50 hidden flex items-center justify-center fade-in"
     >
       <div
-        class="bg-discord-gray-700 w-full max-w-md rounded-lg shadow-2xl overflow-hidden transform transition-all scale-100"
+        class="bg-white dark:bg-discord-gray-700 w-full max-w-md rounded-lg shadow-2xl overflow-hidden transform transition-all scale-100"
       >
         <!-- Header -->
         <div class="p-6 text-center">
-          <h2 class="text-2xl font-bold text-white mb-2">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             Create or Join a Group
           </h2>
-          <p class="text-discord-gray-300 text-sm">
+          <p class="text-gray-500 dark:text-discord-gray-300 text-sm">
             Hang out with friends in a new community.
           </p>
           <button
@@ -10747,7 +10939,6 @@
           document.getElementById("chatHeaderTitle").textContent;
 
         let avatarSrc = "/images/default_avatar.png";
-        // Fix: Fetch real avatar
         if (typeof getUserAvatarUrl === "function") {
           try {
             avatarSrc = await getUserAvatarUrl(currentName);
@@ -10780,7 +10971,6 @@
           }
 
           // Play sound (if available) - simulate using a loop
-          // We'll just assume SoundEngine exists and play 'send' once for now to mimic start
           if (window.SoundEngine) window.SoundEngine.play("send");
         }
       }
@@ -10848,272 +11038,6 @@
       </div>
     </div>
 
-    <style>
-      .sticker-picker {
-        width: 280px;
-        max-height: 320px;
-        overflow-y: auto;
-      }
-
-      .sticker-picker-header {
-        font-size: 12px;
-        font-weight: 600;
-        color: #b9bbbe;
-        text-transform: uppercase;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #40444b;
-        margin-bottom: 8px;
-      }
-
-      .sticker-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-      }
-
-      .sticker-item {
-        width: 80px;
-        height: 80px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition:
-          transform 0.15s ease,
-          background-color 0.15s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #40444b;
-      }
-
-      .sticker-item:hover {
-        transform: scale(1.1);
-        background-color: #5865f2;
-      }
-
-      .sticker-item img {
-        width: 64px;
-        height: 64px;
-        object-fit: contain;
-      }
-
-      .sticker-message {
-        max-width: 200px;
-        margin: 4px 0;
-      }
-
-      .sticker-message img {
-        width: 120px;
-        height: 120px;
-        object-fit: contain;
-        border-radius: 8px;
-        background: transparent;
-      }
-
-      /* Code Block Syntax Highlighting Styles */
-      .code-block-wrapper {
-        position: relative;
-        margin: 8px 0;
-      }
-
-      .code-block-wrapper .hljs-pre {
-        margin: 0;
-        background: #282c34;
-        border-radius: 8px;
-        padding: 12px 16px;
-        overflow-x: auto;
-        font-size: 13px;
-        line-height: 1.5;
-      }
-
-      .code-block-wrapper .hljs-pre code {
-        font-family: "Consolas", "Monaco", "Courier New", monospace;
-        background: transparent;
-        padding: 0;
-      }
-
-      .code-lang-label {
-        position: absolute;
-        top: 4px;
-        left: 12px;
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-        color: #7d8590;
-        background: #21262d;
-        padding: 2px 6px;
-        border-radius: 4px;
-        z-index: 1;
-      }
-
-      .copy-code-btn {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: #373e47;
-        border: none;
-        border-radius: 4px;
-        padding: 6px;
-        cursor: pointer;
-        color: #8b949e;
-        opacity: 0;
-        transition:
-          opacity 0.2s,
-          background 0.2s,
-          color 0.2s;
-        z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .code-block-wrapper:hover .copy-code-btn {
-        opacity: 1;
-      }
-
-      .copy-code-btn:hover {
-        background: #484f58;
-        color: #fff;
-      }
-
-      .copy-code-btn.copied {
-        background: #238636;
-        color: #fff;
-      }
-
-      /* Collapsible Secondary Sidebar Styles */
-      #subPanelContainer {
-        transition:
-          width 0.2s ease-in-out,
-          min-width 0.2s ease-in-out;
-      }
-
-      #subPanelContainer.collapsed {
-        width: 56px !important;
-        min-width: 56px !important;
-        overflow: hidden;
-      }
-
-      #subPanelContainer.collapsed
-        .sub-panel-content:not(
-          #sub-panel-settings,
-          #sub-panel-profile,
-          #sub-panel-home
-        ) {
-        display: none !important;
-      }
-
-      /* Hide sidebar title when collapsed */
-      #subPanelContainer.collapsed > header .sidebar-title {
-        display: none;
-      }
-
-      /* Hide sub-panel headers (like "User Settings", "Profile", etc.) when collapsed */
-      #subPanelContainer.collapsed .sub-panel-header {
-        display: none;
-      }
-
-      /* Sub-panel items (any link/button with .sub-panel-item): Hide text, show only icons */
-      #subPanelContainer.collapsed .sub-panel-item {
-        font-size: 0 !important;
-        justify-content: center;
-        padding: 12px 0;
-        display: flex;
-        align-items: center;
-      }
-
-      /* Sub-panel item icons - ensure visible and centered */
-      #subPanelContainer.collapsed .sub-panel-item i,
-      #subPanelContainer.collapsed .sub-panel-item svg {
-        font-size: 1.25rem;
-        width: 20px;
-        height: 20px;
-        margin: 0 !important;
-        display: inline-block;
-        visibility: visible;
-      }
-
-      /* Hide text spans in sub-panel items */
-      #subPanelContainer.collapsed .sub-panel-item span {
-        display: none !important;
-      }
-
-      /* Settings tabs: Hide text, show only icons (separate class) */
-      #subPanelContainer.collapsed .settings-tab {
-        font-size: 0 !important;
-        justify-content: center;
-        padding: 12px 0;
-        display: flex;
-        align-items: center;
-      }
-
-      /* Settings tab icons - ensure visible and centered */
-      #subPanelContainer.collapsed .settings-tab i,
-      #subPanelContainer.collapsed .settings-tab svg {
-        font-size: 1.25rem;
-        width: 20px;
-        height: 20px;
-        margin: 0 !important;
-        display: inline-block;
-        visibility: visible;
-      }
-
-      /* Hide text spans in settings tabs */
-      #subPanelContainer.collapsed .settings-tab span {
-        display: none !important;
-      }
-
-      /* User Panel Footer - when sidebar is collapsed */
-      /* The footer is: div.flex-shrink-0.h-14.bg-discord-gray-500/30.flex.items-center.justify-between.px-3 */
-      /* It has 2 children: 1) avatar+name div (flex-1), 2) icons div */
-
-      /* Hide the avatar and username section when collapsed */
-      #subPanelContainer.collapsed .flex-shrink-0.h-14 > div.flex-1 {
-        display: none !important;
-      }
-
-      /* Make the footer center its content when collapsed */
-      #subPanelContainer.collapsed .flex-shrink-0.h-14 {
-        justify-content: center !important;
-        padding: 8px 0 !important;
-      }
-
-      /* Center the icon buttons container when collapsed */
-      #subPanelContainer.collapsed
-        .flex-shrink-0.h-14
-        > div.flex.items-center:not(.flex-1) {
-        display: flex !important;
-        justify-content: center !important;
-        width: 100% !important;
-        margin: 0 !important;
-      }
-
-      /* Hide logout button when collapsed */
-      #subPanelContainer.collapsed .flex-shrink-0.h-14 a[href="/login.html"] {
-        display: none !important;
-      }
-
-      /* Reduce padding on footer buttons when collapsed */
-      #subPanelContainer.collapsed .flex-shrink-0.h-14 button {
-        padding: 2px !important;
-      }
-
-      /* Rotate chevron when collapsed */
-      #subPanelContainer.collapsed #sidebarCollapseBtn i {
-        transform: rotate(180deg);
-      }
-
-      #sidebarCollapseBtn i {
-        transition: transform 0.2s ease-in-out;
-      }
-    </style>
-
-    <!-- Robust Auto-Fix & Cleanup Script -->
-
-    <!-- Code Block Copy Function -->
-
-    <!-- Collapsible Sidebar Function -->
-
-    <!-- Sticker Picker JavaScript -->
     <!-- Sticker Picker JavaScript -->
     <script src="files/js/stickers.js"></script>
 
@@ -11356,99 +11280,6 @@
     </script>
     <script src="/files/vendor/cropper.min.js"></script>
 
-    <!-- Mobile Bottom Navigation Bar -->
-    <nav
-      id="mobileBottomNav"
-      class="fixed bottom-0 left-0 right-0 bg-discord-gray-800 border-t border-discord-gray-700 z-50 md:hidden"
-    >
-      <div class="flex items-center justify-around h-14">
-        <button
-          id="mobileNavHome"
-          onclick="mobileNavTo('messages')"
-          class="mobile-nav-btn group"
-          data-tab="messages"
-        >
-          <i data-feather="message-circle" class="w-6 h-6 mb-0.5"></i>
-          <span class="text-[10px]">DMs</span>
-        </button>
-        <button
-          id="mobileNavCloud"
-          onclick="mobileNavTo('cloud')"
-          class="mobile-nav-btn group"
-          data-tab="cloud"
-        >
-          <i data-feather="cloud" class="w-6 h-6 mb-0.5"></i>
-          <span class="text-[10px]">Cloud</span>
-        </button>
-        <button
-          id="mobileNavSettings"
-          onclick="mobileNavTo('settings')"
-          class="mobile-nav-btn group"
-          data-tab="settings"
-        >
-          <i data-feather="settings" class="w-6 h-6 mb-0.5"></i>
-          <span class="text-[10px]">Settings</span>
-        </button>
-        <button
-          id="mobileNavProfile"
-          onclick="mobileNavTo('profile')"
-          class="mobile-nav-btn group"
-          data-tab="profile"
-        >
-          <i data-feather="user" class="w-6 h-6 mb-0.5"></i>
-          <span class="text-[10px]">Profile</span>
-        </button>
-      </div>
-    </nav>
-
-    <style>
-      /* Mobile Bottom Nav Styles */
-      .mobile-nav-btn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex: 1;
-        padding: 8px 0;
-        color: var(--text-muted, #8e9297);
-        transition: color 0.15s ease;
-      }
-
-      .mobile-nav-btn:hover,
-      .mobile-nav-btn.active {
-        color: var(--text-normal, #ffffff);
-      }
-
-      .mobile-nav-btn.active {
-        color: var(--brand-primary, #5865f2);
-      }
-
-      /* Add bottom padding to main content when mobile nav is visible */
-      @media (max-width: 767px) {
-        body {
-          padding-bottom: 56px;
-        }
-
-        /* Fix top spacing on mobile */
-        .chat-area {
-          margin-top: 0 !important;
-          padding-top: 0 !important;
-          height: calc(100dvh - 3.5rem - 3.5rem) !important;
-          /* Adjust height: 100dvh - header - nav */
-        }
-
-        .chat-messages {
-          padding-top: 1rem !important;
-        }
-      }
-
-      @media (min-width: 768px) {
-        #mobileBottomNav {
-          display: none !important;
-        }
-      }
-    </style>
-
     <script>
       // --- Mobile Profile Menu Functions ---
       window.openMobileProfileMenu = function () {
@@ -11605,6 +11436,72 @@
     </div>
 
     <script>
+      function toggleAIInputVisibility() {
+        const wrapper = document.querySelector(".ai-input-wrapper");
+        const showBtn = document.getElementById("showAiInputBtn");
+
+        if (!wrapper) return;
+
+        wrapper.classList.toggle("collapsed");
+        const isCollapsed = wrapper.classList.contains("collapsed");
+
+        // Toggle Floating Button Visibility
+        if (showBtn) {
+          if (isCollapsed) {
+            showBtn.classList.remove("scale-0");
+          } else {
+            showBtn.classList.add("scale-0");
+          }
+        }
+
+        // Save state
+        localStorage.setItem("aiInputCollapsed", isCollapsed);
+      }
+
+      // Restore AI Input state
+      document.addEventListener("DOMContentLoaded", () => {
+        const isCollapsed = localStorage.getItem("aiInputCollapsed") === "true";
+        if (isCollapsed) {
+          const wrapper = document.querySelector(".ai-input-wrapper");
+          const showBtn = document.getElementById("showAiInputBtn");
+
+          if (wrapper) wrapper.classList.add("collapsed");
+          if (showBtn) showBtn.classList.remove("scale-0");
+        }
+      });
+
+      function toggleSidebar() {
+        const sidebar = document.getElementById("primarySidebar");
+        const subPanel = document.getElementById("subPanelContainer");
+        const overlay = document.getElementById("overlay");
+        const aiInput = document.querySelector(".ai-input-wrapper");
+
+        if (sidebar) {
+          sidebar.classList.toggle("-translate-x-full");
+          sidebar.classList.toggle("translate-x-0");
+        }
+        if (subPanel) {
+          subPanel.classList.toggle("-translate-x-full");
+          subPanel.classList.toggle("translate-x-0");
+        }
+        if (overlay) {
+          overlay.classList.toggle("hidden");
+        }
+
+        // Hide/show AI input on mobile when sidebar toggles
+        if (aiInput && window.innerWidth < 768) {
+          const sidebarOpen = sidebar && !sidebar.classList.contains("-translate-x-full");
+          if (sidebarOpen) {
+            aiInput.dataset.wasVisible = aiInput.style.display;
+            aiInput.style.setProperty("display", "none", "important");
+          } else {
+            const prev = aiInput.dataset.wasVisible;
+            if (prev !== undefined && prev !== "none") {
+              aiInput.style.display = prev;
+            }
+          }
+        }
+      }
       function showEditHistory(history, currentContent, currentTs) {
         const modal = document.getElementById("editHistoryModal");
         const content = document.getElementById("editHistoryContent");
@@ -12216,9 +12113,7 @@
               // If messages, revert to current room title logic
               if (typeof currentChatRoom !== "undefined") {
                 titleEl.textContent =
-                  currentChatRoom === "community"
-                    ? "# Community"
-                    : "AI Chat";
+                  currentChatRoom === "community" ? "# Community" : "AI Chat";
               } else {
                 titleEl.textContent = "Messages";
               }

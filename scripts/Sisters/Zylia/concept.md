@@ -3,7 +3,7 @@
 <table align="center" width="100%" style="width: 100%">
   <tr>
     <td align="center">
-      <img src="/scripts/Sisters/assets/Zylia.png" width="150"><br>
+      <img src="/scripts/sisters/assets/Zylia.png" width="150"><br>
       <b>Zylia</b>
     </td>
     <td>

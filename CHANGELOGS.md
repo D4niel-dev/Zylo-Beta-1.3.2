@@ -1,13 +1,11 @@
 <div align="center">
-  <img src="frontend/images/zylo/Zylo_changelogs.png" 
-    width="100%"
-    height="100%"/>
-  <p><strong><i>Updates • Improvements • Fixes</i></strong></p>
+  <img src="frontend/images/zylo/Zylo_changelogs.png" width="100%" height="100%"/>
+  <p><strong><i>Updates — Improvements — Fixes</i></strong></p>
 </div>
 
 ---
 
-## **Zylo-Beta-1.0.0**
+## **Zylo-Beta-1.0.0** — *Initial Release*
 
 - Initial beta release.
 - Core auth pages (login, signup, forgot/reset).
@@ -17,7 +15,7 @@
 
 ---
 
-## **Zylo-Beta-1.1.0**
+## **Zylo-Beta-1.1.0** — *The Core-Basic Update*
 
 ### NEW :
 - Added Friends and Groups basics in UI.
@@ -33,7 +31,7 @@
 
 ---
 
-## **Zylo-Beta-v1.2.0**
+## **Zylo-Beta-v1.2.0** — *The Stability Update*
 
 ### NEW :
 - **Profile editing**: avatar/banner upload preview and persistence.
@@ -61,7 +59,7 @@
 
 ---
 
-## **Zylo-Beta-v1.2.1**
+## **Zylo-Beta-v1.2.1** — *The Modernization Update*
 
 ### NEW :
 - **UI/UX**: Completely change the UI with a more modern look.
@@ -87,7 +85,7 @@
 
 ---
 
-## **Zylo-Beta-v1.3.0**
+## **Zylo-Beta-v1.3.0 - 1.3.1** — *The UI/UX Update*
 
 ### NEW :
 - **Integrated Content**: Home page now directly includes QnA and What's New sections for immediate access.
@@ -108,7 +106,7 @@
 
 ---
 
-## **Zylo-Beta-v1.3.2** — *The Visual Polish*
+## **Zylo-Beta-v1.3.2** — *The Visual Polish Update*
 
 ### NEW :
 - **Visual Overhaul**: Major refinements to sidebar navigation, tab transitions, and overall UI responsiveness.
@@ -135,7 +133,7 @@
 
 ---
 
-## **Zylo-Beta-v1.5.0** — *The Stability & Polish Update* *(Latest)*
+## **Zylo-Beta-v1.5.0** — *The Stability & Polish Update*
 
 ### NEW :
 - **Global Sidebar Toggle**: Added expand/collapse button to ALL specific headers (Home, Friends, Settings, Groups, Cloud, Profile) for consistent navigation control.
@@ -157,3 +155,23 @@
 - **Settings Tab**: Fixed the 'General' settings tab not rendering correctly due to nesting issues.
 - **Backend Stability**: Fixed multiple endpoint issues in `app.py` related to cloud and social features.
 - **Friends/Groups Lists**: Fixed layout and visibility issues in the secondary sidebar.
+
+---
+
+## **Zylo-Beta-v1.5.1** — *The Specialized Modes Update* *(Latest)*
+
+### NEW :
+- **AI Specialized Modes**: Task-specific modes (Thinking, Planning, Code, Review) for Diszi and Zily assistants.
+- **Redesigned Chat Input**: New pill-shaped, translucent input container for a cleaner, modern look.
+- **Manual Input Toggle**: Added discrete controls to hide/show the AI chat input for maximum screen space.
+- **Heroicons Library**: New modern icon set library, toggleable in *Settings > Appearance*.
+
+### IMPROVEMENT :
+- **Mobile UX Refinement**: Fixed AI input positioning on mobile devices to prevent keyboard overlap.
+- **Cloud Mobile View**: Adjusted grid spacing for cloud files to prevent text cramping on smaller screens.
+- **Light Mode Support**: Full theme compatibility for the Moments tab background and input card.
+- **Accessibility & ARIA**: Added comprehensive ARIA labels and keyboard navigation support.
+
+### FIX :
+- **Group Modal Visibility**: Corrected text and background colors in groups modal for light mode readability.
+- **Sidebar Button Polish**: Fixed visibility and hover states for the "Add Group" button in light mode.

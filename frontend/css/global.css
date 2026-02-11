@@ -6,6 +6,19 @@
   --ai-hover: #a8c7fa;
   --ai-danger: #f28b82;
   --transition-speed: 0.3s;
+  --moments-bg-from: rgba(199, 210, 254, 0.4); /* indigo-200/40 */
+  --moments-bg-via: #f3f4f6; /* gray-100 */
+  --moments-bg-to: #ffffff; /* white */
+  --moments-input-bg: rgba(255, 255, 255, 0.6);
+  --moments-input-border: rgba(229, 231, 235, 1); /* gray-200 */
+}
+
+body.dark {
+  --moments-bg-from: rgba(49, 46, 129, 0.2); /* indigo-900/20 */
+  --moments-bg-via: #1e2227; /* discord-gray-900 placeholder */
+  --moments-bg-to: #000000; /* black */
+  --moments-input-bg: rgba(47, 49, 54, 0.6); /* discord-gray-800/60 */
+  --moments-input-border: rgba(255, 255, 255, 0.1);
 }
 
 /* Header Style */
@@ -81,7 +94,7 @@ h2,
   }
 
   .tab-content {
-    padding-top: 4rem !important;
+    padding-top: 0 !important;
   }
 
   header {
@@ -97,7 +110,7 @@ h2,
   }
 
   #mainContent {
-    padding-top: 3.5rem;
+    padding-top: 0;
   }
 
   .sidebar a span:last-child {
@@ -2139,6 +2152,261 @@ body.dark .avatar-img {
 }
 
 /* ========================================
+                Stickers - CSS
+   ======================================== */
+.sticker-picker {
+  width: 280px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.sticker-picker-header {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b9bbbe;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #40444b;
+  margin-bottom: 8px;
+}
+
+.sticker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.sticker-item {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #40444b;
+}
+
+.sticker-item:hover {
+  transform: scale(1.1);
+  background-color: #5865f2;
+}
+
+.sticker-item img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.sticker-message {
+  max-width: 200px;
+  margin: 4px 0;
+}
+
+.sticker-message img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: transparent;
+}
+
+/* ========================================
+    Code Block Syntax Highlighting Styles
+   ======================================== */
+.code-block-wrapper {
+  position: relative;
+  margin: 8px 0;
+}
+
+.code-block-wrapper .hljs-pre {
+  margin: 0;
+  background: #282c34;
+  border-radius: 8px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.code-block-wrapper .hljs-pre code {
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  background: transparent;
+  padding: 0;
+}
+
+.code-lang-label {
+  position: absolute;
+  top: 4px;
+  left: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #7d8590;
+  background: #21262d;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.copy-code-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #373e47;
+  border: none;
+  border-radius: 4px;
+  padding: 6px;
+  cursor: pointer;
+  color: #8b949e;
+  opacity: 0;
+  transition:
+    opacity 0.2s,
+    background 0.2s,
+    color 0.2s;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.code-block-wrapper:hover .copy-code-btn {
+  opacity: 1;
+}
+
+.copy-code-btn:hover {
+  background: #484f58;
+  color: #fff;
+}
+
+.copy-code-btn.copied {
+  background: #238636;
+  color: #fff;
+}
+
+/* ========================================
+    Collapsible Secondary Sidebar Styles
+   ======================================== */
+#subPanelContainer {
+  transition:
+    width 0.2s ease-in-out,
+    min-width 0.2s ease-in-out;
+}
+
+#subPanelContainer.collapsed {
+  width: 56px !important;
+  min-width: 56px !important;
+  overflow: hidden;
+}
+
+#subPanelContainer.collapsed
+  .sub-panel-content:not(#sub-panel-settings, #sub-panel-profile, #sub-panel-home) {
+    display: none !important;
+}
+
+/* Hide sidebar title when collapsed */
+#subPanelContainer.collapsed > header .sidebar-title {
+  display: none;
+}
+
+/* Hide sub-panel headers (like "User Settings", "Profile", etc.) when collapsed */
+#subPanelContainer.collapsed .sub-panel-header {
+  display: none;
+}
+
+/* Sub-panel items (any link/button with .sub-panel-item): Hide text, show only icons */
+#subPanelContainer.collapsed .sub-panel-item {
+  font-size: 0 !important;
+  justify-content: center;
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Sub-panel item icons - ensure visible and centered */
+#subPanelContainer.collapsed .sub-panel-item i,
+#subPanelContainer.collapsed .sub-panel-item svg {
+  font-size: 1.25rem;
+  width: 20px;
+  height: 20px;
+  margin: 0 !important;
+  display: inline-block;
+  visibility: visible;
+}
+
+/* Hide text spans in sub-panel items */
+#subPanelContainer.collapsed .sub-panel-item span {
+  display: none !important;
+}
+
+/* Settings tabs: Hide text, show only icons (separate class) */
+#subPanelContainer.collapsed .settings-tab {
+  font-size: 0 !important;
+  justify-content: center;
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Settings tab icons - ensure visible and centered */
+#subPanelContainer.collapsed .settings-tab i,
+#subPanelContainer.collapsed .settings-tab svg {
+  font-size: 1.25rem;
+  width: 20px;
+  height: 20px;
+  margin: 0 !important;
+  display: inline-block;
+  visibility: visible;
+}
+
+/* Hide text spans in settings tabs */
+#subPanelContainer.collapsed .settings-tab span {
+  display: none !important;
+}
+
+/* Hide the avatar and username section when collapsed */
+#subPanelContainer.collapsed .flex-shrink-0.h-14 > div.flex-1 {
+  display: none !important;
+}
+
+/* Make the footer center its content when collapsed */
+#subPanelContainer.collapsed .flex-shrink-0.h-14 {
+  justify-content: center !important;
+  padding: 8px 0 !important;
+}
+
+/* Center the icon buttons container when collapsed */
+#subPanelContainer.collapsed
+  .flex-shrink-0.h-14
+  > div.flex.items-center:not(.flex-1) {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* Hide logout button when collapsed */
+#subPanelContainer.collapsed .flex-shrink-0.h-14 a[href="/login.html"] {
+  display: none !important;
+}
+
+/* Reduce padding on footer buttons when collapsed */
+#subPanelContainer.collapsed .flex-shrink-0.h-14 button {
+  padding: 2px !important;
+}
+
+/* Rotate chevron when collapsed */
+#subPanelContainer.collapsed #sidebarCollapseBtn i {
+  transform: rotate(180deg);
+ }
+
+#sidebarCollapseBtn i {
+  transition: transform 0.2s ease-in-out;
+}
+
+/* ========================================
    LIGHT THEME OVERRIDES - Must be at end to override Tailwind
    ======================================== */
 
@@ -2453,6 +2721,17 @@ body.dark img.rounded-full {
 
 .add-group-btn:hover {
   border-radius: 16px;
+  background: #3ba55d;
+  color: white;
+}
+
+/* Light mode overrides */
+body:not(.dark) .add-group-btn {
+  background: #e3e5e8;
+  color: #3ba55d;
+}
+
+body:not(.dark) .add-group-btn:hover {
   background: #3ba55d;
   color: white;
 }

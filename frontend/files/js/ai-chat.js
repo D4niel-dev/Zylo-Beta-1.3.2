@@ -565,7 +565,7 @@ class AIChatManager {
                 }
             }
         } else {
-            avatarUrl = model === 'diszi' ? '/images/ai/Dizel/Diszi_beta3.png' : '/images/ai/Zylia/Zily_beta3.png';
+            avatarUrl = model === 'diszi' ? '/images/ai/Dizel/Diszi_beta2.png' : '/images/ai/Zylia/Zily_beta2.png';
         }
             
         // Styling classes

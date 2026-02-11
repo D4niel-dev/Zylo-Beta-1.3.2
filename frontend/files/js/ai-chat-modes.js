@@ -15,9 +15,15 @@ const AIModeManager = {
         this.setupEventListeners();
         this.updateDisplay();
         
-        // Auto-resize logic from plan
+        // Initial char count
+        this.updateCharCount();
+        
+        // Auto-resize and char count logic
         if (this.elements.input) {
-            this.elements.input.addEventListener('input', () => this.autoResize(this.elements.input));
+            this.elements.input.addEventListener('input', () => {
+                this.autoResize(this.elements.input);
+                this.updateCharCount();
+            });
         }
     },
 
@@ -28,8 +34,32 @@ const AIModeManager = {
             currentModeDisplay: document.getElementById('currentModeDisplay'),
             modeItems: document.querySelectorAll('.mode-item'),
             input: document.getElementById('aiUserInput'),
-            dropdown: document.getElementById('modeDropdown')
+            dropdown: document.getElementById('modeDropdown'),
+            charCount: document.getElementById('charCount')
         };
+    },
+
+    updateCharCount() {
+        if (!this.elements.input || !this.elements.charCount) return;
+        
+        const length = this.elements.input.value.length;
+        const MAX_CHARS = 4000;
+        const WARNING_THRESHOLD = 3500;
+        
+        this.elements.charCount.textContent = `${length}/${MAX_CHARS}`;
+        
+        this.elements.charCount.classList.remove('warning', 'danger');
+        if (length >= MAX_CHARS) {
+            this.elements.charCount.classList.add('danger');
+        } else if (length >= WARNING_THRESHOLD) {
+            this.elements.charCount.classList.add('warning');
+        }
+        
+        // Enable/disable send button via DOM
+        const sendBtn = document.getElementById('sendAiBtn');
+        if (sendBtn) {
+            sendBtn.disabled = length === 0 || length > MAX_CHARS;
+        }
     },
 
     setupEventListeners() {
