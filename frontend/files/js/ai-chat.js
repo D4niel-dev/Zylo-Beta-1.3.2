@@ -244,7 +244,20 @@ class AIChatManager {
             this.renderWelcomeScreen(session.model, container);
         } else {
             session.messages.forEach(msg => {
-                this.appendMessageToDOM(session.model, msg.role, msg.content, container, msg.attachments);
+                if (msg.role === 'assistant' && /<think>/.test(msg.content)) {
+                    // Extract thinking block and render above message
+                    const thinkMatch = msg.content.match(/<think>([\s\S]*?)<\/think>/);
+                    if (thinkMatch) {
+                        const thinkEl = document.createElement('div');
+                        thinkEl.className = 'mb-2 max-w-[85%] ml-[45px]';
+                        thinkEl.innerHTML = `<details class="ai-thought"><summary class="ai-thought-header"><i data-feather="cpu" class="w-4 h-4"></i> Thinking Process</summary><div class="ai-thought-content">${this.simpleMarkdown(thinkMatch[1])}</div></details>`;
+                        container.appendChild(thinkEl);
+                    }
+                    const cleanContent = msg.content.replace(/<think>[\s\S]*?<\/think>\s*/, '');
+                    this.appendMessageToDOM(session.model, msg.role, cleanContent, container, msg.attachments);
+                } else {
+                    this.appendMessageToDOM(session.model, msg.role, msg.content, container, msg.attachments);
+                }
             });
             this.scrollToBottom(container);
         }
@@ -517,15 +530,41 @@ class AIChatManager {
                 this.saveSession(session);
                 
                 // Animated Typewriter Effect for Assistant
+                let displayReply = reply;
+                this._skipTypewriter = false;
+                
+                // Extract <think> blocks and insert ABOVE the message bubble
+                const thinkMatch = reply.match(/<think>([\s\S]*?)<\/think>/);
+                if (thinkMatch) {
+                    const thinkEl = document.createElement('div');
+                    thinkEl.className = 'mb-2 max-w-[85%] ml-[54px] flex items-start gap-3';
+                    thinkEl.innerHTML = `<details class="ai-thought" style="flex:1"><summary class="ai-thought-header"><i data-feather="cpu" class="w-4 h-4"></i> Thinking Process</summary><div class="ai-thought-content">${this.simpleMarkdown(thinkMatch[1])}</div></details><button class="answer-now-btn" title="Skip to answer"><i data-feather="skip-forward" class="w-3.5 h-3.5"></i> Answer Now</button>`;
+                    container.appendChild(thinkEl);
+                    displayReply = reply.replace(/<think>[\s\S]*?<\/think>\s*/, '');
+                    
+                    // Wire up Answer Now button
+                    const answerBtn = thinkEl.querySelector('.answer-now-btn');
+                    if (answerBtn) {
+                        answerBtn.onclick = () => {
+                            this._skipTypewriter = true;
+                            answerBtn.style.display = 'none';
+                        };
+                    }
+                    if(window.feather) feather.replace();
+                }
+                
                 const msgEl = this.appendMessageToDOM(session.model, 'assistant', '', container);
                 const proseEl = msgEl.querySelector('.prose');
                 if (proseEl) {
-                    // Pre-format the content to get HTML (markdown -> html)
-                    const formattedHtml = this.formatContent(reply);
-                    // Type out the HTML structure
+                    // Typewrite only the non-thinking portion
+                    const formattedHtml = this.simpleMarkdown(displayReply);
                     await this.typeWriterHtml(proseEl, formattedHtml);
                     
-                    if(window.feather) feather.replace(); // Refresh icons if any
+                    // Hide Answer Now button after typewriter completes
+                    const answerBtn = container.querySelector('.answer-now-btn');
+                    if (answerBtn) answerBtn.style.display = 'none';
+                    
+                    if(window.feather) feather.replace();
                 }
             } else {
                 const err = 'Error: ' + (data.error || 'Unknown error');
@@ -572,10 +611,10 @@ class AIChatManager {
         const baseClass = "flex gap-3 mb-6 max-w-[90%]";
         const alignClass = isUser ? "ml-auto flex-row-reverse" : "mr-auto";
         const bubbleClass = isUser 
-            ? "bg-discord-gray-600 text-white rounded-2xl rounded-tr-sm p-4" 
+            ? "bg-white dark:bg-discord-gray-600 text-gray-900 dark:text-white border border-gray-200 dark:border-transparent rounded-2xl rounded-tr-sm p-4 shadow-sm" 
             : (model === 'diszi' 
-                ? "bg-gradient-to-br from-blue-900/50 to-discord-gray-700 border-l-4 border-blue-500 text-white rounded-2xl rounded-tl-sm p-4 shadow-lg backdrop-blur-sm" 
-                : "bg-gradient-to-br from-purple-900/50 to-discord-gray-700 border-l-4 border-purple-500 text-white rounded-2xl rounded-tl-sm p-4 shadow-lg backdrop-blur-sm");
+                ? "bg-blue-50 dark:bg-discord-gray-700 border-l-4 border-blue-500 text-gray-900 dark:text-white rounded-2xl rounded-tl-sm p-4 shadow-sm" 
+                : "bg-purple-50 dark:bg-discord-gray-700 border-l-4 border-purple-500 text-gray-900 dark:text-white rounded-2xl rounded-tl-sm p-4 shadow-sm");
 
         div.className = `${baseClass} ${alignClass}`;
         
@@ -628,6 +667,16 @@ class AIChatManager {
             let currentCharIndex = 0;
             
             const type = () => {
+                // Skip check: dump all remaining content instantly
+                if (this._skipTypewriter) {
+                    const remaining = segments.slice(currentSegmentIndex).join('');
+                    element.innerHTML += remaining;
+                    element.classList.remove('typing-cursor');
+                    const ctr = element.closest('.sub-panel-content') || element.closest('.overflow-y-auto');
+                    if (ctr) ctr.scrollTop = ctr.scrollHeight;
+                    resolve();
+                    return;
+                }
                 if (currentSegmentIndex < segments.length) {
                     const segment = segments[currentSegmentIndex];
                     
@@ -688,7 +737,7 @@ class AIChatManager {
         const div = document.createElement('div');
         div.id = `aiTyping`;
         div.className = "flex gap-3 mb-6 mr-auto max-w-[90%]";
-        const avatarUrl = model === 'diszi' ? '/images/ai/Dizel/Diszi_beta3.png' : '/images/ai/Zylia/Zily_beta3.png';
+        const avatarUrl = model === 'diszi' ? '/images/ai/Dizel/Diszi_beta2.png' : '/images/ai/Zylia/Zily_beta2.png';
         
         // Gemini-style spinner
         const spinnerClass = model === 'diszi' ? 'diszi' : 'zily';
@@ -715,34 +764,83 @@ class AIChatManager {
     formatContent(text) {
         // Handle <think> blocks first
         let formatted = text.replace(/<think>([\s\S]*?)<\/think>/g, (match, content) => {
-            return `
-                <details class="ai-thought">
-                    <summary class="ai-thought-header">
-                        <i data-feather="cpu" class="w-4 h-4"></i> Thinking Process
-                    </summary>
-                    <div class="ai-thought-content">${this.simpleMarkdown(content)}</div>
-                </details>
-            `;
+            return `<details class="ai-thought"><summary class="ai-thought-header"><i data-feather="cpu" class="w-4 h-4"></i> Thinking Process</summary><div class="ai-thought-content">${this.simpleMarkdown(content)}</div></details>`;
         });
 
-        // Apply standard markdown to the rest (and the content inside think blocks if not already handled)
-        // Note: simpleMarkdown is called above for think content, but we need to call it for the rest
-        // Actually, simpleMarkdown returns string with HTML. 
-        // If we call simpleMarkdown on the WHOLE string now, it might break the HTML we just inserted.
-        // So we should probably apply markdown to the *whole* string first, catch <think> tags, OR
-        // be careful. 
-        
-        // Better strategy: Apply markdown to the whole text, BUT <think> tags might get messed up if they contain markdown characters.
-        // Let's assume <think> blocks are distinct. 
-        
         return this.simpleMarkdown(formatted);
     }
     
     simpleMarkdown(text) {
-        return text
-            .replace(/\n/g, '<br>')
+        // === Code blocks (``` ... ```) — extract first to protect inner content ===
+        const codeBlocks = [];
+        text = text.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+            const idx = codeBlocks.length;
+            codeBlocks.push(`<pre class="ai-md-codeblock"><code class="language-${lang || 'text'}">${code.replace(/</g, '&lt;').replace(/>/g, '&gt;').trim()}</code></pre>`);
+            return `%%CODEBLOCK_${idx}%%`;
+        });
+
+        // === Tables ===
+        text = text.replace(/((?:^\|.+\|\s*$\n?)+)/gm, (tableBlock) => {
+            const rows = tableBlock.trim().split('\n').filter(r => r.trim());
+            if (rows.length < 2) return tableBlock;
+            let html = '<table class="ai-md-table">';
+            rows.forEach((row, i) => {
+                if (/^\|[\s:-]+\|/.test(row) && /^[|\s:-]+$/.test(row)) return;
+                const cells = row.split('|').filter((c, idx, arr) => idx > 0 && idx < arr.length - 1);
+                const tag = i === 0 ? 'th' : 'td';
+                html += '<tr>' + cells.map(c => `<${tag}>${c.trim()}</${tag}>`).join('') + '</tr>';
+            });
+            html += '</table>';
+            return html + '\n';
+        });
+
+        text = text
+            // === Headings (h1-h6, largest first to avoid partial matches) ===
+            .replace(/^###### (.+)$/gm, '<h6 class="text-xs font-bold mt-2 mb-1 text-gray-500 dark:text-gray-400">$1</h6>')
+            .replace(/^##### (.+)$/gm, '<h5 class="text-sm font-bold mt-2 mb-1 text-gray-600 dark:text-gray-300">$1</h5>')
+            .replace(/^#### (.+)$/gm, '<h4 class="text-sm font-bold mt-3 mb-1 text-gray-700 dark:text-gray-200">$1</h4>')
+            .replace(/^### (.+)$/gm, '<h3 class="text-base font-bold mt-3 mb-1 text-gray-800 dark:text-gray-100">$1</h3>')
+            .replace(/^## (.+)$/gm, '<h2 class="text-lg font-bold mt-3 mb-1 text-gray-900 dark:text-white">$1</h2>')
+            .replace(/^# (.+)$/gm, '<h1 class="text-xl font-bold mt-4 mb-2 text-gray-900 dark:text-white">$1</h1>')
+            // === Horizontal rule ===
+            .replace(/^---$/gm, '<hr class="border-gray-300 dark:border-gray-600 my-3">')
+            .replace(/^\*\*\*$/gm, '<hr class="border-gray-300 dark:border-gray-600 my-3">')
+            .replace(/^___$/gm, '<hr class="border-gray-300 dark:border-gray-600 my-3">')
+            // === Blockquotes (> text) ===
+            .replace(/^> (.+)$/gm, '<blockquote class="ai-md-blockquote text-gray-600 dark:text-gray-400 border-gray-300 dark:border-blue-500 bg-gray-50 dark:bg-blue-500/5">$1</blockquote>')
+            // === Task lists ===
+            .replace(/^- \[x\] (.+)$/gm, '<div class="flex gap-2 ml-2 items-center"><span class="text-green-500 dark:text-green-400">☑</span><span class="line-through opacity-70 text-gray-500 dark:text-gray-400">$1</span></div>')
+            .replace(/^- \[ \] (.+)$/gm, '<div class="flex gap-2 ml-2 items-center"><span class="text-gray-400 dark:text-gray-500">☐</span><span class="text-gray-700 dark:text-gray-300">$1</span></div>')
+            // === Ordered lists (1. item) ===
+            .replace(/^(\d+)\. (.+)$/gm, '<div class="flex gap-2 ml-2"><span class="text-blue-600 dark:text-blue-400 font-mono text-xs min-w-[1.5em] text-right">$1.</span><span class="text-gray-800 dark:text-gray-200">$2</span></div>')
+            // === Unordered lists (- item, * item) ===
+            .replace(/^[-*] (.+)$/gm, '<div class="flex gap-2 ml-2"><span class="text-blue-600 dark:text-blue-400">\u2022</span><span class="text-gray-800 dark:text-gray-200">$1</span></div>')
+            // === Images ![alt](url) — before links ===
+            .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full rounded-lg my-2 border border-gray-200 dark:border-gray-600">')
+            // === Links [text](url) ===
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300">$1</a>')
+            // === Bold + Italic (***text*** or ___text___) ===
+            .replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
+            .replace(/___(.*?)___/g, '<strong><em>$1</em></strong>')
+            // === Bold (**text** or __text__) ===
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/`(.*?)`/g, '<code>$1</code>');
+            .replace(/__(.*?)__/g, '<strong>$1</strong>')
+            // === Strikethrough (~~text~~) ===
+            .replace(/~~(.*?)~~/g, '<del class="opacity-60">$1</del>')
+            // === Italic (*text* or _text_) ===
+            .replace(/\*([^*]+?)\*/g, '<em>$1</em>')
+            .replace(/(?<!\w)_([^_]+?)_(?!\w)/g, '<em>$1</em>')
+            // === Inline code (`text`) ===
+            .replace(/`(.*?)`/g, '<code class="ai-md-inline-code bg-gray-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 border-gray-200 dark:border-blue-500/20">$1</code>')
+            // === Newlines ===
+            .replace(/\n/g, '<br>');
+
+        // === Restore code blocks ===
+        codeBlocks.forEach((block, i) => {
+            text = text.replace(`%%CODEBLOCK_${i}%%`, block);
+        });
+
+        return text;
     }
 
     // Settings Modal

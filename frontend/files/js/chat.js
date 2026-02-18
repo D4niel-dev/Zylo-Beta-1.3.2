@@ -14,6 +14,8 @@ var replyContext = null;
 var activeTypers = new Set();
 // processedMessageIds is for DM deduplication
 var processedMessageIds = new Set();
+var typingTimeout = null;
+var isTyping = false;
 
 // Elements
 var chatInput = document.getElementById("chatInput");
@@ -117,21 +119,24 @@ async function createDiscordMessage(data) {
     replyBtn.innerHTML = '<i data-feather="corner-up-left" class="w-3 h-3"></i>';
     replyBtn.onclick = (e) => {
         e.stopPropagation();
-        // Trigger reply logic (assuming replyToMessage exists globally or passed in)
-        if (typeof replyToMessage === 'function') replyToMessage(data);
+        // Call startReply with the correct arguments
+        if (typeof startReply === 'function') {
+            startReply(data.id, data.username || data.from, data.message || data.content || '');
+        }
     };
     actions.appendChild(replyBtn);
 
-    // Edit Button
-    const editBtn = document.createElement("button");
-    editBtn.className = "p-1.5 hover:bg-discord-gray-600 rounded text-discord-gray-400 hover:text-white transition";
-    editBtn.innerHTML = '<i data-feather="edit-2" class="w-3 h-3"></i>';
-    editBtn.onclick = (e) => {
-        e.stopPropagation();
-        // Trigger edit logic
-        if (typeof startEditMessage === 'function') startEditMessage(data.id, data.content);
-    };
-    actions.appendChild(editBtn);
+    // Edit Button (only for own messages)
+    if (isOwnMessage) {
+        const editBtn = document.createElement("button");
+        editBtn.className = "p-1.5 hover:bg-discord-gray-600 rounded text-discord-gray-400 hover:text-white transition";
+        editBtn.innerHTML = '<i data-feather="edit-2" class="w-3 h-3"></i>';
+        editBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (typeof startEditMessage === 'function') startEditMessage(data.id, data.message || data.content);
+        };
+        actions.appendChild(editBtn);
+    }
 
     // Delete Button (only for own messages)
     if (isOwnMessage) {
@@ -141,22 +146,52 @@ async function createDiscordMessage(data) {
         deleteBtn.innerHTML = '<i data-feather="trash-2" class="w-4 h-4"></i>';
         deleteBtn.onclick = async () => {
             if (confirm('Are you sure you want to delete this message?')) {
+                // Detect context BEFORE removing from DOM
+                const isCommunity = !!msgWrapper.closest('#chatMessagesCommunity');
+                const isFriendsDM = !!msgWrapper.closest('#friendsChatMessages');
+                
                 // Optimistic removal
                 msgWrapper.remove();
 
-                // Send to backend
+                const username = localStorage.getItem('username') || localStorage.getItem('savedUsername');
+                
+                // Send to backend based on detected context
                 try {
-                    if (currentGroupId) {
-                        await fetch('/api/groups/message/delete', {
+                    let res;
+                    if (isCommunity) {
+                        res = await fetch('/api/messages/delete', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: data.id,
+                                username: username,
+                                timestamp: data.timestamp || data.ts
+                            })
+                        });
+                    } else if (isFriendsDM) {
+                        res = await fetch('/api/dm/delete', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: data.id,
+                                username: username
+                            })
+                        });
+                    } else if (typeof currentGroupId !== 'undefined' && currentGroupId) {
+                        res = await fetch('/api/groups/message/delete', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
                                 groupId: currentGroupId,
-                                channel: activeChannelId || 'general',
+                                channel: (typeof activeChannelId !== 'undefined' && activeChannelId) || 'general',
                                 timestamp: data.timestamp,
                                 username: username
                             })
                         });
+                    }
+                    if (res && !res.ok) {
+                        const err = await res.json().catch(() => ({}));
+                        console.warn('Delete response:', res.status, err);
                     }
                 } catch (err) {
                     console.error('Failed to delete message:', err);
@@ -579,6 +614,11 @@ async function showUserProfile(targetUsername) {
 
     overlay.classList.remove('hidden');
     modal.classList.remove('hidden');
+
+    // Clear previous badges
+    if (document.getElementById('uvBadges')) {
+        document.getElementById('uvBadges').innerHTML = '';
+    }
     // feather.replace(); // Call feather if needed, but usually redundant if icons are static
 
     if (targetUsername === 'AI') {
@@ -604,6 +644,11 @@ async function showUserProfile(targetUsername) {
             if (u.avatar) document.getElementById('uvAvatar').src = u.avatar;
             if (u.banner) document.getElementById('uvBanner').src = u.banner;
             document.getElementById('uvBio').textContent = u.about || u.aboutMe || 'No bio shared.';
+
+            // Render Badges
+            if (window.renderBadges) {
+                renderBadges(u.badges || [], 'uvBadges');
+            }
 
             // Set Up Message Button
             const msgBtn = document.getElementById('uvMessageBtn');
@@ -760,8 +805,8 @@ async function addReactionToMessage(msgWrapper, emoji, data) {
     }
 
     // Sync to backend
-    if (typeof currentGroupId !== 'undefined' && currentGroupId && data.timestamp) {
-        try {
+    try {
+        if (typeof currentGroupId !== 'undefined' && currentGroupId && data.timestamp) {
             await fetch('/api/groups/message/react', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -774,8 +819,16 @@ async function addReactionToMessage(msgWrapper, emoji, data) {
                     action: userIndex === -1 ? 'add' : 'remove'
                 })
             });
-        } catch (e) { console.error('Reaction sync failed:', e); }
-    }
+        } else if (typeof window.socket !== 'undefined') {
+            // Community or DM reaction sync
+            window.socket.emit('message_reaction', {
+                messageId: data.id,
+                username,
+                emoji,
+                action: userIndex === -1 ? 'add' : 'remove'
+            });
+        }
+    } catch (e) { console.error('Reaction sync failed:', e); }
 }
 
 // Rate Limiting
@@ -803,7 +856,18 @@ async function sendMessage() {
     rateLimit.history.push(now);
 
     const message = chatInput.value.trim();
-    if (!message) return;
+    
+    // Check for pending attachments
+    const hasAttachments = (typeof pendingAttachments !== 'undefined' && pendingAttachments.length > 0);
+
+    // Stop typing immediately
+    if (typeof typingTimeout !== 'undefined' && typingTimeout) clearTimeout(typingTimeout);
+    if (typeof isTyping !== 'undefined' && isTyping) {
+        if (typeof socket !== 'undefined') socket.emit("stop_typing", { room: currentChatRoom, username });
+        isTyping = false;
+    }
+
+    if (!message && !hasAttachments) return;
 
     if (currentChatRoom === 'community') {
         const tempId = typeof generateUUID === 'function' ? generateUUID() : Date.now().toString();
@@ -811,6 +875,7 @@ async function sendMessage() {
             id: tempId,
             username,
             message,
+            attachments: hasAttachments ? pendingAttachments : [],
             replyTo: replyContext ? { id: replyContext.id, username: replyContext.username, content: replyContext.content } : null,
             ts: Date.now() / 1000
         };
@@ -826,6 +891,12 @@ async function sendMessage() {
         chatInput.value = "";
         chatInput.style.height = "auto";
         cancelReply();
+        
+        // Clear pending attachments
+        if (hasAttachments) {
+            pendingAttachments = [];
+            if (typeof renderAttachmentPreview === 'function') renderAttachmentPreview();
+        }
 
         try {
             await fetch('/api/messages', {
@@ -968,30 +1039,7 @@ window.removeAttachment = function(index) {
 
 window.sendFile = sendFile; // Expose to window
 
-function sendMessage() {
-    const input = document.getElementById("chatInput");
-    const message = input.value.trim();
-    const username = localStorage.getItem("savedUsername") || "User";
 
-    if ((message || pendingAttachments.length > 0) && username) {
-        // Stop typing immediately
-        clearTimeout(typingTimeout);
-        socket.emit("stop_typing", { room: currentRoom, username });
-        isTyping = false;
-
-        socket.emit("send_message", {
-            username,
-            message,
-            attachments: pendingAttachments
-        });
-        
-        input.value = "";
-        pendingAttachments = [];
-        renderAttachmentPreview();
-        input.style.height = 'auto'; // Reset height
-    }
-};
-window.sendFile = sendFile;
 
 // Voice Message Recording
 let mediaRecorder = null;
@@ -1128,6 +1176,165 @@ if (typeof socket !== 'undefined') {
     });
 }
 
+// Handle Community File Upload
+async function handleCommunityFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // limit 50MB
+    if (file.size > 50 * 1024 * 1024) {
+        alert("File too large (Max 50MB)");
+        event.target.value = "";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Show loading spinner on the trigger button (if available)
+    const btn = event.target.nextElementSibling;
+    let originalIcon = null;
+    if (btn) {
+        originalIcon = btn.innerHTML;
+        btn.innerHTML = '<i class="animate-spin" data-feather="loader"></i>';
+        if (window.feather) feather.replace();
+    }
+
+    try {
+        const res = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            pendingAttachments.push({
+                url: data.url,
+                filename: data.filename || file.name,
+                fileType: data.fileType || 'file',
+                originalName: data.originalName || file.name
+            });
+            renderAttachmentPreview();
+        } else {
+            alert("Upload failed: " + data.error);
+        }
+    } catch (e) {
+        console.error("Upload error:", e);
+        alert("Upload failed");
+    } finally {
+        if (btn && originalIcon !== null) {
+            btn.innerHTML = originalIcon;
+            if (window.feather) feather.replace();
+        }
+        event.target.value = "";
+    }
+}
+window.handleCommunityFileUpload = handleCommunityFileUpload;
+
+// Render Attachment Preview
+function renderAttachmentPreview() {
+    // Determine which preview container to target based on active chat
+    const communityContainer = document.getElementById('attachmentPreview');
+    const friendsContainer = document.getElementById('friendsAttachmentPreview');
+    
+    // Render into both containers (only the visible one matters)
+    _renderPreviewInto(communityContainer);
+    _renderPreviewInto(friendsContainer);
+}
+
+function _renderPreviewInto(container) {
+    if (!container) return;
+
+    container.innerHTML = '';
+    
+    if (pendingAttachments.length === 0) {
+        container.classList.add('hidden');
+        return;
+    }
+
+    container.classList.remove('hidden');
+
+    pendingAttachments.forEach((att, index) => {
+        const div = document.createElement('div');
+        div.className = "relative group flex-shrink-0 w-24 h-24 bg-discord-gray-800 rounded border border-discord-gray-600 flex items-center justify-center overflow-hidden";
+        
+        // Preview Content
+        if (att.fileType === 'image' || (att.filename && att.filename.match(/\.(jpg|jpeg|png|gif|webp)$/i))) {
+            div.innerHTML = `<img src="${att.url}" class="w-full h-full object-cover">`;
+        } else {
+             div.innerHTML = `<div class="flex flex-col items-center justify-center text-xs text-center p-1">
+                <span class="font-bold text-discord-gray-300 break-all line-clamp-2">${att.originalName || att.filename}</span>
+             </div>`;
+        }
+
+        // Remove Button
+        const removeBtn = document.createElement('button');
+        removeBtn.className = "absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 hover:bg-red-600 hidden group-hover:block shadow-sm";
+        removeBtn.innerHTML = '<i data-feather="x" class="w-3 h-3"></i>';
+        removeBtn.onclick = () => removeAttachment(index);
+        
+        div.appendChild(removeBtn);
+        container.appendChild(div);
+    });
+
+    if (window.feather) feather.replace();
+}
+window.renderAttachmentPreview = renderAttachmentPreview;
+
+function removeAttachment(index) {
+    if (index >= 0 && index < pendingAttachments.length) {
+        pendingAttachments.splice(index, 1);
+        renderAttachmentPreview();
+    }
+}
+window.removeAttachment = removeAttachment;
+
+// Load Community Messages from Backend
+async function loadCommunityMessages() {
+    if (!chatMessagesCommunity) return;
+    try {
+        const res = await fetch('/api/messages');
+        const data = await res.json();
+        
+        if (Array.isArray(data)) {
+            // Sort by timestamp
+            data.sort((a, b) => (a.timestamp || a.ts) - (b.timestamp || b.ts));
+            
+            chatMessagesCommunity.innerHTML = '';
+            processedMessageIds.clear(); // Clear tracked IDs to allow re-render
+            
+            for (const msg of data) {
+                 if (msg.id && processedMessageIds.has(msg.id)) continue;
+                 
+                 // Ensure ID exists
+                 if (!msg.id) msg.id = `msg_${msg.timestamp || Date.now()}_${Math.random()}`;
+                 
+                 processedMessageIds.add(msg.id);
+                 
+                 const el = await createDiscordMessage(msg);
+                 if (el) {
+                    el.setAttribute('data-msg-id', msg.id);
+                    chatMessagesCommunity.appendChild(el);
+                 }
+            }
+            chatMessagesCommunity.scrollTop = chatMessagesCommunity.scrollHeight;
+            if (window.feather) feather.replace();
+        }
+    } catch (e) {
+        console.error("Failed to load community messages:", e);
+    }
+}
+window.loadCommunityMessages = loadCommunityMessages;
+
+// Init Load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (localStorage.getItem('chatRoom') === 'community') loadCommunityMessages();
+    });
+} else {
+    if (localStorage.getItem('chatRoom') === 'community') loadCommunityMessages();
+}
+
 function switchChatRoom(room) {
     currentChatRoom = room;
     localStorage.setItem('chatRoom', room);
@@ -1147,11 +1354,19 @@ function switchChatRoom(room) {
     const communityInput = document.getElementById('communityInputContainer');
     const aiInput = document.querySelector('.ai-input-wrapper');
 
+    // New: Load messages when switching to community
+    if (room === 'community') {
+        if (typeof window.loadCommunityMessages === 'function') {
+            window.loadCommunityMessages().catch(console.error);
+        }
+    }
+
     if (room === 'community') {
         chatMessagesCommunity.classList.remove('hidden');
         chatMessagesAI.classList.add('hidden');
         aiControls.classList.add('hidden');
         if (btnAI) btnAI.classList.remove('active');
+        if (btnCommunity) btnCommunity.classList.add('active'); // Add this line
         if (title) title.textContent = '# Community';
         
         // Hide AI specific UI
@@ -1253,13 +1468,19 @@ window.loadAiPersonas = loadAiPersonas;
 async function sendFriendMessage() {
     const input = document.getElementById('friendsChatInput');
     const text = input.value.trim();
-    if (!text || !activeFriendChat) return;
+    const hasAttachments = (typeof pendingAttachments !== 'undefined' && pendingAttachments.length > 0);
+    if (!text && !hasAttachments) return;
+    if (!activeFriendChat) return;
     const me = localStorage.getItem('savedUsername') || 'User';
 
+    const dmId = (typeof generateUUID === 'function') ? generateUUID() : Date.now().toString();
+
     const payload = {
+        id: dmId,
         from: me,
         to: activeFriendChat,
         message: text,
+        attachments: hasAttachments ? pendingAttachments : [],
         ts: Date.now() / 1000,
         replyTo: replyContext ? { id: replyContext.id, username: replyContext.username, content: replyContext.content } : null
     };
@@ -1278,7 +1499,6 @@ async function sendFriendMessage() {
         if (navigator.onLine) {
             socket.emit('send_dm', payload);
         } else {
-            // Always attempt API for persistence when offline
             fetch('/api/dm/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(() => { });
         }
     } else {
@@ -1287,6 +1507,7 @@ async function sendFriendMessage() {
             groupId: activeFriendChat.id,
             username: me,
             message: text,
+            attachments: hasAttachments ? pendingAttachments : [],
             ts: Date.now() / 1000,
             replyTo: replyContext ? { id: replyContext.id, username: replyContext.username, content: replyContext.content } : null
         };
@@ -1294,6 +1515,10 @@ async function sendFriendMessage() {
     }
 
     input.value = '';
+    if (hasAttachments) {
+        pendingAttachments = [];
+        renderAttachmentPreview();
+    }
     cancelReply();
 }
 window.sendFriendMessage = sendFriendMessage;

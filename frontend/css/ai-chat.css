@@ -145,12 +145,26 @@
 /* === New AI Chat UI (v1.5.1) === */
 
 :root {
-  --ai-bg: rgba(255, 255, 255, 0.08);
+  /* Defaults (Light Mode) */
+  --ai-bg: rgba(255, 255, 255, 0.85);
+  --ai-border: rgba(0, 0, 0, 0.1);
+  --ai-text: #1f2937;
+  --ai-placeholder: rgba(0, 0, 0, 0.5);
+  --ai-accent: #3b82f6; /* slightly darker blue for light mode */
+  --ai-hover: #60a5fa;
+  --ai-danger: #ef4444;
+  --transition-speed: 0.3s;
+}
+
+html.dark {
+  /* Dark Mode Overrides */
+  --ai-bg: rgba(25, 25, 25, 0.6); /* darker background for input */
   --ai-border: rgba(255, 255, 255, 0.1);
+  --ai-text: #ffffff;
+  --ai-placeholder: rgba(255, 255, 255, 0.4);
   --ai-accent: #8ab4f8;
   --ai-hover: #a8c7fa;
   --ai-danger: #f28b82;
-  --transition-speed: 0.3s;
 }
 
 /* Floating Clean AI Input */
@@ -216,7 +230,7 @@ body.sidebar-collapsed .ai-input-wrapper {
   background: transparent;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--ai-text);
   font-size: 16px;
   line-height: 24px;
   resize: none;
@@ -230,12 +244,13 @@ body.sidebar-collapsed .ai-input-wrapper {
 }
 
 #aiUserInput::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--ai-placeholder);
   transition: color var(--transition-speed);
 }
 
 #aiUserInput:focus::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--ai-placeholder);
+  opacity: 0.7;
 }
 
 /* Custom scrollbar for webkit browsers */
@@ -255,7 +270,7 @@ body.sidebar-collapsed .ai-input-wrapper {
 /* Character counter */
 .char-counter {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--ai-placeholder);
   padding: 0 4px;
   align-self: center;
   min-width: 60px;
@@ -527,48 +542,251 @@ body.light-mode .mode-item:hover {
 }
 
 /* AI Thinking Indicator (Collapsible) */
+/* Thinking Process Redesign */
+/* Thinking Process Redesign */
 details.ai-thought {
-  margin-bottom: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, 0.03); /* Light Mode Default */
+  border-radius: 6px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-summary.ai-thought-header {
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-muted, #9ca3af);
-  user-select: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition:
-    background 0.2s,
-    color 0.2s;
+html.dark details.ai-thought {
+  background: rgba(15, 23, 42, 0.4); /* Dark Mode */
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-summary.ai-thought-header::-webkit-details-marker {
+/* Remove default marker */
+details.ai-thought > summary {
+  list-style: none;
+}
+details.ai-thought > summary::-webkit-details-marker {
   display: none;
 }
 
-summary.ai-thought-header:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-secondary, #e5e7eb);
+details.ai-thought:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
+html.dark details.ai-thought:hover {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+details.ai-thought[open] {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+html.dark details.ai-thought[open] {
+  background: rgba(15, 23, 42, 0.8);
+}
+
+/* Header */
+.ai-thought-header {
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b; /* Light mode text */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+html.dark .ai-thought-header {
+  color: #94a3b8;
+}
+
+.ai-thought-header:hover {
+  color: #475569;
+}
+
+html.dark .ai-thought-header:hover {
+  color: #cbd5e1;
+}
+
+/* Content */
 .ai-thought-content {
-  padding: 10px 12px;
+  padding: 12px 14px;
   font-size: 0.85rem;
-  color: var(--text-secondary, #d1d5db);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(0, 0, 0, 0.1);
-  white-space: pre-wrap; /* Preserve formatting in thoughts */
-  font-family: monospace; /* Often code-like or structured */
+  color: #475569; /* Light mode text */
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.02);
+  font-family: 'Consolas', 'Monaco', monospace;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  position: relative;
 }
 
-details.ai-thought[open] summary.ai-thought-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+html.dark .ai-thought-content {
+  color: #94a3b8;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Hide ::before/animations from old style */
+details.ai-thought::before {
+  display: none; 
+}
+
+.ai-thought-content::before {
+  content: "💭";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+.ai-thought-content strong {
+  color: #60a5fa;
+  font-weight: 600;
+}
+
+.ai-thought-content code {
+  background: rgba(59, 130, 246, 0.15);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #a5b4fc;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.ai-thought-content p {
+  margin: 0 0 8px 0;
+}
+
+.ai-thought-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure thoughts don't get affected by prose styles */
+.ai-thought-content .prose,
+.ai-thought-content .prose-invert {
+  all: unset;
+}
+
+/* Answer Now Button */
+.answer-now-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.answer-now-btn:hover {
+  opacity: 1;
+  background: rgba(59, 130, 246, 0.25);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: scale(1.02);
+}
+
+.answer-now-btn:active {
+  transform: scale(0.97);
+}
+
+/* Markdown Tables */
+.ai-md-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--ai-border);
+  background: var(--ai-bg);
+}
+
+.ai-md-table th {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--ai-accent); /* use variable */
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+}
+
+.ai-md-table td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--ai-border);
+  color: var(--ai-text); /* use variable */
+}
+
+.ai-md-table tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.ai-md-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Fenced Code Blocks */
+.ai-md-codeblock {
+  background: rgba(0, 0, 0, 0.05); /* Light mode */
+  border: 1px solid var(--ai-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  overflow-x: auto;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--ai-text);
+  scrollbar-width: thin;
+  scrollbar-color: var(--ai-accent) transparent;
+}
+
+html.dark .ai-md-codeblock {
+  background: rgba(0, 0, 0, 0.5); /* Dark mode */
+  color: #e2e8f0;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+
+.ai-md-codeblock code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* Inline Code */
+.ai-md-inline-code {
+  background: rgba(59, 130, 246, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.82em;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+/* Blockquotes */
+.ai-md-blockquote {
+  border-left: 3px solid rgba(59, 130, 246, 0.5);
+  padding: 8px 14px;
+  margin: 8px 0;
+  background: rgba(59, 130, 246, 0.05);
+  color: #94a3b8;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
 }

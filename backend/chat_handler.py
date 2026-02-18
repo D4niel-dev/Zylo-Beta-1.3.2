@@ -126,6 +126,12 @@ def handle_chat_request(data, username):
         if "message" in response:
             content = response["message"]["content"]
             
+            # Extract thinking/reasoning from thinking models (e.g. lfm2.5-thinking)
+            # Ollama returns this in a separate "thinking" field when think=True
+            thinking = response["message"].get("thinking", "")
+            if thinking and thinking.strip():
+                content = f"<think>{thinking.strip()}</think>\n\n{content}"
+            
             # Save to Memory (Conversation History)
             try:
                 # Append the new interaction to history

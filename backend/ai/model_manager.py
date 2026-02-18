@@ -38,6 +38,7 @@ class ModelManager:
             "model": model,
             "messages": payload_messages,
             "stream": stream,
+            "think": True,
         }
         
         if options:

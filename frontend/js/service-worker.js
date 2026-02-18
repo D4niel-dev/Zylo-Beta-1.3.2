@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v2-zylo';
+const CACHE_VERSION = 'v4-zylo';
 const CORE_CACHE = `core-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `runtime-${CACHE_VERSION}`;
 const API_CACHE = `api-${CACHE_VERSION}`;
@@ -14,7 +14,9 @@ const CORE_ASSETS = [
   '/offline.html',
   '/manifest.webmanifest',
   '/files/sw-register.js',
-  '/files/style.css',
+  '/css/global.css',
+  '/css/ai-chat.css',
+  '/css/sidebar.css',
   // Local vendor assets to ensure full offline startup
   '/files/vendor/tailwindcss.js',
   '/files/vendor/feather-icons.js',
@@ -23,9 +25,13 @@ const CORE_ASSETS = [
   '/files/vendor/cropper.min.js',
   '/files/vendor/emoji-mart.css',
   '/files/vendor/emoji-mart.js',
+  '/files/vendor/heroicons_data.json',
+  '/files/vendor/heroicons.js',
   // Core images
-  '/images/Zylo_icon.ico',
-  '/images/Zylo_icon.png',
+  '/images/zylo/Zylo_icon.ico',
+  '/images/zylo/Zylo_icon.png',
+  '/images/ai/Dizel/Diszi_beta2.png',
+  '/images/ai/Zylia/Zily_beta2.png',
   '/images/default_avatar.png',
   '/images/default_banner.png',
   // Social icon assets referenced in signup

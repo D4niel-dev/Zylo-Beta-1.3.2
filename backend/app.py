@@ -653,6 +653,10 @@ def login():
                 })
             # Create session token
             token = create_session(user["username"])
+            
+            # Refresh badges
+            check_badges(user["username"])
+            
             return jsonify({
                 "success": True, 
                 "username": user["username"], 
@@ -793,6 +797,10 @@ def verify_email():
                 user["email_verified"] = True
                 user.pop("verification_code", None)  # Remove code after verification
                 save_users(users)
+                
+                # Grant verified badge
+                check_badges(username)
+                
                 return jsonify({"success": True, "message": "Email verified successfully!"})
             else:
                 return jsonify({"success": False, "error": "Invalid verification code"}), 400
@@ -897,6 +905,49 @@ def messages_api():
     socketio.emit('message', msg_entry, room='community')
     
     return jsonify({"success": True, "message": msg_entry})
+
+@app.route("/api/messages/delete", methods=["POST"])
+def delete_community_message():
+    """Delete a community message by ID or timestamp."""
+    global messages
+    data = request.json or {}
+    msg_id = data.get('id')
+    username = data.get('username', '')
+    timestamp = data.get('timestamp')
+
+    if not msg_id and not timestamp:
+        return jsonify({"success": False, "error": "Message ID or timestamp required"}), 400
+
+    original_len = len(messages)
+    messages = [m for m in messages if not (
+        (msg_id and m.get('id') == msg_id) or
+        (timestamp and m.get('timestamp') == timestamp and m.get('username') == username)
+    )]
+
+    if len(messages) < original_len:
+        save_messages(messages)
+        socketio.emit('message_deleted', {'id': msg_id, 'timestamp': timestamp}, room='community')
+        return jsonify({"success": True})
+    return jsonify({"success": False, "error": "Message not found"}), 404
+
+@app.route("/api/dm/delete", methods=["POST"])
+def delete_dm_message():
+    """Delete a DM message by ID."""
+    global dms
+    data = request.json or {}
+    msg_id = data.get('id')
+    username = data.get('username', '')
+
+    if not msg_id:
+        return jsonify({"success": False, "error": "Message ID required"}), 400
+
+    original_len = len(dms)
+    dms = [m for m in dms if not (m.get('id') == msg_id and m.get('from') == username)]
+
+    if len(dms) < original_len:
+        save_dms(dms)
+        return jsonify({"success": True})
+    return jsonify({"success": False, "error": "Message not found"}), 404
 
 # Get list of currently online users
 @app.route("/api/users/online", methods=["GET"])
@@ -1406,7 +1457,8 @@ def ai_chat():
             payload = {
                 "model": model,
                 "messages": [{"role": "system", "content": persona.system_prompt}] + messages_in,
-                "stream": False
+                "stream": False,
+                "think": True
             }
             # Add stream: False to ensure we get json back
             resp = http_post_json("http://127.0.0.1:11434/api/chat", payload, timeout=600)
@@ -1416,6 +1468,10 @@ def ai_chat():
             if isinstance(resp, dict):
                 if "message" in resp and isinstance(resp["message"], dict):
                     reply = resp["message"].get("content")
+                    # Extract thinking/reasoning from thinking models
+                    thinking = resp["message"].get("thinking", "")
+                    if thinking and thinking.strip():
+                        reply = f"<think>{thinking.strip()}</think>\n\n{reply}"
                 elif "messages" in resp and isinstance(resp["messages"], list):
                      # Handle other formats if any
                     reply = " ".join(
@@ -1945,6 +2001,15 @@ def update_profile():
                 user["settings"].update(settings)
                 print(f"✅ Updated settings: {settings}")
 
+            # Badges
+            if "badges" in data:
+                user["badges"] = data.get("badges")
+                print(f"✅ Updated badges for {username}: {user['badges']}")
+
+            if "badges_pinned" in data:
+                user["badges_pinned"] = data.get("badges_pinned")
+                print(f"✅ Updated pinned badges for {username}: {user['badges_pinned']}")
+
             updated = True
             print(f"✅ Updated {username}'s profile.")
             break
@@ -2003,6 +2068,68 @@ def _add_xp(username: str, amount: int = 5):
             }, room=f"user_{username}")
         except Exception as e:
             print(f"Error emitting level up: {e}")
+
+def grant_badge(username, badge_id):
+    """Grants a badge to a user if they don't already have it."""
+    if not username or not badge_id:
+        return False
+        
+    users = load_users()
+    user_idx = -1
+    for i, u in enumerate(users):
+        if u['username'] == username:
+            user_idx = i
+            break
+            
+    if user_idx == -1:
+        return False
+        
+    user = users[user_idx]
+    if 'badges' not in user:
+        user['badges'] = []
+        
+    if badge_id in user['badges']:
+        return False # Already has it
+        
+    user['badges'].append(badge_id)
+    save_users(users)
+    
+    # Notify user of badge unlock
+    try:
+        from flask_socketio import emit
+        emit('badge_unlock', {
+            'username': username,
+            'badge_id': badge_id
+        }, room=f"user_{username}")
+        print(f"🏆 Granted badge {badge_id} to {username}")
+    except Exception as e:
+        print(f"Error emitting badge unlock: {e}")
+        
+    return True
+
+def check_badges(username, context=None):
+    """Checks and grants badges based on user state and context."""
+    if not username:
+        return
+        
+    users = load_users()
+    user = next((u for u in users if u['username'] == username), None)
+    if not user:
+        return
+        
+    # 1. Verified Badge (if email is verified)
+    if user.get('email_verified'):
+        grant_badge(username, 'verified')
+        
+    # 2. Developer Badge (hardcoded for devs)
+    if username in ['Dan', 'Daniel']:
+        grant_badge(username, 'developer')
+        
+    # 3. Supporter (Placeholder for future subscription logic)
+    # 4. Thinker/Coder (Context dependent - usually triggered from chat)
+    if context == 'ai_thinking_session':
+        # This would increment a counter in user metadata and grant if threshold met
+        pass
 
 # -------- Settings and Account Management Endpoints -------- #
 

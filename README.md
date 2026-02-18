@@ -96,7 +96,7 @@ Privacy is a top priority for Zylo.
 ---
 
 > [!NOTE]
-> Zylo is currently in **Beta**. We are actively fixing bugs and improving performance for the full release.
+> Zylo is currently in **Beta**. We are actively fixing bugs and improving performance for the full release. If you want to use the `ai-chat`, please install **Ollama** and choose any models that you want. You can use cloud models too.
 
 > [!IMPORTANT]
 > Any feedback or reports should/would be sent to **@d4niel_1f**.
