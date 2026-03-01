@@ -13,7 +13,7 @@ python -m pip install -r requirements.txt || goto :error
 python -m pip install pyinstaller || goto :error
 
 REM Resolve icon path: prefer ICO, else convert PNG -> ICO
-set ICON_DIR=%REPO%\frontend\images
+set ICON_DIR=%REPO%\frontend\images\zylo
 set ICON_ARG=
 if exist "%ICON_DIR%\Zylo_icon.ico" (
   set ICON_ARG=--icon "%ICON_DIR%\Zylo_icon.ico"

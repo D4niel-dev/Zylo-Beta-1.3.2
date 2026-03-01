@@ -332,10 +332,12 @@ async function appendGroupMessage(msg) {
     const container = document.getElementById('groupChatMessages');
     if (!container || !window.createDiscordMessage) return;
 
+    // Deduplication: skip if message with this ID already exists
+    const msgId = msg.id || msg.timestamp || msg.ts;
+    if (msgId && container.querySelector(`[data-msg-id="${msgId}"]`)) return;
+
     const el = await createDiscordMessage(msg);
-    
-    // Check if pinned (if msg has pinned property from backend, currently not sent but we can update later)
-    // For now, rely on updates or separate fetch.
+    if (msgId) el.setAttribute('data-msg-id', msgId);
     
     // Context Menu for Pinning
     el.addEventListener('contextmenu', (e) => {
@@ -351,8 +353,6 @@ async function appendGroupMessage(msg) {
         
         if (isOwner || isAdmin || isMod) {
             e.preventDefault();
-            // Simple toggle prompt for MVP
-            // Ideally check if already pinned to toggle text
             if (confirm("Pin/Unpin this message?")) {
                  const action = confirm("Click OK to PIN, Cancel to UNPIN") ? 'pin' : 'unpin';
                  window.socket.emit('pin_message', {

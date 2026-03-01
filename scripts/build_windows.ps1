@@ -15,7 +15,7 @@ python -m pip install -r requirements.txt
 python -m pip install pyinstaller
 
 # Entry script launches Flask backend and opens browser
-$entry = Join-Path $repoRoot 'scripts\main.py'
+$entry = Join-Path $repoRoot 'scripts\main.pyw'
 
 # Output dist path
 $dist = Join-Path $repoRoot 'dist'
@@ -23,7 +23,7 @@ if (!(Test-Path $dist)) { New-Item -ItemType Directory -Path $dist | Out-Null }
 
 # Create onefile exe.
 # Resolve icon path: prefer ICO, else convert PNG -> ICO
-$iconDir = Join-Path $repoRoot 'frontend/images'
+$iconDir = Join-Path $repoRoot 'frontend/images/zylo'
 $iconArg = ''
 if (Test-Path (Join-Path $iconDir 'Zylo_icon.ico')) {
   $iconArg = "--icon `"$((Join-Path $iconDir 'Zylo_icon.ico'))`""

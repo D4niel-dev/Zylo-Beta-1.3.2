@@ -1989,6 +1989,15 @@ def update_profile():
                 user["aboutMe"] = str(data.get("aboutMe") or data.get("about_long") or data.get("description") or "").strip()
                 print(f"Updated aboutMe for {username}: '{user['aboutMe']}'")
 
+            if "pronouns" in data:
+                user["pronouns"] = str(data.get("pronouns") or "").strip()
+                
+            if "allowDMs" in data:
+                user["allowDMs"] = bool(data.get("allowDMs"))
+                
+            if "allowFriendRequests" in data:
+                user["allowFriendRequests"] = bool(data.get("allowFriendRequests"))
+
             # Optional fields
             if level is not None:
                 user["level"] = level
@@ -2243,8 +2252,13 @@ def update_email():
     data = request.json or {}
     username = (data.get("username") or "").strip()
     new_email = (data.get("newEmail") or "").strip()
+    password = data.get("password")
+
     if not username or not new_email:
         return jsonify({"success": False, "error": "Missing username/newEmail"}), 400
+
+    if not password:
+        return jsonify({"success": False, "error": "Password confirmation is required"}), 400
 
     users = load_users()
     # Ensure email unique
@@ -2255,6 +2269,10 @@ def update_email():
     idx, user = _find_user(users, username)
     if user is None:
         return jsonify({"success": False, "error": "User not found"}), 404
+
+    # Verify password
+    if user.get("password") and user.get("password") != password:
+        return jsonify({"success": False, "error": "Incorrect password"}), 401
 
     users[idx]["email"] = new_email
     save_users(users)

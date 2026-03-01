@@ -135,31 +135,85 @@ function close2FAModal() {
 var pendingAvatar = null;
 var pendingBanner = null;
 var pendingUsertag = null;
+var pendingPronouns = null;
+var pendingActiveBadges = null; // null means no changes made
 var accountSettingsChanged = false;
 
-// Prompt functions for edit buttons
-function promptUsernameEdit() {
-    alert("Changing username is not supported yet.");
-}
+window.renderBadgeSelectionUI = function(unlockedBadges, activeBadges) {
+    const container = document.getElementById('settingsBadgesContainer');
+    const countSpan = document.getElementById('activeBadgesCount');
+    if (!container || !countSpan) return;
 
-function promptEmailEdit() {
-    alert("Changing email is not supported yet.");
-}
-
-function promptUsertagEdit() {
-    const current = document.getElementById('currentUsertag').innerText;
-    const newVal = prompt("Enter new Usertag (e.g. @CoolUser):", current);
-    if (newVal !== null && newVal !== current) {
-        document.getElementById('currentUsertag').innerText = newVal;
-        pendingUsertag = newVal;
-        accountSettingsChanged = true;
-        updateSaveButtonVisibility();
+    container.innerHTML = '';
+    
+    // Initialize pendingActiveBadges if null
+    if (pendingActiveBadges === null) {
+        pendingActiveBadges = [...activeBadges];
     }
+
+    countSpan.textContent = pendingActiveBadges.length;
+
+    if (!unlockedBadges || unlockedBadges.length === 0) {
+        container.innerHTML = '<div class="w-full text-center text-discord-gray-500 text-sm py-4 italic">No badges unlocked yet. Keep chatting to earn some!</div>';
+        return;
+    }
+
+    unlockedBadges.forEach(id => {
+        // Assume window.getBadge exists from badges-config.js
+        const badge = typeof window.getBadge === 'function' ? window.getBadge(id) : { name: id, icon: 'help-circle', color: 'text-gray-400' };
+        
+        const isSelected = pendingActiveBadges.includes(id);
+        
+        const badgeEl = document.createElement('div');
+        badgeEl.className = `w-12 h-12 rounded-lg flex items-center justify-center cursor-pointer transition-all transform active:scale-95 border-2 ${isSelected ? 'bg-discord-gray-700 border-discord-blurple shadow-[0_0_10px_rgba(88,101,242,0.3)]' : 'bg-discord-gray-800/50 border-transparent hover:bg-discord-gray-700/80'} group relative`;
+        badgeEl.title = badge.name;
+        
+        // Add checkmark if selected
+        let checkmark = isSelected ? '<div class="absolute -top-2 -right-2 bg-discord-blurple rounded-full p-0.5 border-2 border-[#2b2d31] shadow-md z-10"><i data-feather="check" class="w-3 h-3 text-white"></i></div>' : '';
+
+        badgeEl.innerHTML = `
+            ${checkmark}
+            <i data-feather="${badge.icon}" class="w-6 h-6 ${badge.color} transition-transform ${isSelected ? 'scale-110' : 'group-hover:scale-110'}"></i>
+        `;
+        
+        badgeEl.onclick = () => {
+            if (isSelected) {
+                // Deselect
+                pendingActiveBadges = pendingActiveBadges.filter(b => b !== id);
+            } else {
+                // Select (max 3)
+                if (pendingActiveBadges.length >= 3) {
+                    if (window.showToast) window.showToast("You can only display up to 3 active badges.", 2000, true);
+                    return;
+                }
+                pendingActiveBadges.push(id);
+            }
+            
+            toggleSettingChanged();
+            window.renderBadgeSelectionUI(unlockedBadges, activeBadges); // Re-render this section
+        };
+
+        container.appendChild(badgeEl);
+    });
+
+    if (window.feather) {
+        feather.replace();
+    }
+};
+
+// Account edit functions moved to mainapp.html for Discord-like Modal support
+
+function toggleSettingChanged() {
+    accountSettingsChanged = true;
+    updateSaveButtonVisibility();
 }
 
 function updateSaveButtonVisibility() {
     const btn = document.getElementById('saveSettingsBtn');
     if (btn) btn.style.display = accountSettingsChanged ? 'block' : 'none';
+    
+    const accountBtn = document.getElementById('saveAccountSettingsBtn');
+    if (accountBtn) accountBtn.style.display = accountSettingsChanged ? 'flex' : 'none';
 }
 
 function showSaveSettingsModal() {
@@ -231,6 +285,30 @@ async function persistAccountSettings() {
         hasChanges = true;
     }
 
+    if (pendingPronouns !== null) {
+        payload.pronouns = pendingPronouns;
+        hasChanges = true;
+    }
+
+    if (pendingActiveBadges !== null) {
+        payload.badges_active = pendingActiveBadges;
+        hasChanges = true;
+    }
+
+    const dmToggle = document.getElementById("allowDMsToggle");
+    if (dmToggle) {
+        payload.allowDMs = dmToggle.checked;
+    }
+
+    const frToggle = document.getElementById("allowFriendRequestsToggle");
+    if (frToggle) {
+        payload.allowFriendRequests = frToggle.checked;
+    }
+
+    if (accountSettingsChanged) {
+        hasChanges = true;
+    }
+
     if (!hasChanges) {
         if (window.showToast) window.showToast("No changes to save.");
         return;
@@ -253,6 +331,10 @@ async function persistAccountSettings() {
             pendingAvatar = null;
             pendingBanner = null;
             pendingUsertag = null;
+            pendingPronouns = null;
+            pendingActiveBadges = null;
+            accountSettingsChanged = false;
+            updateSaveButtonVisibility();
 
              if (window.showToast) window.showToast("Profile updated successfully!");
 

@@ -1976,7 +1976,7 @@
           >
             <!-- Left Column: Identity Card -->
             <div
-              class="w-full md:w-80 flex-shrink-0 flex flex-col gap-4 md:overflow-y-auto scrollbar-hide"
+              class="w-full md:w-80 flex-shrink-0 flex flex-col gap-4"
             >
               <div
                 class="bg-discord-gray-800 rounded-2xl shadow-xl border border-discord-gray-700/50 relative group"
@@ -2767,954 +2767,868 @@
         >
           <div class="w-full max-w-4xl mx-auto space-y-8">
             <div id="generalSettings" class="settings-content w-full space-y-6">
-              <h2
-                class="text-2xl font-bold text-white flex items-center gap-2"
-                data-i18n="settings.general"
-              >
-                <button
-                  onclick="toggleSidebarCollapse()"
-                  class="sidebar-expand-btn hidden text-discord-gray-400 hover:text-white transition"
-                  title="Expand Sidebar"
-                >
+              <h2 class="text-3xl font-extrabold text-white flex items-center gap-2 mb-6" data-i18n="settings.general">
+                <button onclick="toggleSidebarCollapse()" class="sidebar-expand-btn hidden text-discord-gray-400 hover:text-white transition" title="Expand Sidebar">
                   <i data-feather="chevron-right" class="w-6 h-6"></i>
                 </button>
                 General Settings
               </h2>
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span
-                  id="labelEnableAnimations"
-                  data-i18n="settings.enableAnimations"
-                  >Enable Animations</span
-                >
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="animationsToggle"
-                    class="sr-only peer"
-                  />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
-              </div>
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span id="labelCompactMode" data-i18n="settings.compactMode"
-                  >Compact Mode</span
-                >
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="compactToggle"
-                    class="sr-only peer"
-                  />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-purple-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
-              </div>
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span id="labelShowTooltips" data-i18n="settings.showTooltips"
-                  >Show Tooltips</span
-                >
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="tooltipToggle"
-                    class="sr-only peer"
-                  />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-green-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
-              </div>
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span id="labelShowHomeTab" data-i18n="settings.showHomeTab"
-                  >Show Home Tab</span
-                >
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="showHomeTabToggle"
-                    class="sr-only peer"
-                    onchange="toggleHomeTab(this.checked)"
-                  />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <label
-                  id="labelLanguage"
-                  for="languageSelect"
-                  class="block mb-2"
-                  data-i18n="settings.language"
-                  >Language</label
-                >
-                <select
-                  id="languageSelect"
-                  onchange="window.setLanguage(this.value)"
-                  class="w-full p-2 rounded-lg border-discord-gray-600 bg-discord-gray-700"
-                >
-                  <option value="en">English</option>
-                  <option value="vi">Tiếng Việt</option>
-                  <option value="es">Español</option>
-                </select>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <label
-                  id="labelStartupPage"
-                  for="startupPage"
-                  class="block mb-2"
-                  data-i18n="settings.startupPage"
-                  >Startup Page</label
-                >
-                <select
-                  id="startupPage"
-                  class="w-full p-2 rounded-lg border-discord-gray-600 bg-discord-gray-700"
-                >
-                  <option value="home">Home</option>
-                  <option value="profile">Profile</option>
-                  <option value="messages">Community</option>
-                  <option value="friends">Friends</option>
-                  <option value="moments">Moments</option>
-                  <option value="settings">Settings</option>
-                </select>
-              </div>
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span id="labelAutoSave" data-i18n="settings.autoSave"
-                  >Auto Save Changes</span
-                >
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="autoSaveToggle"
-                    class="sr-only peer"
-                  />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-yellow-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
-              </div>
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span id="labelConfirmExit" data-i18n="settings.confirmExit"
-                  >Confirm Before Exit</span
-                >
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="confirmExitToggle"
-                    class="sr-only peer"
-                  />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-red-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
+
+              <div class="grid md:grid-cols-2 gap-5 mb-6">
+                <!-- App Behavior -->
+                <div class="zylo-premium-card p-5 group flex flex-col gap-4 hover:border-discord-blurple/50 transition-colors">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2.5 bg-discord-blurple/10 rounded-xl text-discord-blurple group-hover:scale-110 group-hover:bg-discord-blurple/20 transition-all">
+                      <i data-feather="layout" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide">App Behavior</h3>
+                  </div>
+                  
+                  <div>
+                    <label id="labelLanguage" for="languageSelect" class="block text-sm font-medium text-discord-gray-300 mb-2" data-i18n="settings.language">Language</label>
+                    <select id="languageSelect" onchange="window.setLanguage(this.value)" class="w-full p-2.5 rounded-xl border border-white/10 bg-black/20 text-white focus:outline-none focus:border-discord-blurple transition-colors">
+                      <option value="en">English</option>
+                      <option value="vi">Tiếng Việt</option>
+                      <option value="es">Español</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <label id="labelStartupPage" for="startupPage" class="block text-sm font-medium text-discord-gray-300 mb-2" data-i18n="settings.startupPage">Startup Page</label>
+                    <select id="startupPage" class="w-full p-2.5 rounded-xl border border-white/10 bg-black/20 text-white focus:outline-none focus:border-discord-blurple transition-colors">
+                      <option value="home">Home</option>
+                      <option value="profile">Profile</option>
+                      <option value="messages">Community</option>
+                      <option value="friends">Friends</option>
+                      <option value="moments">Moments</option>
+                      <option value="settings">Settings</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Preferences -->
+                <div class="zylo-premium-card p-5 group flex flex-col gap-1 hover:border-discord-blurple/50 transition-colors">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2.5 bg-discord-blurple/10 rounded-xl text-discord-blurple group-hover:scale-110 group-hover:bg-discord-blurple/20 transition-all">
+                      <i data-feather="sliders" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide">Preferences</h3>
+                  </div>
+                  
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors">
+                    <span id="labelEnableAnimations" class="text-discord-gray-300 font-medium" data-i18n="settings.enableAnimations">Enable Animations</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="animationsToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors">
+                    <span id="labelCompactMode" class="text-discord-gray-300 font-medium" data-i18n="settings.compactMode">Compact Mode</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="compactToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-purple-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors">
+                    <span id="labelShowTooltips" class="text-discord-gray-300 font-medium" data-i18n="settings.showTooltips">Show Tooltips</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="tooltipToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-green-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors">
+                    <span id="labelShowHomeTab" class="text-discord-gray-300 font-medium" data-i18n="settings.showHomeTab">Show Home Tab</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="showHomeTabToggle" class="sr-only peer" onchange="toggleHomeTab(this.checked)" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+                </div>
               </div>
 
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span id="labelReadReceipts" data-i18n="settings.readReceipts"
-                  >Send Read Receipts</span
-                >
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="readReceiptsToggle"
-                    class="sr-only peer"
-                  />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-blue-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
+              <!-- Application Data -->
+              <div class="zylo-premium-card p-5 group flex flex-col gap-1 hover:border-emerald-500/50 transition-colors mb-6">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-500 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all">
+                    <i data-feather="database" class="w-5 h-5"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-white tracking-wide">Application Data</h3>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div class="flex items-center justify-between p-4 bg-black/20 hover:bg-white/5 rounded-lg border border-white/5 transition-colors">
+                    <span id="labelAutoSave" class="text-discord-gray-300 font-medium" data-i18n="settings.autoSave">Auto Save Changes</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="autoSaveToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-yellow-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-4 bg-black/20 hover:bg-white/5 rounded-lg border border-white/5 transition-colors">
+                    <span id="labelConfirmExit" class="text-discord-gray-300 font-medium" data-i18n="settings.confirmExit">Confirm Before Exit</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="confirmExitToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-red-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-4 bg-black/20 hover:bg-white/5 rounded-lg border border-white/5 transition-colors md:col-span-2 flex-col sm:flex-row gap-2">
+                    <span id="labelReadReceipts" class="text-discord-gray-300 font-medium" data-i18n="settings.readReceipts">Send Read Receipts</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="readReceiptsToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-blue-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+                </div>
               </div>
 
-              <div
-                id="saveSettingsBtn"
-                class="pt-4 border-t border-discord-gray-600"
-                style="display: none"
-              >
-                <button
-                  onclick="showSaveSettingsModal()"
-                  class="w-full px-4 py-2 bg-discord-blurple hover:bg-opacity-80 text-white rounded-lg mb-3"
-                >
-                  <i data-feather="save" class="w-4 h-4 inline mr-2"></i>
-                  Save Changes
-                </button>
-              </div>
-              <div class="pt-4 border-t border-discord-gray-600">
-                <button
-                  id="btnResetAll"
-                  onclick="resetAllSettings()"
-                  class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                  data-i18n="settings.resetAll"
-                >
-                  Reset All Settings
+              <!-- Action Buttons -->
+              <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                <div id="saveSettingsBtn" class="flex-1" style="display: none">
+                  <button onclick="showSaveSettingsModal()" class="w-full premium-btn px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 text-white rounded-xl font-bold flex items-center justify-center gap-2">
+                    <i data-feather="save" class="w-5 h-5"></i> Save Changes
+                  </button>
+                </div>
+                <button id="btnResetAll" onclick="resetAllSettings()" class="flex-1 premium-btn px-4 py-3 bg-gradient-to-r from-red-500 to-rose-600 shadow-lg shadow-red-500/20 text-white rounded-xl font-bold flex items-center justify-center gap-2" data-i18n="settings.resetAll">
+                  <i data-feather="rotate-ccw" class="w-5 h-5"></i> Reset All Settings
                 </button>
               </div>
             </div>
 
-            <div
-              id="appearanceSettings"
-              class="settings-content w-full hidden space-y-6"
-            >
-              <h2
-                class="text-2xl font-bold text-white"
-                data-i18n="settings.appearance"
-              >
-                Appearance
+            <div id="appearanceSettings" class="settings-content w-full hidden space-y-6">
+              <h2 class="text-3xl font-extrabold text-white flex items-center gap-2 mb-6" data-i18n="settings.appearance">
+                <button onclick="toggleSidebarCollapse()" class="sidebar-expand-btn hidden text-discord-gray-400 hover:text-white transition" title="Expand Sidebar">
+                  <i data-feather="chevron-right" class="w-6 h-6"></i>
+                </button>
+                Appearance Settings
               </h2>
 
-              <!-- Theme Presets -->
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3
-                  class="font-semibold mb-2 text-white"
-                  data-i18n="settings.themePresets"
-                >
-                  Theme Presets
-                </h3>
-                <select
-                  id="themePresetSelect"
-                  onchange="applyThemePreset(this.value)"
-                  class="w-full bg-discord-gray-700 text-white p-2 rounded border border-discord-gray-600"
-                >
-                  <option value="">Select a preset...</option>
-                  <option value="light">Light Mode</option>
-                  <option value="dark">Dark Mode (Default)</option>
-                  <option value="midnight">Midnight Blue</option>
-                  <option value="custom">Custom Strategy</option>
-                </select>
-              </div>
+              <div class="grid md:grid-cols-2 gap-5 mb-6">
+                <!-- Visuals & Themes -->
+                <div class="zylo-premium-card p-5 group flex flex-col gap-4 hover:border-discord-blurple/50 transition-colors">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2.5 bg-discord-blurple/10 rounded-xl text-discord-blurple group-hover:scale-110 group-hover:bg-discord-blurple/20 transition-all">
+                      <i data-feather="monitor" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide" data-i18n="settings.themePresets">Visuals & Themes</h3>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-sm font-medium text-discord-gray-300 mb-2">Theme Presets</label>
+                    <select id="themePresetSelect" onchange="applyThemePreset(this.value)" class="w-full p-2.5 rounded-xl border border-white/10 bg-black/20 text-white focus:outline-none focus:border-discord-blurple transition-colors">
+                      <option value="">Select a preset...</option>
+                      <option value="light">Light Mode</option>
+                      <option value="dark">Dark Mode (Default)</option>
+                      <option value="amoled">AMOLED Pitch Black</option>
+                      <option value="midnight">Midnight Blue</option>
+                      <option value="ocean">Deep Ocean</option>
+                      <option value="forest">Enchanted Forest</option>
+                      <option value="sunset">Retro Sunset</option>
+                      <option value="dracula">Dracula</option>
+                      <option value="custom">Custom Strategy</option>
+                    </select>
+                  </div>
 
-              <!-- Icon Set -->
-              <div class="p-3 bg-discord-gray-800 rounded-lg mt-3">
-                <h3 class="font-semibold mb-2 text-white">Icon Set</h3>
-                <select
-                  id="iconSetSelect"
-                  onchange="toggleIconProvider(this.value)"
-                  class="w-full bg-discord-gray-700 text-white p-2 rounded border border-discord-gray-600"
-                >
-                  <option value="feather">Feather Icons (Default)</option>
-                  <option value="heroicons">Heroicons (Outline)</option>
-                </select>
-                <div class="text-xs text-gray-400 mt-1">
-                  <i data-feather="info" class="w-3 h-3 inline"></i>
-                  Requires page reload to fully apply.
+                  <div>
+                    <label class="block text-sm font-extrabold text-white mb-3">Quick Settings</label>
+                    
+                    <div class="space-y-5">
+                      <!-- Base Theme -->
+                      <div>
+                        <span class="text-xs font-semibold text-discord-gray-400 uppercase mb-2 block tracking-wider">Base Theme</span>
+                        <div class="flex items-center gap-2">
+                          <button onclick="setTheme('light')" class="flex-1 py-2 bg-white text-gray-900 rounded-lg text-sm font-bold hover:bg-gray-200 transition shadow-sm flex items-center justify-center gap-2"><i data-feather="sun" class="w-4 h-4"></i> Light</button>
+                          <button onclick="setTheme('dark')" class="flex-1 py-2 bg-discord-gray-700 text-white rounded-lg text-sm font-bold hover:bg-discord-gray-600 transition border border-white/5 shadow-sm flex items-center justify-center gap-2"><i data-feather="moon" class="w-4 h-4"></i> Dark</button>
+                          <button onclick="setTheme('system')" class="flex-1 py-2 bg-black/20 text-gray-300 rounded-lg text-sm font-medium hover:bg-white/5 transition border border-white/5 border-dashed flex items-center justify-center gap-2"><i data-feather="monitor" class="w-4 h-4"></i> System</button>
+                        </div>
+                      </div>
+
+                      <!-- Accents -->
+                      <div>
+                        <span class="text-xs font-semibold text-discord-gray-400 uppercase mb-2 block tracking-wider">Accent Color</span>
+                        <div class="flex items-center gap-3 flex-wrap">
+                          <span id="themeColorSwatch" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/5 bg-black/30 text-xs font-mono text-white shadow-inner">
+                            <span id="themeColorDot" class="w-3.5 h-3.5 rounded-full border border-white/20 shadow-sm"></span>
+                            <span id="themeColorText">#ffffff</span>
+                          </span>
+                          <div class="relative overflow-hidden w-9 h-9 rounded-lg border border-white/10 cursor-pointer shadow-sm hover:scale-110 transition-transform bg-gradient-to-tr from-pink-500 via-purple-500 to-indigo-500" title="Pick Custom Accent Color">
+                             <input type="color" id="customThemeColorPicker" class="absolute -top-4 -left-4 w-16 h-16 cursor-pointer mix-blend-overlay" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Font Scaling -->
+                      <div>
+                        <span class="text-xs font-semibold text-discord-gray-400 uppercase mb-2 block tracking-wider">Font Scaling</span>
+                        <div class="flex items-center gap-2">
+                          <button onclick="document.documentElement.style.fontSize='14px'" class="flex-1 py-2 bg-black/20 text-gray-300 rounded-lg text-xs hover:bg-white/10 transition border border-white/5 flex items-center justify-center gap-2"><i data-feather="type" class="w-3 h-3"></i> Small</button>
+                          <button onclick="document.documentElement.style.fontSize='16px'" class="flex-1 py-2 bg-discord-blurple/20 text-discord-blurple border border-discord-blurple/30 rounded-lg text-sm font-bold hover:bg-discord-blurple/30 transition shadow-[0_0_15px_rgba(88,101,242,0.15)] relative overflow-hidden group flex items-center justify-center gap-2">
+                            <i data-feather="type" class="w-4 h-4"></i> Normal
+                            <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                          </button>
+                          <button onclick="document.documentElement.style.fontSize='18px'" class="flex-1 py-2 bg-black/20 text-gray-300 rounded-lg text-base hover:bg-white/10 transition border border-white/5 font-medium flex items-center justify-center gap-2"><i data-feather="type" class="w-5 h-5"></i> Large</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Icons & Background -->
+                <div class="zylo-premium-card p-5 group flex flex-col gap-4 hover:border-discord-blurple/50 transition-colors">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2.5 bg-discord-blurple/10 rounded-xl text-discord-blurple group-hover:scale-110 group-hover:bg-discord-blurple/20 transition-all">
+                      <i data-feather="image" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide">Icons & Background</h3>
+                  </div>
+                  
+                  <div>
+                    <label class="block text-sm font-medium text-discord-gray-300 mb-2">Icon Set</label>
+                    <select id="iconSetSelect" onchange="toggleIconProvider(this.value)" class="w-full p-2.5 rounded-xl border border-white/10 bg-black/20 text-white focus:outline-none focus:border-discord-blurple transition-colors">
+                      <option value="feather">Feather Icons (Default)</option>
+                      <option value="heroicons">Heroicons (Outline)</option>
+                    </select>
+                    <div class="text-xs text-yellow-500 mt-2 flex items-center gap-1 opacity-80">
+                      <i data-feather="info" class="w-3 h-3"></i> Requires page reload to apply.
+                    </div>
+                  </div>
+
+                  <div class="mt-2">
+                    <div class="flex items-center justify-between p-3 bg-black/20 hover:bg-white/5 rounded-lg border border-white/5 transition-colors mb-3">
+                      <span id="labelSolidBg" class="text-discord-gray-300 font-medium" data-i18n="settings.solidBg">Solid Background</span>
+                      <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="solidBgToggle" class="sr-only peer" />
+                        <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                      </label>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                       <label class="block text-sm font-medium text-discord-gray-300">Custom Background Image</label>
+                       <input type="file" id="bgImageInput" accept="image/*" class="block w-full text-sm text-discord-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-discord-blurple file:text-white hover:file:bg-discord-blurple/80 cursor-pointer" />
+                       <div class="flex gap-2 mt-1">
+                          <button id="previewBgBtn" class="flex-1 py-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded-lg hover:bg-emerald-600/30 transition text-sm font-medium">Preview Image</button>
+                          <button id="clearBgImageBtn" class="flex-1 py-1.5 bg-red-600/20 text-red-400 border border-red-500/30 rounded-lg hover:bg-red-600/30 transition text-sm font-medium">Clear Image</button>
+                       </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
+              <!-- Advanced Editor -->
+              <div class="zylo-premium-card p-5 group hover:border-purple-500/50 transition-colors mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                 <div class="flex items-center gap-4">
+                    <div class="p-3 bg-purple-500/10 rounded-xl text-purple-400 group-hover:scale-110 transition-transform">
+                       <i data-feather="edit-3" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                      <h3 class="text-xl font-bold text-white tracking-wide" data-i18n="settings.advancedThemeEditor">Advanced Theme Editor</h3>
+                      <p class="text-sm text-discord-gray-400">Customize every color and background explicitly.</p>
+                    </div>
+                 </div>
+                 <button disabled class="shrink-0 px-5 py-2.5 bg-purple-600/20 text-purple-400 rounded-xl font-medium cursor-not-allowed border border-purple-500/30">
+                    <i data-feather="lock" class="w-4 h-4 inline mr-1 -mt-0.5"></i> In-Dev
+                 </button>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="pt-2">
+                <button onclick="resetAppearanceSettings()" class="w-full premium-btn px-4 py-3 bg-gradient-to-r from-red-500 to-rose-600 shadow-lg shadow-red-500/20 text-white rounded-xl font-bold flex items-center justify-center gap-2" data-i18n="settings.resetAppearance">
+                  <i data-feather="rotate-ccw" class="w-5 h-5"></i> Reset Appearance to Default
+                </button>
+              </div>
+
+              <!-- Required Scripts -->
               <script>
-                // Initialize dropdown state
                 document.addEventListener("DOMContentLoaded", () => {
-                  const savedProvider =
-                    localStorage.getItem("icon_provider") || "feather";
+                  const savedProvider = localStorage.getItem("icon_provider") || "feather";
                   const select = document.getElementById("iconSetSelect");
                   if (select) select.value = savedProvider;
                 });
               </script>
-
-              <!-- Moved Controls -->
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3
-                  class="font-semibold mb-3 text-white"
-                  data-i18n="settings.quickSettings"
-                >
-                  Quick Settings
-                </h3>
-                <div class="flex items-center gap-3 flex-wrap mb-4">
-                  <span
-                    id="themeColorSwatch"
-                    class="inline-flex items-center gap-2 px-2 py-1 rounded border text-xs border-discord-gray-600"
-                  >
-                    <span
-                      id="themeColorDot"
-                      class="w-4 h-4 rounded-full border"
-                    ></span>
-                    <span id="themeColorText">#ffffff</span>
-                  </span>
-                  <button
-                    onclick="setTheme('light')"
-                    class="px-3 py-1 bg-gray-200 text-gray-800 rounded"
-                  >
-                    Light
-                  </button>
-                  <button
-                    onclick="setTheme('dark')"
-                    class="px-3 py-1 bg-discord-gray-600 text-white rounded"
-                  >
-                    Dark
-                  </button>
-                  <button
-                    onclick="setTheme('system')"
-                    class="px-3 py-1 bg-discord-gray-600 text-white rounded"
-                  >
-                    System
-                  </button>
-                  <input
-                    type="color"
-                    id="customThemeColorPicker"
-                    class="h-9 w-12 p-1 rounded border bg-discord-gray-700 border-discord-gray-600"
-                    title="Custom Accent Color"
-                  />
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <label class="inline-flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="solidBgToggle"
-                      class="accent-discord-blurple"
-                    />
-                    <span id="labelSolidBg" data-i18n="settings.solidBg"
-                      >Solid BG</span
-                    >
-                  </label>
-                  <div class="flex items-center gap-2">
-                    <input
-                      type="file"
-                      id="bgImageInput"
-                      accept="image/*"
-                      class="block w-full text-sm text-discord-gray-300 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-discord-gray-600 file:text-white hover:file:bg-discord-gray-500"
-                    />
-                    <button
-                      id="previewBgBtn"
-                      class="px-3 py-1 bg-green-700 rounded"
-                    >
-                      Preview
-                    </button>
-                    <button
-                      id="clearBgImageBtn"
-                      class="px-3 py-1 bg-discord-gray-600 rounded"
-                    >
-                      Clear
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Custom Editor Access -->
-              <div
-                class="p-3 bg-discord-gray-800 rounded-lg flex items-center justify-between"
-              >
-                <div>
-                  <h3
-                    class="font-semibold text-white"
-                    data-i18n="settings.advancedThemeEditor"
-                  >
-                    Advanced Theme Editor
-                  </h3>
-                  <p class="text-sm text-discord-gray-400">
-                    Customize every color and background
-                  </p>
-                </div>
-                <button
-                  disabled
-                  class="px-4 py-2 bg-discord-blurple text-white rounded opacity-50 cursor-not-allowed"
-                >
-                  In-Dev
-                </button>
-              </div>
-
-              <!-- Reset -->
-              <div class="pt-4 border-t border-discord-gray-600">
-                <button
-                  onclick="resetAppearanceSettings()"
-                  class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg"
-                  data-i18n="settings.resetAppearance"
-                >
-                  Reset Appearance to Default
-                </button>
-              </div>
             </div>
-            <!-- Added this closing div for appearanceSettings -->
 
-            <div
-              id="soundSettings"
-              class="settings-content w-full hidden space-y-6"
-            >
-              <h2
-                class="text-2xl font-bold text-white"
-                data-i18n="settings.sounds"
-              >
+            <div id="soundSettings" class="settings-content w-full hidden space-y-6">
+              <h2 class="text-3xl font-extrabold text-white flex items-center gap-2 mb-6" data-i18n="settings.sounds">
+                <button onclick="toggleSidebarCollapse()" class="sidebar-expand-btn hidden text-discord-gray-400 hover:text-white transition" title="Expand Sidebar">
+                  <i data-feather="chevron-right" class="w-6 h-6"></i>
+                </button>
                 Sound & Notifications
               </h2>
 
-              <!-- Do Not Disturb -->
-              <div
-                class="bg-discord-gray-900 p-4 rounded-lg border border-discord-gray-600 mb-4"
-              >
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-3">
-                    <div class="bg-red-500/20 p-2 rounded-full text-red-500">
-                      <i data-feather="bell-off" class="w-5 h-5"></i>
+              <div class="grid md:grid-cols-2 gap-5 mb-6">
+                <!-- Volumes & Playback Card -->
+                <div class="zylo-premium-card p-5 group flex flex-col gap-4 hover:border-discord-blurple/50 transition-colors">
+                  <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2.5 bg-discord-blurple/10 rounded-xl text-discord-blurple group-hover:scale-110 group-hover:bg-discord-blurple/20 transition-all">
+                      <i data-feather="volume-2" class="w-5 h-5"></i>
                     </div>
-                    <div>
-                      <h3
-                        class="text-white font-medium"
-                        data-i18n="settings.doNotDisturb"
-                      >
-                        Do Not Disturb
-                      </h3>
-                      <p
-                        class="text-xs text-discord-gray-400"
-                        data-i18n="settings.dndDesc"
-                      >
-                        Suppress all notification sounds (messages, calls).
-                      </p>
+                    <h3 class="text-xl font-bold text-white tracking-wide">Volumes & Playback</h3>
+                  </div>
+
+                  <!-- Do Not Disturb -->
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors border border-red-500/20 bg-red-500/5 mb-2">
+                    <div class="flex items-center gap-3">
+                      <div class="bg-red-500/20 p-2 rounded-full text-red-500">
+                        <i data-feather="bell-off" class="w-4 h-4"></i>
+                      </div>
+                      <div>
+                        <h4 class="text-white font-medium text-sm" data-i18n="settings.doNotDisturb">Do Not Disturb</h4>
+                        <p class="text-xs text-discord-gray-400" data-i18n="settings.dndDesc">Suppress all notification sounds.</p>
+                      </div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="dndToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-red-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <!-- Volume Sliders -->
+                  <div class="space-y-6 mt-2">
+                    <div class="p-4 bg-black/20 border border-white/5 rounded-xl text-discord-gray-300 hover:border-discord-blurple/30 transition-colors">
+                      <div class="flex items-center justify-between mb-3 pb-2 border-b border-white/5">
+                        <label for="soundVolume" class="font-semibold flex items-center gap-2" data-i18n="settings.soundVolume">
+                          <i data-feather="volume-2" class="w-4 h-4 text-discord-blurple"></i> Sound Effects
+                        </label>
+                        <span id="soundVolumeValue" class="text-xs font-bold text-discord-blurple bg-discord-blurple/10 px-2 py-0.5 rounded-md">75%</span>
+                      </div>
+                      <input type="range" id="soundVolume" min="0" max="100" value="75" oninput="document.getElementById('soundVolumeValue').innerText = this.value + '%'" class="w-full h-2.5 bg-black/50 rounded-lg appearance-none cursor-pointer accent-discord-blurple hover:accent-indigo-400 transition-all shadow-inner focus:outline-none focus:ring-2 focus:ring-discord-blurple/50" />
+                    </div>
+                    
+                    <div class="p-4 bg-black/20 border border-white/5 rounded-xl text-discord-gray-300 hover:border-green-500/30 transition-colors">
+                      <div class="flex items-center justify-between mb-3 pb-2 border-b border-white/5">
+                        <label for="musicVolume" class="font-semibold flex items-center gap-2" data-i18n="settings.musicVolume">
+                          <i data-feather="music" class="w-4 h-4 text-green-500"></i> Background Music
+                        </label>
+                        <span id="musicVolumeValue" class="text-xs font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded-md">60%</span>
+                      </div>
+                      <input type="range" id="musicVolume" min="0" max="100" value="60" oninput="document.getElementById('musicVolumeValue').innerText = this.value + '%'" class="w-full h-2.5 bg-black/50 rounded-lg appearance-none cursor-pointer accent-green-500 hover:accent-emerald-400 transition-all shadow-inner focus:outline-none focus:ring-2 focus:ring-green-500/50" />
                     </div>
                   </div>
-                  <label
-                    class="relative inline-flex items-center cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      id="dndToggle"
-                      class="sr-only peer"
-                    />
-                    <div
-                      class="w-11 h-6 bg-discord-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"
-                    ></div>
-                  </label>
+
+                  <!-- Sound Profile -->
+                  <div class="mt-4 pt-4 border-t border-white/5">
+                    <label for="soundProfile" class="block text-sm font-semibold text-discord-gray-300 mb-2 uppercase tracking-wide" data-i18n="settings.soundProfile">Sound Profile Options</label>
+                    <select id="soundProfile" class="w-full flex-1 p-3 rounded-xl border border-white/10 bg-black/30 text-white focus:outline-none focus:border-discord-blurple transition-colors appearance-none cursor-pointer font-medium tracking-wide">
+                      <option value="default">Default Theme</option>
+                      <option value="soft">Soft & Chill</option>
+                      <option value="retro">8-bit Retro</option>
+                      <option value="clicky">Mechanical Clicky</option>
+                    </select>
+                  </div>
+                  
+                  <!-- Voice Devices -->
+                  <div class="mt-4 pt-4 border-t border-white/5 space-y-4">
+                    <div class="flex items-center gap-2 mb-1">
+                      <h4 class="text-sm font-semibold text-discord-gray-400 uppercase tracking-widest">Voice & Video API</h4>
+                      <span class="px-2 py-0.5 bg-yellow-500/20 text-yellow-500 text-[10px] font-bold rounded-full border border-yellow-500/30">Beta</span>
+                    </div>
+                    <div>
+                      <label for="inputDevice" class="block text-sm font-medium text-discord-gray-300 mb-2 flex items-center gap-2"><i data-feather="mic" class="w-3.5 h-3.5 text-discord-gray-400"></i> Input Device (Mic)</label>
+                      <select id="inputDevice" class="w-full p-2.5 rounded-xl border border-white/10 bg-black/20 text-discord-gray-400 focus:outline-none focus:border-discord-blurple transition-colors cursor-not-allowed" disabled>
+                        <option value="default">Default - Microphone Array</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label for="outputDevice" class="block text-sm font-medium text-discord-gray-300 mb-2 flex items-center gap-2"><i data-feather="speaker" class="w-3.5 h-3.5 text-discord-gray-400"></i> Output Device (Speakers)</label>
+                      <select id="outputDevice" class="w-full p-2.5 rounded-xl border border-white/10 bg-black/20 text-discord-gray-400 focus:outline-none focus:border-discord-blurple transition-colors cursor-not-allowed" disabled>
+                        <option value="default">Default - System Audio</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Events & Notifications Card -->
+                <div class="zylo-premium-card p-5 group flex flex-col gap-1 hover:border-discord-blurple/50 transition-colors">
+                  <div class="flex items-center gap-3 mb-3">
+                    <div class="p-2.5 bg-discord-blurple/10 rounded-xl text-discord-blurple group-hover:scale-110 group-hover:bg-discord-blurple/20 transition-all">
+                      <i data-feather="bell" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide">Events & Notification</h3>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors">
+                    <span data-i18n="settings.muteAll" class="text-discord-gray-300 font-medium">Mute All Sounds</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="muteAll" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-red-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors">
+                    <span data-i18n="settings.enableSound" class="text-discord-gray-300 font-medium">Enable Sound Effects</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="enableSound" class="sr-only peer" checked />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors">
+                    <span data-i18n="settings.enableMusic" class="text-discord-gray-300 font-medium">Enable Background Music</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="enableMusic" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors border-b border-white/5 pb-4 mb-2">
+                    <span data-i18n="settings.duckMusic" class="text-discord-gray-300 font-medium">Duck Music (Lower volume on event)</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="duckMusic" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-discord-blurple rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all shadow-inner"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-3 hover:bg-white/5 rounded-lg transition-colors bg-purple-500/5 border border-purple-500/10">
+                    <div class="flex items-center gap-3">
+                      <i data-feather="message-square" class="w-4 h-4 text-purple-400"></i>
+                      <span class="text-discord-gray-300 font-medium">Text-To-Speech (TTS) Messages</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="ttsToggle" class="sr-only peer" />
+                      <div class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-purple-500 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all shadow-inner"></div>
+                    </label>
+                  </div>
+
+                  <div class="mt-4 border-t border-white/10 pt-4 px-1">
+                    <h4 class="text-sm font-semibold text-discord-gray-400 mb-4 uppercase tracking-wider flex items-center gap-2" data-i18n="settings.playEvents">
+                      <i data-feather="activity" class="w-4 h-4"></i> Trigger Sounds For:
+                    </h4>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <!-- Chat & Messaging -->
+                      <div class="space-y-3">
+                        <span class="text-xs font-bold text-discord-gray-500 uppercase">Chat & Messaging</span>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playSend" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform" data-i18n="settings.playSend">Message Sent</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playReceive" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform" data-i18n="settings.playReceive">Message Received</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playMention" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform">You were Mentioned</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playCallRing" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform">Incoming Call / Ringing</span>
+                        </label>
+                      </div>
+
+                      <!-- System & Friends -->
+                      <div class="space-y-3">
+                        <span class="text-xs font-bold text-discord-gray-500 uppercase">System & Social</span>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playFriendOnline" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform">Friend comes Online</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playCallDisconnect" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform">Voice Disconnected</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playUi" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform" data-i18n="settings.playUi">App UI Interactions</span>
+                        </label>
+                        <label class="flex items-center gap-3 text-discord-gray-300 cursor-pointer hover:text-white transition group">
+                          <input type="checkbox" id="playAchievement" class="w-4 h-4 rounded border-discord-gray-600 text-discord-blurple focus:ring-discord-blurple focus:ring-offset-discord-gray-800 transition-colors" checked />
+                          <span class="group-hover:translate-x-1 transition-transform">Achievement / Badge Unlocked</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <label
-                  for="soundVolume"
-                  class="block mb-2"
-                  data-i18n="settings.soundVolume"
-                  >Sound Effects Volume</label
-                >
-                <input
-                  type="range"
-                  id="soundVolume"
-                  min="0"
-                  max="100"
-                  value="75"
-                  class="w-full accent-discord-blurple"
-                />
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <label
-                  for="musicVolume"
-                  class="block mb-2"
-                  data-i18n="settings.musicVolume"
-                  >Music Volume</label
-                >
-                <input
-                  type="range"
-                  id="musicVolume"
-                  min="0"
-                  max="100"
-                  value="60"
-                  class="w-full accent-green-500"
-                />
-              </div>
-              <div
-                class="flex items-center justify-between p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <span data-i18n="settings.muteAll">Mute All Sounds</span>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" id="muteAll" class="sr-only peer" />
-                  <div
-                    class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-red-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                  ></div>
-                </label>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg space-y-2">
-                <div class="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="enableSound"
-                    class="accent-discord-blurple"
-                  />
-                  <label for="enableSound" data-i18n="settings.enableSound"
-                    >Enable Sound Effects</label
-                  >
-                </div>
-                <div class="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="enableMusic"
-                    class="accent-discord-blurple"
-                  />
-                  <label for="enableMusic" data-i18n="settings.enableMusic"
-                    >Enable Background Music</label
-                  >
-                </div>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <label
-                  for="soundProfile"
-                  class="block mb-2"
-                  data-i18n="settings.soundProfile"
-                  >Sound Profile</label
-                >
-                <select
-                  id="soundProfile"
-                  class="w-full p-2 rounded-lg border-discord-gray-600 bg-discord-gray-700"
-                >
-                  <option value="default">Default</option>
-                  <option value="soft">Soft</option>
-                  <option value="retro">Retro</option>
-                  <option value="clicky">Clicky</option>
-                </select>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3 class="font-semibold mb-2" data-i18n="settings.playEvents">
-                  Play on events
-                </h3>
-                <div class="flex items-center gap-2 mb-2">
-                  <input
-                    type="checkbox"
-                    id="playSend"
-                    class="accent-discord-blurple"
-                    checked
-                  />
-                  <label for="playSend" data-i18n="settings.playSend"
-                    >Message sent</label
-                  >
-                </div>
-                <div class="flex items-center gap-2 mb-2">
-                  <input
-                    type="checkbox"
-                    id="playReceive"
-                    class="accent-discord-blurple"
-                    checked
-                  />
-                  <label for="playReceive" data-i18n="settings.playReceive"
-                    >Message received</label
-                  >
-                </div>
-                <div class="flex items-center gap-2 mb-2">
-                  <input
-                    type="checkbox"
-                    id="playUi"
-                    class="accent-discord-blurple"
-                    checked
-                  />
-                  <label for="playUi" data-i18n="settings.playUi"
-                    >UI interactions</label
-                  >
-                </div>
-              </div>
-              <div
-                class="flex items-center gap-2 p-3 bg-discord-gray-800 rounded-lg"
-              >
-                <input
-                  type="checkbox"
-                  id="duckMusic"
-                  class="accent-discord-blurple"
-                />
-                <label for="duckMusic" data-i18n="settings.duckMusic"
-                  >Duck music when playing effects</label
-                >
-              </div>
-              <div
-                id="saveSoundSettingsBtn"
-                class="pt-4 border-t border-discord-gray-600"
-                style="display: none"
-              >
-                <button
-                  onclick="showSaveSettingsModal()"
-                  class="w-full px-4 py-2 bg-discord-blurple hover:bg-opacity-80 text-white rounded-lg"
-                >
-                  <i data-feather="save" class="w-4 h-4 inline mr-2"></i>
-                  Save Sound Settings
-                </button>
-              </div>
+
+              <!-- Required hidden element for save logic compatibility -->
+              <div id="saveSoundSettingsBtn" style="display: none"></div>
             </div>
 
             <div
               id="aboutSettings"
               class="settings-content w-full hidden space-y-6"
             >
-              <h2
-                class="text-2xl font-bold text-white"
-                data-i18n="settings.about"
-              >
+              <h2 class="text-3xl font-extrabold text-white mb-6" data-i18n="settings.about">
                 About Us
               </h2>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <p class="text-discord-gray-300">
-                  <strong>Zylo v1.5.1</strong> — Created by D4niel-dev
-                </p>
-                <p class="text-discord-gray-400 text-sm mt-1">
-                  © 2025 Zylo. All rights reserved.
-                </p>
+
+              <div class="zylo-premium-card p-6 flex flex-col items-center justify-center text-center space-y-2 relative overflow-hidden">
+                <!-- Decorative background elements -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+                
+                <img src="/images/zylo/Zylo_icon.png" alt="Zylo Logo" class="w-20 h-20 rounded-2xl shadow-lg mb-3 object-cover z-10" onerror="this.src='/images/default_avatar.png'">
+                <h3 class="text-3xl font-bold text-white z-10 tracking-tight">Zylo <span class="text-gradient-primary">v1.5.1</span></h3>
+                <p class="text-discord-gray-300 font-medium z-10 text-lg">Created by D4niel-dev</p>
+                <p class="text-discord-gray-400 text-sm mt-3 z-10">© 2025 Zylo. All rights reserved.</p>
               </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3
-                  class="text-lg font-semibold mb-2 text-white"
-                  data-i18n="settings.versionDetails"
-                >
-                  Version Details
-                </h3>
-                <ul
-                  class="list-disc list-inside text-discord-gray-300 text-sm space-y-1"
-                >
-                  <li>Build: 1.5.1-stable</li>
-                  <li>Release Date: August 2025</li>
-                  <li>UI Framework: Tailwind CSS</li>
-                  <li>Backend: Python (Flask)</li>
-                  <li>Platform: Web/Desktop Hybrid</li>
-                </ul>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3 class="text-lg font-semibold mb-2 text-white">
-                  System Status
-                </h3>
-                <div
-                  id="aboutSystemStatus"
-                  class="text-discord-gray-300 text-sm"
-                >
-                  Checking backend status...
+
+              <div class="grid md:grid-cols-2 gap-5">
+                <div class="zylo-premium-card p-5 hover:border-discord-blurple/50 transition-colors group">
+                  <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2.5 bg-discord-blurple/10 rounded-xl text-discord-blurple group-hover:scale-110 group-hover:bg-discord-blurple/20 transition-all">
+                      <i data-feather="info" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide" data-i18n="settings.versionDetails">Version Details</h3>
+                  </div>
+                  <ul class="space-y-3 text-discord-gray-300 text-sm">
+                    <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span class="text-discord-gray-400">Build</span> 
+                      <span class="font-medium text-white bg-white/5 px-2 py-0.5 rounded">1.5.1-stable</span>
+                    </li>
+                    <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span class="text-discord-gray-400">Release Date</span> 
+                      <span class="font-medium text-white">August 2025</span>
+                    </li>
+                    <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span class="text-discord-gray-400">Environment</span> 
+                      <span class="font-medium text-white">Production</span>
+                    </li>
+                    <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span class="text-discord-gray-400">UI Stack</span> 
+                      <span class="font-medium text-white">HTML/JS + TailwindCSS</span>
+                    </li>
+                    <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span class="text-discord-gray-400">Icons</span> 
+                      <span class="font-medium text-white">Feather & Heroicons</span>
+                    </li>
+                    <li class="flex justify-between items-center border-b border-white/5 pb-2">
+                      <span class="text-discord-gray-400">Backend Engine</span> 
+                      <span class="font-medium text-white">Python (Flask + SocketIO)</span>
+                    </li>
+                    <li class="flex justify-between items-center pb-1">
+                      <span class="text-discord-gray-400">Target Platforms</span> 
+                      <span class="font-medium text-white">Web/PWA/Desktop</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="zylo-premium-card p-5 hover:border-emerald-500/50 transition-colors group">
+                  <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2.5 bg-emerald-500/10 rounded-xl text-emerald-500 group-hover:scale-110 group-hover:bg-emerald-500/20 transition-all">
+                      <i data-feather="server" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide">System Status</h3>
+                  </div>
+                  <div id="aboutSystemStatus" class="flex flex-col items-center justify-center p-6 bg-black/20 rounded-xl border border-white/5 text-discord-gray-300 h-[196px]">
+                    <div class="w-10 h-10 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4"></div>
+                    <span class="text-sm font-medium">Checking backend status...</span>
+                  </div>
                 </div>
               </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3 class="text-lg font-semibold mb-2 text-white">
-                  Quick Actions
-                </h3>
-                <div class="flex flex-col gap-2">
-                  <button
-                    onclick="checkForUpdates()"
-                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow"
-                  >
-                    🔄 Check for Updates
-                  </button>
-                  <button
-                    onclick="openChangelog()"
-                    class="px-4 py-2 bg-discord-blurple hover:bg-opacity-80 text-white rounded-lg shadow"
-                  >
-                    📜 View Changelog
-                  </button>
-                  <button
-                    onclick="openPrivacyPolicy()"
-                    class="px-4 py-2 bg-discord-gray-600 hover:bg-discord-gray-500 text-white rounded-lg shadow"
-                  >
-                    🔒 Privacy Policy
-                  </button>
+
+              <div class="grid md:grid-cols-2 gap-5">
+                <div class="zylo-premium-card p-5">
+                  <div class="flex items-center gap-3 mb-5">
+                    <div class="p-2.5 bg-yellow-500/10 rounded-xl text-yellow-500 hover:scale-110 transition-transform">
+                      <i data-feather="zap" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white tracking-wide">Quick Actions</h3>
+                  </div>
+                  <div class="flex flex-col gap-3">
+                    <button onclick="checkForUpdates()" class="premium-btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20 text-white rounded-xl font-semibold">
+                      <i data-feather="refresh-cw" class="w-4 h-4"></i> Check for Updates
+                    </button>
+                    <button onclick="openChangelog()" class="premium-btn flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 text-white rounded-xl font-semibold">
+                      <i data-feather="file-text" class="w-4 h-4"></i> View Changelog
+                    </button>
+                    <button onclick="openPrivacyPolicy()" class="premium-btn flex items-center justify-center gap-2 px-4 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl font-semibold">
+                      <i data-feather="shield" class="w-4 h-4"></i> Privacy Policy
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3
-                  class="text-lg font-semibold mb-2 text-white"
-                  data-i18n="settings.credits"
-                >
-                  Credits
-                </h3>
-                <p class="text-discord-gray-300 text-sm">
-                  Special thanks to testers, designers, and contributors who
-                  made Zylo possible.
-                </p>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3
-                  class="text-lg font-semibold mb-2 text-white"
-                  data-i18n="settings.resources"
-                >
-                  Resources
-                </h3>
-                <div class="flex flex-col gap-2">
-                  <a
-                    href="https://github.com/D4niel-dev"
-                    target="_blank"
-                    class="text-blue-400 hover:underline"
-                    >🔗 My GitHub</a
-                  >
-                  <a
-                    href="https://www.youtube.com/@d4niel-dev"
-                    target="_blank"
-                    class="text-blue-400 hover:underline"
-                    >🔗 My YouTube</a
-                  >
-                  <a
-                    href="mailto:zylosupp0rt@gmail.com"
-                    class="text-blue-400 hover:underline"
-                    >📧 Contact Support</a
-                  >
+
+                <div class="zylo-premium-card p-5 flex flex-col justify-between relative overflow-hidden">
+                  <div class="absolute -bottom-10 -right-10 opacity-5">
+                    <i data-feather="heart" class="w-48 h-48"></i>
+                  </div>
+                  <div class="z-10">
+                    <h3 class="text-xl font-bold mb-3 text-white tracking-wide" data-i18n="settings.resources">Resources & Credits</h3>
+                    <p class="text-discord-gray-300 text-sm mb-5 leading-relaxed">
+                      Special thanks to testers, designers, and contributors who made Zylo possible. This project is licensed under the MIT License.
+                    </p>
+                  </div>
+                  <div class="flex flex-col gap-2 z-10 mt-auto">
+                    <a href="https://github.com/D4niel-dev" target="_blank" class="flex items-center justify-between group p-3 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10 transition-all">
+                      <div class="flex items-center gap-3 text-discord-gray-300 group-hover:text-white">
+                        <i data-feather="github" class="w-5 h-5"></i> 
+                        <span class="font-medium">GitHub Repository</span>
+                      </div>
+                      <i data-feather="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    </a>
+                    <a href="https://www.youtube.com/@d4niel-dev" target="_blank" class="flex items-center justify-between group p-3 rounded-xl hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-all">
+                      <div class="flex items-center gap-3 text-discord-gray-300 group-hover:text-red-400">
+                        <i data-feather="youtube" class="w-5 h-5"></i> 
+                        <span class="font-medium">YouTube Channel</span>
+                      </div>
+                      <i data-feather="external-link" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-red-400"></i>
+                    </a>
+                    <a href="mailto:zylosupp0rt@gmail.com" class="flex items-center justify-between group p-3 rounded-xl hover:bg-blue-500/10 border border-transparent hover:border-blue-500/20 transition-all">
+                      <div class="flex items-center gap-3 text-discord-gray-300 group-hover:text-blue-400">
+                        <i data-feather="mail" class="w-5 h-5"></i> 
+                        <span class="font-medium">Contact Support</span>
+                      </div>
+                      <i data-feather="arrow-up-right" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity text-blue-400"></i>
+                    </a>
+                  </div>
                 </div>
-              </div>
-              <div class="p-3 bg-discord-gray-800 rounded-lg">
-                <h3
-                  class="text-lg font-semibold mb-2 text-white"
-                  data-i18n="settings.license"
-                >
-                  License
-                </h3>
-                <p class="text-discord-gray-300 text-sm">
-                  This project is licensed under the MIT License.
-                </p>
               </div>
             </div>
 
             <div
               id="accountSettings"
-              class="settings-content w-full hidden space-y-6"
+              class="settings-content w-full hidden space-y-8"
             >
-              <h2
-                class="text-2xl font-bold text-white"
-                data-i18n="settings.account"
-              >
+              <h2 class="text-3xl font-extrabold text-white mb-2" data-i18n="settings.account">
                 My Account
               </h2>
-              <div
-                class="relative rounded-xl shadow-sm bg-discord-gray-800 p-4"
-              >
-                <label
-                  for="settingsBannerUpload"
-                  class="banner-label block cursor-pointer"
-                >
-                  <img
-                    id="settingsBanner"
-                    src="/images/default_banner.png"
-                    alt="Banner"
-                    class="w-full h-40 object-cover rounded-xl"
-                  />
-                  <span class="edit-overlay" title="Change banner"
-                    ><i data-feather="edit-2"></i
-                  ></span>
+
+              <!-- Profile Header Card (Banner + Avatar) -->
+              <div class="zylo-premium-card overflow-hidden relative group">
+                <label for="settingsBannerUpload" class="banner-label block cursor-pointer relative h-48 w-full group/banner">
+                  <img id="settingsBanner" src="/images/default_banner.png" alt="Banner" class="w-full h-full object-cover transition-transform duration-500 group-hover/banner:scale-105" />
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover/banner:opacity-100 transition-opacity flex flex-col items-center justify-center">
+                    <div class="bg-white/10 backdrop-blur-md p-3 rounded-full text-white mb-2">
+                      <i data-feather="camera" class="w-6 h-6"></i>
+                    </div>
+                    <span class="text-white font-medium shadow-sm">Change Banner</span>
+                  </div>
                 </label>
-                <input
-                  type="file"
-                  id="settingsBannerUpload"
-                  accept="image/*"
-                  class="hidden"
-                />
-                <div class="relative -mt-10 ml-6 drop-shadow z-10">
-                  <label
-                    for="settingsAvatarUpload"
-                    class="avatar-label cursor-pointer"
-                  >
-                    <img
-                      id="settingsAvatar"
-                      src="/images/default_avatar.png"
-                      alt="Avatar"
-                      class="w-30 h-30 rounded-full border-4 border-discord-gray-800 object-cover avatar-img"
-                    />
-                    <span class="edit-overlay" title="Change avatar"
-                      ><i data-feather="edit-2"></i
-                    ></span>
-                  </label>
-                  <input
-                    type="file"
-                    id="settingsAvatarUpload"
-                    accept="image/*"
-                    class="hidden"
-                  />
-                  <button
-                    onclick="setAsBackground('avatar')"
-                    class="absolute -bottom-2 -right-2 bg-discord-blurple hover:bg-opacity-80 text-white rounded-full p-1 text-xs"
-                    title="Set as background"
-                  >
-                    <i data-feather="image"></i>
-                  </button>
-                </div>
-              </div>
+                <input type="file" id="settingsBannerUpload" accept="image/*" class="hidden" />
 
-              <div
-                class="space-y-3 p-4 bg-discord-gray-800 rounded-lg"
-                aria-label="Account details"
-              >
-                <div class="editable-row">
-                  <div>
-                    <div class="editable-label">Username</div>
-                    <div id="currentUsername" class="editable-value"></div>
+                <div class="px-6 pb-6 pt-3 relative flex items-end justify-between">
+                  <div class="relative -mt-20 z-10">
+                    <label for="settingsAvatarUpload" class="avatar-label cursor-pointer relative group/avatar block">
+                      <div class="relative inline-block rounded-full bg-discord-gray-900 overflow-visible">
+                         <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 p-[3px] -m-[3px]"></div>
+                         <img id="settingsAvatar" src="/images/default_avatar.png" alt="Avatar" class="w-32 h-32 rounded-full border-[6px] border-[#1e2227] object-cover avatar-img relative z-10" />
+                      </div>
+                      <div class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center z-20 m-[3px]">
+                        <i data-feather="camera" class="w-8 h-8 text-white"></i>
+                      </div>
+                    </label>
+                    <input type="file" id="settingsAvatarUpload" accept="image/*" class="hidden" />
                   </div>
-                  <button
-                    class="edit-icon"
-                    onclick="promptUsernameEdit()"
-                    title="Edit username"
-                  >
-                    <i data-feather="edit-2"></i>
-                  </button>
-                </div>
-                <div class="editable-row">
-                  <div>
-                    <div class="editable-label">Usertag</div>
-                    <div id="currentUsertag" class="editable-value"></div>
-                  </div>
-                  <button
-                    class="edit-icon"
-                    onclick="promptUsertagEdit()"
-                    title="Edit usertag"
-                  >
-                    <i data-feather="edit-2"></i>
-                  </button>
-                </div>
-                <div class="editable-row">
-                  <div>
-                    <div class="editable-label">Email</div>
-                    <div id="currentEmail" class="editable-value">Hidden</div>
-                  </div>
-                  <button
-                    class="edit-icon"
-                    onclick="promptEmailEdit()"
-                    title="Edit email"
-                  >
-                    <i data-feather="edit-2"></i>
-                  </button>
-                </div>
-                <div class="mb-4">
-                  <label class="editable-label">Bio</label>
-                  <div
-                    id="settingsProfileBioDisplay"
-                    class="p-2 bg-discord-gray-700 rounded text-discord-gray-300 truncate"
-                    style="min-height: 38px"
-                  >
-                    &nbsp;
-                  </div>
-                </div>
-                <div class="mb-4">
-                  <label class="editable-label">About me</label>
-                  <div
-                    id="settingsAboutMeDisplay"
-                    class="p-3 bg-discord-gray-700 rounded text-discord-gray-300"
-                    style="
-                      white-space: pre-wrap;
-                      max-height: 200px;
-                      overflow: auto;
-                    "
-                  >
-                    &nbsp;
+                  
+                  <div class="flex gap-3">
+                     <!-- Action buttons can go here if needed -->
                   </div>
                 </div>
               </div>
 
-              <div
-                class="mt-4 p-4 rounded-lg bg-discord-gray-800"
-                aria-label="Security settings"
-              >
-                <div class="flex items-center justify-between">
+              <!-- User Information -->
+              <div class="zylo-premium-card p-6" aria-label="Account details">
+                <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-3">
+                  <div class="p-2 bg-blue-500/10 rounded-lg text-blue-500"><i data-feather="user" class="w-5 h-5"></i></div>
+                  Profile Details
+                </h3>
+                
+                <div class="space-y-4">
+                  <div class="editable-row">
+                    <div>
+                      <div class="editable-label">Username</div>
+                      <div id="currentUsername" class="editable-value"></div>
+                    </div>
+                    <button class="edit-icon" onclick="promptUsernameEdit()" title="Edit username">
+                      <i data-feather="edit-2" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="editable-row">
+                    <div>
+                      <div class="editable-label">Usertag</div>
+                      <div id="currentUsertag" class="editable-value"></div>
+                    </div>
+                    <button class="edit-icon" onclick="promptUsertagEdit()" title="Edit usertag">
+                      <i data-feather="edit-2" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="editable-row">
+                    <div>
+                      <div class="editable-label">Email</div>
+                      <div id="currentEmail" class="editable-value">Hidden</div>
+                    </div>
+                    <button class="edit-icon" onclick="promptEmailEdit()" title="Edit email">
+                      <i data-feather="edit-2" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+
+                  <div class="editable-row">
+                    <div>
+                      <div class="editable-label">Pronouns</div>
+                      <div id="currentPronouns" class="editable-value">Not set</div>
+                    </div>
+                    <button class="edit-icon" onclick="promptPronounsEdit()" title="Edit pronouns">
+                      <i data-feather="edit-2" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+
+                  <div class="mt-6 pt-6 border-t border-white/5 space-y-5">
+                    <div class="editable-row flex items-start justify-between group">
+                      <div class="flex-1">
+                        <label class="editable-label flex items-center gap-2 mb-3">Bio <i data-feather="align-left" class="w-3.5 h-3.5"></i></label>
+                        <div id="settingsProfileBioDisplay" class="p-4 bg-black/20 rounded-xl text-discord-gray-300 border border-white/5 min-h-[50px] break-words">
+                          &nbsp;
+                        </div>
+                      </div>
+                      <button class="edit-icon self-start mt-8 ml-4" onclick="promptBioEdit()" title="Edit short bio">
+                        <i data-feather="edit-2" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                    <div class="editable-row flex items-start justify-between group">
+                      <div class="flex-1">
+                        <label class="editable-label flex items-center gap-2 mb-3">About me <i data-feather="file-text" class="w-3.5 h-3.5"></i></label>
+                        <div id="settingsAboutMeDisplay" class="p-4 bg-black/20 rounded-xl text-discord-gray-300 border border-white/5 max-h-[200px] overflow-auto whitespace-pre-wrap break-words">
+                          &nbsp;
+                        </div>
+                      </div>
+                      <button class="edit-icon self-start mt-8 ml-4" onclick="promptAboutMeEdit()" title="Edit about me">
+                        <i data-feather="edit-2" class="w-4 h-4"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Profile Badges Section -->
+              <div class="zylo-premium-card p-6" aria-label="Profile Badges">
+                <div class="flex items-center justify-between mb-5">
+                  <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                    <div class="p-2 bg-yellow-500/10 rounded-lg text-yellow-500"><i data-feather="award" class="w-5 h-5"></i></div>
+                    Profile Badges
+                  </h3>
+                  <div class="text-sm text-discord-gray-400">
+                    <span id="activeBadgesCount">0</span>/3 Active
+                  </div>
+                </div>
+                <p class="text-sm text-discord-gray-400 mb-4">Select up to 3 badges to display on your public profile. These are the badges you have unlocked!</p>
+                
+                <div id="settingsBadgesContainer" class="flex flex-wrap gap-3 p-4 bg-black/20 border border-white/5 rounded-xl min-h-[100px]">
+                   <!-- JS will populate interactive badges here -->
+                   <div class="w-full text-center text-discord-gray-500 text-sm py-4 italic">Loading badges...</div>
+                </div>
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6" aria-label="Preferences">
+                <div class="zylo-premium-card p-6">
+                  <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-feather="globe" class="w-5 h-5 text-discord-blurple"></i> Language
+                  </h3>
+                  <select id="settingsLanguage" class="w-full p-3 rounded-xl border border-white/10 bg-black/20 text-white focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition-all outline-none">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                  </select>
+                </div>
+                
+                <div class="zylo-premium-card p-6 flex flex-col justify-center">
+                  <div class="flex items-center justify-between">
+                     <div>
+                       <h3 class="text-lg font-bold text-white mb-1" data-i18n="settings.showEmail">Show Email</h3>
+                       <p class="text-sm text-discord-gray-400">Make your email visible on profile.</p>
+                     </div>
+                     <label class="relative inline-flex items-center cursor-pointer">
+                       <input type="checkbox" id="showEmail" class="sr-only peer" />
+                       <div class="w-14 h-7 bg-discord-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-discord-blurple"></div>
+                     </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Security Settings -->
+              <div class="zylo-premium-card p-6 border border-emerald-500/10" aria-label="Privacy settings">
+                <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-3">
+                  <div class="p-2 bg-emerald-500/10 rounded-lg text-emerald-500"><i data-feather="eye-off" class="w-5 h-5"></i></div>
+                  Privacy Options
+                </h3>
+
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between p-4 bg-black/20 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div>
+                      <div class="font-semibold text-white text-lg mb-1">Direct Messages</div>
+                      <div class="text-sm text-discord-gray-400">Allow direct messages from server members.</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="allowDMsToggle" class="sr-only peer" checked onchange="toggleSettingChanged()">
+                      <div class="w-14 h-7 bg-discord-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500"></div>
+                    </label>
+                  </div>
+
+                  <div class="flex items-center justify-between p-4 bg-black/20 rounded-xl border border-white/5 hover:border-white/10 transition-colors">
+                    <div>
+                      <div class="font-semibold text-white text-lg mb-1">Friend Requests</div>
+                      <div class="text-sm text-discord-gray-400">Allow anyone to send you a friend request.</div>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                      <input type="checkbox" id="allowFriendRequestsToggle" class="sr-only peer" checked onchange="toggleSettingChanged()">
+                      <div class="w-14 h-7 bg-discord-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-emerald-500"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="zylo-premium-card p-6 border border-red-500/10" aria-label="Security settings">
+                <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-3">
+                  <div class="p-2 bg-red-500/10 rounded-lg text-red-500"><i data-feather="shield" class="w-5 h-5"></i></div>
+                  Security & Authentication
+                </h3>
+
+                <div class="flex items-center justify-between p-4 bg-black/20 rounded-xl border border-white/5 mb-6 hover:border-white/10 transition-colors">
                   <div>
-                    <div
-                      class="font-semibold text-white"
-                      data-i18n="settings.twoFactorAuth"
-                    >
+                    <div class="font-semibold text-white text-lg mb-1" data-i18n="settings.twoFactorAuth">
                       Two-Factor Authentication (2FA)
                     </div>
-                    <div
-                      class="text-sm text-discord-gray-400"
-                      data-i18n="settings.twoFactorDesc"
-                    >
-                      Add an extra layer of protection.
+                    <div class="text-sm text-discord-gray-400" data-i18n="settings.twoFactorDesc">
+                      Add an extra layer of protection to your account.
                     </div>
                   </div>
-                  <label
-                    class="relative inline-flex items-center cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      id="twoFactorToggle"
-                      class="sr-only peer"
-                    />
-                    <div
-                      class="w-11 h-6 bg-discord-gray-600 peer-checked:bg-purple-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all"
-                    ></div>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="twoFactorToggle" class="sr-only peer" />
+                    <div class="w-14 h-7 bg-discord-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-purple-600"></div>
                   </label>
                 </div>
-              </div>
 
-              <div class="grid sm:grid-cols-2 gap-3" aria-label="Preferences">
-                <div class="editable-row">
-                  <div>
-                    <div class="editable-label">Language</div>
-                    <div class="editable-value">
-                      <select
-                        id="settingsLanguage"
-                        class="p-2 rounded-lg border-discord-gray-600 bg-discord-gray-700"
-                      >
-                        <option value="en">English</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                      </select>
-                    </div>
+                <div class="p-5 bg-black/20 rounded-xl border border-white/5 space-y-4 mt-6">
+                  <div class="font-semibold text-white text-lg" data-i18n="settings.changePassword">
+                    Change Password
+                  </div>
+                  <div class="grid sm:grid-cols-3 gap-4">
+                    <input type="password" id="oldPassword" placeholder="Current password" class="w-full p-3 rounded-xl border border-white/10 bg-black/40 text-white placeholder-discord-gray-500 focus:border-discord-blurple outline-none transition-colors" />
+                    <input type="password" id="newPassword" placeholder="New password" class="w-full p-3 rounded-xl border border-white/10 bg-black/40 text-white placeholder-discord-gray-500 focus:border-discord-blurple outline-none transition-colors" />
+                    <input type="password" id="confirmPassword" placeholder="Confirm new password" class="w-full p-3 rounded-xl border border-white/10 bg-black/40 text-white placeholder-discord-gray-500 focus:border-discord-blurple outline-none transition-colors" />
+                  </div>
+                  <div class="flex">
+                    <button onclick="updatePassword()" class="premium-btn w-full sm:w-auto mt-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg shadow-green-500/20 text-white rounded-xl font-semibold">
+                      Change Password
+                    </button>
                   </div>
                 </div>
-                <div class="editable-row">
-                  <div>
-                    <div class="editable-label" data-i18n="settings.showEmail">
-                      Show Email on Profile
-                    </div>
-                    <div class="editable-value">
-                      <input
-                        type="checkbox"
-                        id="showEmail"
-                        class="accent-discord-blurple"
-                      />
-                    </div>
+                
+                <!-- Danger Zone -->
+                <div class="mt-8 pt-6 border-t border-red-500/20">
+                  <div class="flex flex-col sm:flex-row gap-4 items-center justify-between p-4 rounded-xl border border-red-500/30 bg-red-500/5">
+                     <div>
+                        <h4 class="text-red-400 font-bold mb-1">Danger Zone</h4>
+                        <p class="text-sm text-discord-gray-400">Permanently delete your account and all associated data.</p>
+                     </div>
+                     <button onclick="deleteAccount()" class="premium-btn shrink-0 px-6 py-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 shadow-lg shadow-red-500/20 rounded-xl text-white font-bold" data-i18n="settings.deleteAccount">
+                        Delete Account
+                     </button>
                   </div>
                 </div>
               </div>
 
-              <div class="p-4 rounded-lg bg-discord-gray-800">
-                <div
-                  class="font-semibold mb-2 text-white"
-                  data-i18n="settings.changePassword"
-                >
-                  Change Password
-                </div>
-                <div class="grid sm:grid-cols-3 gap-2">
-                  <input
-                    type="password"
-                    id="oldPassword"
-                    placeholder="Current password"
-                    class="p-2 rounded-lg border-discord-gray-600 bg-discord-gray-700"
-                  />
-                  <input
-                    type="password"
-                    id="newPassword"
-                    placeholder="New password"
-                    class="p-2 rounded-lg border-discord-gray-600 bg-discord-gray-700"
-                  />
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm new password"
-                    class="p-2 rounded-lg border-discord-gray-600 bg-discord-gray-700"
-                  />
-                </div>
-                <button
-                  onclick="updatePassword()"
-                  class="mt-3 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg"
-                >
-                  Change Password
-                </button>
-              </div>
-
-              <div class="border-t border-discord-gray-600 pt-4">
-                <button
-                  onclick="deleteAccount()"
-                  class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-white w-full"
-                  data-i18n="settings.deleteAccount"
-                >
-                  Delete Account
-                </button>
-              </div>
-
-              <div
-                id="saveAccountSettingsBtn"
-                class="pt-4 border-t border-discord-gray-600"
-                style="display: none"
-              >
-                <button
-                  onclick="showSaveSettingsModal()"
-                  class="w-full px-4 py-2 bg-discord-blurple hover:bg-opacity-80 text-white rounded-lg"
-                >
-                  <i data-feather="save" class="w-4 h-4 inline mr-2"></i>
-                  Save Account Settings
+              <!-- Save Changes Bar (Floating or bottom) -->
+              <div id="saveAccountSettingsBtn" class="sticky bottom-4 z-50 bg-black/40 backdrop-blur-xl border border-discord-blurple/50 p-4 rounded-2xl shadow-2xl shadow-discord-blurple/20 flex flex-wrap items-center justify-between gap-4 mt-8" style="display: none">
+                <span class="text-white font-medium ml-2">Careful — you have unsaved changes!</span>
+                <button onclick="showSaveSettingsModal()" class="px-6 py-2.5 bg-discord-blurple hover:bg-indigo-600 text-white rounded-xl font-bold transition-colors">
+                  Save Changes
                 </button>
               </div>
             </div>
@@ -5110,6 +5024,17 @@
               }, 100);
             }
           }
+          
+          // --- Tab-Specific Background Music ---
+          if (window.SoundEngine) {
+              const musicTabs = ["friends", "profile", "moments"];
+              if (musicTabs.includes(viewName)) {
+                  // Wait slightly to ensure interaction has happened preventing autoplay policy blocks
+                  setTimeout(() => window.SoundEngine.startMusic(), 50);
+              } else {
+                  window.SoundEngine.stopMusic();
+              }
+          }
         }
 
         // 4. Update Sidebar Active State
@@ -5505,7 +5430,12 @@
           }
 
           for (const m of msgs) {
+            // Deduplication: skip if this message ID already rendered
+            const msgId = m.id || m.timestamp || m.ts;
+            if (msgId && msgsContainer.querySelector(`[data-msg-id="${msgId}"]`)) continue;
+
             const el = await createDiscordMessage({ ...m, username: m.from });
+            if (msgId) el.setAttribute('data-msg-id', msgId);
             msgsContainer.appendChild(el);
 
             // Mark as read if I am recipient and it's not read
@@ -5676,7 +5606,7 @@
 
           // Render Badges
           if (window.renderBadges) {
-            renderBadges(user.badges || [], "profileBadges");
+            renderBadges(user.badges_active || user.badges || [], "profileBadges");
           }
 
           // Update User Panel
@@ -6650,28 +6580,241 @@
           openCropper(e, "avatar"),
         );
 
+      // Generic Edit Modal for Account Settings
+      function showEditAccountModal(title, description, inputLabel, currentValue, placeholder, onSave, inputType = 'text') {
+        const existing = document.getElementById('editAccountModal');
+        if (existing) existing.remove();
+
+        let inputElementHtml = '';
+        if (inputType === 'textarea') {
+            inputElementHtml = `<textarea id="editAccountInput" placeholder="${placeholder}" class="w-full bg-discord-gray-900 border border-black/50 text-white rounded-lg p-3 text-sm focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition min-h-[120px] resize-y leading-relaxed" spellcheck="false"></textarea>`;
+        } else {
+            inputElementHtml = `<input type="text" id="editAccountInput" placeholder="${placeholder}" class="w-full bg-discord-gray-900 border border-black/50 text-white rounded-lg p-3 text-sm focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition" autocomplete="off" />`;
+        }
+
+        const modalHtml = `
+        <div id="editAccountModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+            <div class="bg-discord-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-white/10 flex flex-col transform transition-all scale-100">
+                <div class="p-6 pb-2">
+                    <h2 class="text-2xl font-extrabold text-white tracking-wide text-center mb-2">${title}</h2>
+                    <p class="text-discord-gray-400 text-center text-sm mb-6">${description}</p>
+                    
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-discord-gray-400 uppercase tracking-wider">${inputLabel}</label>
+                        ${inputElementHtml}
+                    </div>
+                </div>
+                
+                <div class="p-5 mt-4 bg-discord-gray-900/50 flex justify-end gap-3 border-t border-white/5">
+                    <button onclick="document.getElementById('editAccountModal').remove()" class="px-5 py-2.5 rounded-xl text-discord-gray-300 font-medium hover:text-white hover:underline text-sm transition">Cancel</button>
+                    <button id="editAccountSaveBtn" class="px-7 py-2.5 bg-discord-blurple hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition shadow-lg shadow-discord-blurple/20">Done</button>
+                </div>
+            </div>
+        </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        const inputEl = document.getElementById('editAccountInput');
+        inputEl.value = currentValue || '';
+        inputEl.focus();
+        if (inputType !== 'textarea') inputEl.select();
+        
+        document.getElementById('editAccountSaveBtn').addEventListener('click', () => {
+            const val = inputEl.value.trim();
+            if(val !== currentValue) {
+                onSave(val);
+            }
+            document.getElementById('editAccountModal').remove();
+        });
+
+        inputEl.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter' && inputType !== 'textarea') {
+                document.getElementById('editAccountSaveBtn').click();
+            } else if (e.key === 'Escape') {
+                document.getElementById('editAccountModal').remove();
+            }
+        });
+      }
+
+      function showEmailEditModal(currentEmail, onSave) {
+        const existing = document.getElementById('editAccountModal');
+        if (existing) existing.remove();
+
+        const modalHtml = `
+        <div id="editAccountModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+            <div class="bg-discord-gray-800 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-white/10 flex flex-col transform transition-all scale-100">
+                <div class="p-6 pb-2">
+                    <h2 class="text-2xl font-extrabold text-white tracking-wide text-center mb-2">Change Your Email</h2>
+                    <p class="text-discord-gray-400 text-center text-sm mb-6">Enter a new email address and your password to confirm.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-discord-gray-400 uppercase tracking-wider">NEW EMAIL</label>
+                            <input type="email" id="editEmailInput" placeholder="Enter new email" value="${currentEmail}" class="w-full bg-discord-gray-900 border border-black/50 text-white rounded-lg p-3 text-sm focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-discord-gray-400 uppercase tracking-wider">CURRENT PASSWORD</label>
+                            <input type="password" id="editEmailPasswordInput" placeholder="Enter your password" class="w-full bg-discord-gray-900 border border-black/50 text-white rounded-lg p-3 text-sm focus:outline-none focus:border-discord-blurple focus:ring-1 focus:ring-discord-blurple transition" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-5 mt-4 bg-discord-gray-900/50 flex justify-end gap-3 border-t border-white/5">
+                    <button onclick="document.getElementById('editAccountModal').remove()" class="px-5 py-2.5 rounded-xl text-discord-gray-300 font-medium hover:text-white hover:underline text-sm transition">Cancel</button>
+                    <button id="editAccountSaveBtn" class="px-7 py-2.5 bg-discord-blurple hover:bg-indigo-500 text-white rounded-xl font-bold text-sm transition shadow-lg shadow-discord-blurple/20">Update Email</button>
+                </div>
+            </div>
+        </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        const emailEl = document.getElementById('editEmailInput');
+        const passEl = document.getElementById('editEmailPasswordInput');
+        emailEl.focus();
+        emailEl.select();
+        
+        document.getElementById('editAccountSaveBtn').addEventListener('click', () => {
+            const newEmail = emailEl.value.trim();
+            const pass = passEl.value;
+            if(!pass) return alert("Please enter your password to confirm.");
+            if(newEmail !== currentEmail) {
+                onSave(newEmail, pass);
+            } else {
+                document.getElementById('editAccountModal').remove();
+            }
+        });
+
+        [emailEl, passEl].forEach(el => el.addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') {
+                document.getElementById('editAccountSaveBtn').click();
+            } else if (e.key === 'Escape') {
+                document.getElementById('editAccountModal').remove();
+            }
+        }));
+      }
+
       function promptUsernameEdit() {
         const current = localStorage.getItem("username") || "";
-        const next = prompt("Enter new username", current || "");
-        if (!next || next === current) return;
-        const curEl = document.getElementById("currentUsername");
-        if (curEl) curEl.textContent = next;
-        updateUsername(next);
-      }
-      function promptUsertagEdit() {
-        const current = (localStorage.getItem("usertag") || "").replace(
-          "@",
-          "",
+        showEditAccountModal(
+            "Change Your Username",
+            "Enter a new username.",
+            "USERNAME",
+            current,
+            "Enter new username",
+            (next) => {
+                const curEl = document.getElementById("currentUsername");
+                if (curEl) curEl.textContent = next;
+                updateUsername(next);
+            }
         );
-        const next = prompt("Enter new 4-digit usertag", current || "");
-        if (!next) return;
-        updateUsertag(next);
       }
+
+      function promptUsertagEdit() {
+        const current = (localStorage.getItem("usertag") || "").replace("@", "");
+        showEditAccountModal(
+            "Change Your Usertag",
+            "Enter a new 4-digit usertag.",
+            "USERTAG",
+            current,
+            "0000",
+            (next) => {
+                updateUsertag(next);
+                // Also update local UI state if pending
+                if(typeof pendingUsertag !== 'undefined') {
+                    pendingUsertag = next;
+                    if(typeof toggleSettingChanged === 'function') toggleSettingChanged();
+                }
+            }
+        );
+      }
+
       function promptEmailEdit() {
         const current = localStorage.getItem("savedEmail") || "";
-        const next = prompt("Enter new email", current || "");
-        if (!next) return;
-        updateEmail(next);
+        showEmailEditModal(
+            current,
+            (newEmail, pass) => {
+                updateEmail(newEmail, pass);
+                document.getElementById('editAccountModal').remove();
+            }
+        );
+      }
+
+      function promptPronounsEdit() {
+          const el = document.getElementById('currentPronouns');
+          const current = el ? el.innerText : "";
+          const val = current === "Not set" ? "" : current;
+          showEditAccountModal(
+            "Change Pronouns",
+            "Add your pronouns so people know how to refer to you.",
+            "PRONOUNS",
+            val,
+            "they/them",
+            (next) => {
+                if (el) el.innerText = next || "Not set";
+                // Trigger safe UI state refresh
+                if(typeof pendingPronouns !== 'undefined') {
+                    pendingPronouns = next;
+                    if(typeof toggleSettingChanged === 'function') toggleSettingChanged();
+                } else {
+                     window.pendingPronouns = next;
+                     if(typeof window.toggleSettingChanged === 'function') window.toggleSettingChanged();
+                }
+            }
+          );
+      }
+
+      function promptBioEdit() {
+          const el = document.getElementById('settingsProfileBioDisplay');
+          const current = el ? el.innerText.trim() : "";
+          showEditAccountModal(
+            "Change Your Bio",
+            "Write a short and sweet bio about yourself.",
+            "SHORT BIO",
+            current,
+            "A little bit about me...",
+            (next) => {
+                fetch("/api/update-profile", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: localStorage.getItem("username"), bio: next })
+                }).then(r => r.json()).then(data => {
+                    if(data.success) {
+                        if (el) el.innerHTML = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(next) : next || "&nbsp;";
+                        if (window.showToast) window.showToast("Bio updated successfully!");
+                    } else {
+                        alert("Failed to update bio: " + data.error);
+                    }
+                });
+            },
+            "textarea"
+          );
+      }
+      
+      function promptAboutMeEdit() {
+          const el = document.getElementById('settingsAboutMeDisplay');
+          const current = el ? el.innerText.trim() : "";
+          showEditAccountModal(
+            "Change About Me",
+            "Write a longer description for your profile card.",
+            "ABOUT ME",
+            current,
+            "Tell the world your story...",
+            (next) => {
+                fetch("/api/update-profile", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: localStorage.getItem("username"), aboutMe: next })
+                }).then(r => r.json()).then(data => {
+                    if(data.success) {
+                        if (el) el.innerHTML = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(next) : next || "&nbsp;";
+                        if (window.showToast) window.showToast("About me updated successfully!");
+                    } else {
+                        alert("Failed to update about me: " + data.error);
+                    }
+                });
+            },
+            "textarea"
+          );
       }
 
       // Account settings quick view
@@ -7563,6 +7706,59 @@
           .forEach((el) => el.classList.add("hidden"));
         const target = document.getElementById(sectionId);
         if (target) target.classList.remove("hidden");
+
+        if (sectionId === "accountSettings") {
+          loadAccountSettingsData();
+        }
+      }
+
+      async function loadAccountSettingsData() {
+        const username = localStorage.getItem("username") || localStorage.getItem("savedUsername");
+        if (!username) return;
+        try {
+          // Temporarily show loading or just fetch
+          const res = await fetch(`/api/get-user?identifier=${encodeURIComponent(username)}`);
+          const data = await res.json();
+          if (data.success && data.user) {
+            const user = data.user;
+            
+            // Bio & About Me
+            const bioDisp = document.getElementById("settingsProfileBioDisplay");
+            if (bioDisp) bioDisp.textContent = user.about || "This user haven't said anything about them self yet...";
+            
+            const aboutDisp = document.getElementById("settingsAboutMeDisplay");
+            if (aboutDisp) aboutDisp.textContent = user.aboutMe || "This user haven't said anything about them self yet...";
+            
+            // Basic Info (already done by loadUserProfile usually, but let's ensure it's up to date)
+            const currentEmail = document.getElementById("currentEmail");
+            if (currentEmail) currentEmail.textContent = user.email || "Hidden";
+            
+            // Pronouns
+            const pronounsDisp = document.getElementById("currentPronouns");
+            if (pronounsDisp) pronounsDisp.textContent = user.pronouns || "Not set";
+            
+            // Privacy Toggles
+            const dmToggle = document.getElementById("allowDMsToggle");
+            if (dmToggle) dmToggle.checked = user.allowDMs !== false; // Default true if undefined
+            
+            const frToggle = document.getElementById("allowFriendRequestsToggle");
+            if (frToggle) frToggle.checked = user.allowFriendRequests !== false;
+            
+            // Sync settings inputs for edit mode if they exist
+            const bioInp = document.getElementById("settingsProfileBio");
+            if (bioInp) bioInp.value = user.about || "";
+            
+            const aboutInp = document.getElementById("settingsAboutMe");
+            if (aboutInp) aboutInp.value = user.aboutMe || "";
+
+            // Badges UI
+            if (typeof window.renderBadgeSelectionUI === 'function') {
+                window.renderBadgeSelectionUI(user.badges || [], user.badges_active || []);
+            }
+          }
+        } catch (e) {
+          console.error("Failed to load account settings data", e);
+        }
       }
 
       function updateGlobalSearch(query) {
@@ -7884,9 +8080,15 @@
         { id: "enableMusic", key: "enableMusic" },
         { id: "soundProfile", key: "soundProfile" },
         { id: "duckMusic", key: "duckMusic" },
+        { id: "ttsToggle", key: "ttsToggle" },
         { id: "playSend", key: "playSend" },
         { id: "playReceive", key: "playReceive" },
+        { id: "playMention", key: "playMention" },
+        { id: "playCallRing", key: "playCallRing" },
+        { id: "playFriendOnline", key: "playFriendOnline" },
+        { id: "playCallDisconnect", key: "playCallDisconnect" },
         { id: "playUi", key: "playUi" },
+        { id: "playAchievement", key: "playAchievement" },
       ];
 
       // Add sound settings to change tracking
@@ -7955,9 +8157,15 @@
           { id: "enableMusic", key: "enableMusic", checkbox: true },
           { id: "soundProfile", key: "soundProfile" },
           { id: "duckMusic", key: "duckMusic", checkbox: true },
+          { id: "ttsToggle", key: "ttsToggle", checkbox: true },
           { id: "playSend", key: "playSend", checkbox: true },
           { id: "playReceive", key: "playReceive", checkbox: true },
+          { id: "playMention", key: "playMention", checkbox: true },
+          { id: "playCallRing", key: "playCallRing", checkbox: true },
+          { id: "playFriendOnline", key: "playFriendOnline", checkbox: true },
+          { id: "playCallDisconnect", key: "playCallDisconnect", checkbox: true },
           { id: "playUi", key: "playUi", checkbox: true },
+          { id: "playAchievement", key: "playAchievement", checkbox: true },
         ];
 
         soundControls.forEach(({ id, key, checkbox }) => {
@@ -7973,6 +8181,23 @@
             localStorage.setItem(key, value);
             persistSettings({ [key]: value });
           });
+        });
+
+        // Sync volume display values on load
+        const svEl = document.getElementById("soundVolume");
+        const svVal = document.getElementById("soundVolumeValue");
+        if (svEl && svVal) svVal.innerText = svEl.value + "%";
+
+        const mvEl = document.getElementById("musicVolume");
+        const mvVal = document.getElementById("musicVolumeValue");
+        if (mvEl && mvVal) mvVal.innerText = mvEl.value + "%";
+
+        // Sync volume display on input (for live dragging)
+        if (svEl) svEl.addEventListener("input", function() {
+          if (svVal) svVal.innerText = this.value + "%";
+        });
+        if (mvEl) mvEl.addEventListener("input", function() {
+          if (mvVal) mvVal.innerText = this.value + "%";
         });
       })();
 
@@ -8043,7 +8268,7 @@
         }
       }
 
-      async function updateEmail(newEmail) {
+      async function updateEmail(newEmail, password) {
         if (!newEmail) {
           const el = document.getElementById("changeEmail");
           newEmail = (el ? el.value : "").trim();
@@ -8051,12 +8276,13 @@
 
         const username = localStorage.getItem("username");
         if (!newEmail) return alert("Please enter a new email.");
+        if (!password) return alert("Password confirmation is required.");
 
         try {
           const res = await fetch("/api/update-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, newEmail }),
+            body: JSON.stringify({ username, newEmail, password }),
           });
 
           const data = await res.json();
@@ -8234,17 +8460,132 @@
       }
 
       function checkForUpdates() {
-        alert("🔄 Checking for updates...\nNo updates available.");
+        const btn = document.querySelector('button[onclick="checkForUpdates()"]');
+        if(btn) btn.innerHTML = '<i data-feather="loader" class="w-4 h-4 animate-spin"></i> Checking...';
+        if(window.feather) feather.replace();
+        
+        setTimeout(() => {
+            if(window.showToast) window.showToast("You are already on the latest version of Zylo (Beta 1.5.1).", 3000);
+            if(btn) btn.innerHTML = '<i data-feather="check" class="w-4 h-4"></i> Up to Date';
+            if(window.feather) feather.replace();
+            setTimeout(() => {
+               if(btn) btn.innerHTML = '<i data-feather="refresh-cw" class="w-4 h-4"></i> Check for Updates';
+               if(window.feather) feather.replace();
+            }, 3000);
+        }, 1500);
       }
 
       function openChangelog() {
-        alert("📜 Changelog:\n- Improved settings UI\n- Fixed minor bugs");
+          const html = `
+            <div id="tempChangelogModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4 animate-fadeIn">
+                <div class="bg-discord-gray-800 text-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden animate-pop">
+                    <div class="px-6 py-4 border-b border-discord-gray-700 flex justify-between items-center bg-discord-gray-900/50">
+                        <h2 class="text-xl font-bold flex items-center gap-2">
+                            <i data-feather="file-text" class="text-blue-400"></i> Changelog
+                        </h2>
+                        <button onclick="document.getElementById('tempChangelogModal').remove()" class="text-gray-400 hover:text-white transition">
+                            <i data-feather="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 overflow-y-auto max-h-[60vh] text-sm text-discord-gray-300 space-y-4">
+                        <div class="bg-discord-gray-900/50 p-4 rounded-lg border border-discord-gray-700">
+                            <h3 class="font-bold text-white text-base mb-2">Zylo-Beta-v1.5.1 — The Specialized Modes Update</h3>
+                            <h4 class="font-semibold text-emerald-400 mt-2 mb-1">NEW :</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-3">
+                                <li><strong>AI Specialized Modes</strong>: Task-specific modes (Thinking, Planning, Code, Review) for Diszi and Zily assistants.</li>
+                                <li><strong>Redesigned Chat Input</strong>: New pill-shaped, translucent input container for a cleaner, modern look.</li>
+                                <li><strong>Manual Input Toggle</strong>: Added discrete controls to hide/show the AI chat input for maximum screen space.</li>
+                                <li><strong>Heroicons Library</strong>: New modern icon set library, toggleable in Settings > Appearance.</li>
+                            </ul>
+                            <h4 class="font-semibold text-blue-400 mt-2 mb-1">IMPROVEMENT :</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-3">
+                                <li><strong>Mobile UX Refinement</strong>: Fixed AI input positioning on mobile devices to prevent keyboard overlap.</li>
+                                <li><strong>Cloud Mobile View</strong>: Adjusted grid spacing for cloud files to prevent text cramping on smaller screens.</li>
+                                <li><strong>Light Mode Support</strong>: Full theme compatibility for the Moments tab background and input card.</li>
+                                <li><strong>Accessibility & ARIA</strong>: Added comprehensive ARIA labels and keyboard navigation support.</li>
+                            </ul>
+                            <h4 class="font-semibold text-red-400 mt-2 mb-1">FIX :</h4>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li><strong>Group Modal Visibility</strong>: Corrected text and background colors in groups modal for light mode readability.</li>
+                                <li><strong>Sidebar Button Polish</strong>: Fixed visibility and hover states for the "Add Group" button in light mode.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-discord-gray-900/50 p-4 rounded-lg border border-discord-gray-700">
+                            <h3 class="font-bold text-white text-base mb-2">Zylo-Beta-v1.5.0 — The Stability & Polish Update</h3>
+                            <h4 class="font-semibold text-emerald-400 mt-2 mb-1">NEW :</h4>
+                            <ul class="list-disc list-inside space-y-1 mb-3">
+                                <li><strong>Global Sidebar Toggle</strong>: Added expand/collapse button to ALL specific headers for consistent navigation control.</li>
+                                <li><strong>Cloud "Download All"</strong>: Added ability to zip and download all cloud files at once.</li>
+                                <li><strong>Moments Comments</strong>: Fully implemented commenting system with backend support and expandable UI.</li>
+                                <li><strong>New GIFs</strong>: Added 6 new reaction GIFs.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-discord-gray-900/50 p-4 rounded-lg border text-center border-discord-gray-700 mb-2">
+                             <a href="https://github.com/D4niel-dev/Zylo-Beta-1.5.1/blob/main/CHANGELOGS.md" target="_blank" class="text-discord-blurple hover:text-white transition"><i>View full historical changelog on GitHub...</i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          `;
+          document.body.insertAdjacentHTML('beforeend', html);
+          if(window.feather) feather.replace();
       }
 
       function openPrivacyPolicy() {
-        alert(
-          "🔒 Privacy Policy:\nYour data is stored securely and never shared.",
-        );
+          const html = `
+            <div id="tempPrivacyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[500] flex items-center justify-center p-4 animate-fadeIn">
+                <div class="bg-discord-gray-800 text-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden animate-pop">
+                    <div class="px-6 py-4 border-b border-discord-gray-700 flex justify-between items-center bg-discord-gray-900/50">
+                        <h2 class="text-xl font-bold flex items-center gap-2">
+                            <i data-feather="shield" class="text-green-400"></i> Privacy Policy
+                        </h2>
+                        <button onclick="document.getElementById('tempPrivacyModal').remove()" class="text-gray-400 hover:text-white transition">
+                            <i data-feather="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 overflow-y-auto max-h-[60vh] text-sm text-discord-gray-300 space-y-4">
+                        <p><strong>Effective Date:</strong> January 4, 2026<br>
+                        <strong>Last Updated:</strong> February 13, 2026</p>
+                        
+                        <p>Welcome to Zylo. This Privacy Policy explains how Zylo collects, uses, discloses, and protects your personal information when you use our platform.</p>
+                        
+                        <h3 class="font-bold text-white mt-4 mb-2">1. Information We Collect</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Account Registration:</strong> Username, Email, Password, Profile pictures.</li>
+                            <li><strong>User-Generated Content:</strong> Messages, media files, group/chat data.</li>
+                            <li><strong>Automatically Collected:</strong> Usage data, IP address, Device info, Cookies.</li>
+                        </ul>
+                        
+                        <h3 class="font-bold text-white mt-4 mb-2">2. How We Use Your Information</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>To create/manage accounts and deliver chat/group features.</li>
+                            <li>To improve platform performance, security, and fix bugs.</li>
+                            <li>To communicate important updates and notices.</li>
+                        </ul>
+                        
+                        <h3 class="font-bold text-white mt-4 mb-2">3. Data Sharing & Security</h3>
+                        <p>We do not sell your personal information. We only share it with trusted service providers necessary for cloud hosting and analytics, or when required by law.</p>
+                        <p>We use encryption (TLS/SSL) and bcrypt hashing to protect your data, but no system is 100% impenetrable.</p>
+
+                        <h3 class="font-bold text-white mt-4 mb-2">4. Your Rights</h3>
+                        <p>You can access, update, or delete your account data at any time via your Profile Settings or by contacting us.</p>
+                        
+                        <div class="bg-discord-gray-900/50 p-4 rounded-lg mt-4 border border-discord-gray-700">
+                            <p class="font-bold text-white mb-1">Contact Us:</p>
+                            <p>Email: zylosupp0rt@gmail.com<br>
+                            Website: <a href="https://d4niel-dev.github.io/Zylo/" class="text-blue-400 hover:underline" target="_blank">d4niel-dev.github.io/Zylo</a></p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-discord-gray-900 border-t border-discord-gray-700 text-center">
+                        <button onclick="document.getElementById('tempPrivacyModal').remove()" class="px-6 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg text-white font-bold hover:brightness-110 shadow-lg shadow-emerald-500/20 transition">I Understand</button>
+                    </div>
+                </div>
+            </div>
+          `;
+          document.body.insertAdjacentHTML('beforeend', html);
+          if(window.feather) feather.replace();
       }
 
       /// === Sidebar + Navbar Functions ===
@@ -9138,7 +9479,6 @@
         const startup = localStorage.getItem("startupPage") || "home";
         switchTab(startup);
         loadFriends(); // Load social data on entry
-        loadFriends(); // Load social data on entry
         loadGroups();
       });
 
@@ -9931,6 +10271,11 @@
           if (targetId === "aboutSettings") {
             try {
               populateAboutInfo();
+            } catch (e_) {}
+          }
+          if (targetId === "accountSettings") {
+            try {
+              loadAccountSettingsData();
             } catch (e_) {}
           }
           if (targetId === "filesSettings") {
@@ -11091,14 +11436,14 @@
           }
 
           // Play sound (if available) - simulate using a loop
-          if (window.SoundEngine) window.SoundEngine.play("send");
+          if (window.ZyloSounds) ZyloSounds.play("callRing");
         }
       }
 
       function endFakeCall() {
         const modal = document.getElementById("callModal");
         if (modal) modal.classList.add("hidden");
-        if (window.SoundEngine) window.SoundEngine.play("logout"); // End sound
+        if (window.ZyloSounds) ZyloSounds.play("callDisconnect"); // End sound
       }
     </script>
 
@@ -12037,6 +12382,7 @@
       // === Session Management ===
 
       async function doLogout() {
+        if (window.ZyloSounds) ZyloSounds.play("logout");
         const token = localStorage.getItem("session_token");
         try {
           if (token) {
@@ -12083,6 +12429,9 @@
             if (!data.valid) {
               console.warn("Session invalid/expired:", data.error);
               doLogout(); // Expired token -> logout
+            } else {
+              // Valid session on load -> play login sound
+              if (window.ZyloSounds) ZyloSounds.play("login");
             }
           } catch (e) {
             console.error("Session validation network error:", e);
@@ -12101,6 +12450,7 @@
     </script>
     <script src="files/js/badges-config.js"></script>
     <script src="/files/js/settings.js"></script>
+    <script src="/files/js/sounds.js"></script>
 
     <script src="/files/js/ai-chat-modes.js"></script>
     <script src="/files/js/ai-chat.js?v=6"></script>

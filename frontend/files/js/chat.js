@@ -318,7 +318,7 @@ async function createDiscordMessage(data) {
     userSpan.onclick = () => showUserProfile(tUname);
     const timeSpan = document.createElement("span");
     timeSpan.className = "text-discord-gray-400 text-xs";
-    timeSpan.textContent = new Date(data.ts ? data.ts * 1000 : Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    timeSpan.textContent = new Date((data.ts || data.timestamp) ? (data.ts || data.timestamp) * 1000 : Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     header.appendChild(userSpan);
     header.appendChild(timeSpan);
@@ -648,7 +648,7 @@ async function showUserProfile(targetUsername) {
 
             // Render Badges
             if (window.renderBadges) {
-                renderBadges(u.badges || [], 'uvBadges');
+                renderBadges(u.badges_active || u.badges || [], 'uvBadges');
             }
 
             // Set Up Message Button
@@ -949,6 +949,7 @@ async function sendMessage() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
+            if (window.ZyloSounds) ZyloSounds.play('send');
         } catch (e) { console.error('Failed to send message:', e); }
         return;
     }
@@ -1195,6 +1196,8 @@ if (typeof socket !== 'undefined') {
 
     socket.on("receive_message", async (data) => {
         await appendCommunityMessage(data);
+        // Play receive sound
+        if (window.ZyloSounds) ZyloSounds.play('receive');
     });
 
     socket.on('receive_dm', async (data) => {
@@ -1216,6 +1219,8 @@ if (typeof socket !== 'undefined') {
                     msgsContainer.scrollTop = msgsContainer.scrollHeight;
                     if (window.feather) feather.replace();
                  }
+                 // Play receive sound for incoming DMs
+                 if (from !== me && window.ZyloSounds) ZyloSounds.play('receive');
             }
         }
     });
@@ -1546,6 +1551,8 @@ async function sendFriendMessage() {
         } else {
             fetch('/api/dm/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }).catch(() => { });
         }
+        // Play send sound
+        if (window.ZyloSounds) ZyloSounds.play('send');
     } else {
         // Group Logic
         const groupPayload = {

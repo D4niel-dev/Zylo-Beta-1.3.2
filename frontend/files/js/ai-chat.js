@@ -16,6 +16,11 @@ class AIChatManager {
         this.sendBtn = document.getElementById('sendAiBtn'); // New ID
         this.controls = document.getElementById('aiControls');
         
+        // Polling state
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.statusCheckTimer = null;
+        
         // Bind methods
         this.sendMessage = this.sendMessage.bind(this);
         this.handleUiSend = this.handleUiSend.bind(this); // New handler
@@ -954,22 +959,69 @@ class AIChatManager {
                  headers: { 'Authorization': `Bearer ${localStorage.getItem('session_token')}` }
             });
             const data = await res.json();
+            const aiChatTab = document.getElementById('aiChatTab');
+            
             if (!data.online) {
-                const container = document.getElementById('chatMessagesAI');
-                if (container && container.parentElement) {
-                    // Check if warning already exists
-                    if (container.parentElement.querySelector('.ai-offline-warning')) return;
-
-                    const warning = document.createElement('div');
-                    warning.className = "ai-offline-warning bg-red-500/80 backdrop-blur text-white text-xs p-2 text-center absolute top-0 w-full z-50 rounded-b-lg";
-                    warning.innerHTML = "<i data-feather='alert-circle' class='w-3 h-3 inline mr-1'></i> AI Service Offline (Ollama)";
-                    container.parentElement.style.position = 'relative';
-                    container.parentElement.prepend(warning);
-                    if(window.feather) feather.replace();
+                if (aiChatTab) {
+                    let warning = aiChatTab.querySelector('.ai-offline-warning');
+                    
+                    // Only show on AI tab wrapper, but create it if missing
+                    if (!warning && window.appState && window.appState.currentTab === 'ai-chat') {
+                        warning = document.createElement('div');
+                        warning.className = "ai-offline-warning bg-red-500/80 backdrop-blur text-white text-xs p-2 text-center absolute top-0 w-full z-50 rounded-b-lg transition-all";
+                        
+                        // Ensure aiChatTab is positioned relative so the absolute warning sticks to its top
+                        if (getComputedStyle(aiChatTab).position === 'static') {
+                            aiChatTab.style.position = 'relative';
+                        }
+                        aiChatTab.prepend(warning);
+                    }
+                    
+                    if (warning) {
+                        this.reconnectAttempts++;
+                        if (this.reconnectAttempts <= this.maxReconnectAttempts) {
+                            warning.innerHTML = `<i data-feather='alert-circle' class='w-3 h-3 inline mr-1'></i> AI Service Offline (Ollama) - Reconnecting... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`;
+                            warning.classList.remove('bg-red-500/80');
+                            warning.classList.add('bg-orange-500/80'); // Orange for retrying
+                            
+                            // Schedule another check in 10s
+                            clearTimeout(this.statusCheckTimer);
+                            this.statusCheckTimer = setTimeout(() => this.checkStatus(), 10000);
+                        } else {
+                            warning.innerHTML = "<i data-feather='alert-circle' class='w-3 h-3 inline mr-1'></i> AI Service Offline (Ollama) - Disconnected";
+                            warning.classList.remove('bg-orange-500/80');
+                            warning.classList.add('bg-red-500/80'); // Red for given up
+                        }
+                        if(window.feather) feather.replace();
+                    }
+                }
+            } else {
+                // Online! Clean up if warning exists
+                this.reconnectAttempts = 0;
+                clearTimeout(this.statusCheckTimer);
+                if (aiChatTab) {
+                    const warning = aiChatTab.querySelector('.ai-offline-warning');
+                    if (warning) {
+                        warning.innerHTML = "<i data-feather='check-circle' class='w-3 h-3 inline mr-1'></i> AI Service Reconnected!";
+                        warning.classList.remove('bg-red-500/80', 'bg-orange-500/80');
+                        warning.classList.add('bg-green-500/90');
+                        if(window.feather) feather.replace();
+                        
+                        // Fade it out after a moment
+                        setTimeout(() => {
+                            warning.style.opacity = '0';
+                            setTimeout(() => warning.remove(), 300);
+                        }, 2500);
+                    }
                 }
             }
         } catch (e) {
             console.error("AI Status Check Failed", e);
+            // If network fails completely, treat as offline retry
+            if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                clearTimeout(this.statusCheckTimer);
+                this.statusCheckTimer = setTimeout(() => this.checkStatus(), 10000);
+            }
         }
     }
 
