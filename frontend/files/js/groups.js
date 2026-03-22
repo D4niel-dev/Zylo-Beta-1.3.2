@@ -69,79 +69,11 @@ function renderServerSidebar() {
 window.renderServerSidebar = renderServerSidebar;
 
 
-
-function renderGroupChannels() {
-    const list = document.getElementById('groupChannelsList');
-    if (!list) return;
-    list.innerHTML = '';
-
-    // Find current group data
-    const group = groupsData.find(g => g.id === currentGroupId);
-    const channels = (group && group.channels) ? group.channels : [{ id: 'general', name: 'general' }];
-
-    // Group by category, default "Text Channels"
-    const categories = {};
-    channels.forEach(ch => {
-        const cat = ch.category || 'Text Channels';
-        if (!categories[cat]) categories[cat] = [];
-        categories[cat].push(ch);
-    });
-
-    // Render grouped
-    // Order: Text Channels first, then others alphabetical, or alphabetical
-    const sortedCats = Object.keys(categories).sort((a, b) => {
-        if (a === 'Text Channels') return -1;
-        if (b === 'Text Channels') return 1;
-        return a.localeCompare(b);
-    });
-
-    sortedCats.forEach(cat => {
-        // Render Header
-        const header = document.createElement('div');
-        header.className = 'flex items-center justify-between px-2 pt-4 pb-1 text-xs font-bold text-discord-gray-400 uppercase hover:text-discord-gray-300 group select-none transition-colors';
-        header.innerHTML = `
-            <div class="flex items-center gap-0.5 cursor-pointer">
-                <span>\/</span>
-                <span>${cat}</span>
-            </div>
-            <!-- Future: Add "+" btn for admin -->
-        `;
-        list.appendChild(header);
-
-        // Render Channels
-        categories[cat].forEach(ch => {
-            const channelName = typeof ch === 'string' ? ch : ch.name;
-            const channelId = typeof ch === 'string' ? ch : ch.id;
-            const type = ch.type || 'text';
-            
-            const btn = document.createElement('div');
-            const isActive = (typeof activeChannelId !== 'undefined' ? activeChannelId : 'general') === channelId;
-            btn.className = `channel-item group flex items-center px-2 py-1.5 mx-2 rounded cursor-pointer transition-colors mb-0.5 ${isActive ? 'bg-discord-gray-600/50 text-white' : 'text-discord-gray-400 hover:bg-discord-gray-700/50 hover:text-discord-gray-200'}`;
-            
-            const icon = type === 'voice' ? 'volume-2' : 'hash';
-            
-            btn.innerHTML = `
-                <i data-feather="${icon}" class="w-4 h-4 mr-1.5 text-discord-gray-400"></i>
-                <span class="truncate font-medium">${channelName}</span>
-            `;
-            btn.onclick = () => {
-                 switchGroupChannel(group, channelId);
-            };
-            list.appendChild(btn);
-        });
-    });
-    if (window.feather) feather.replace();
-
-    // Also update header info if available
-    const nameEl = document.getElementById('groupPanelName');
-    const descEl = document.getElementById('groupPanelDesc');
-    if(group) {
-        if (nameEl) nameEl.textContent = group.name;
-        if (descEl) descEl.textContent = group.description || 'No description';
-    }
-}
+// renderGroupChannels removed: using loadGroupChannels instead
 
 function selectGroup(groupId) {
+    if (window.vcSimulationInterval) clearInterval(window.vcSimulationInterval);
+
     // Leave previous group room if connected
     if (typeof socket !== 'undefined' && socket && currentGroupId && currentGroupId !== groupId) {
         socket.emit('leave', { room: currentGroupId });
@@ -161,6 +93,9 @@ function selectGroup(groupId) {
     document.querySelectorAll('.sub-panel-content').forEach(p => p.classList.add('hidden'));
     document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
 
+    // Fix active pill duplication: Clear focus from all primary sidebar tabs when entering a group
+    document.querySelectorAll('.sidebar-tab').forEach(b => b.classList.remove('active'));
+
     const gPanel = document.getElementById('sub-panel-group');
     const gTab = document.getElementById('tab-group');
     if (gPanel) gPanel.classList.remove('hidden');
@@ -172,13 +107,27 @@ function selectGroup(groupId) {
     // Update basic info in sidebar
     const nameEl = document.getElementById('groupPanelName');
     const descEl = document.getElementById('groupPanelDesc');
-    if (nameEl) nameEl.textContent = group.name;
-    if (descEl) descEl.textContent = group.description || 'No description';
+    if (group) {
+        if (nameEl) nameEl.textContent = group.name;
+        if (descEl) descEl.textContent = group.description || 'No description';
+    }
 
     // Handle Socket join
     if (typeof socket !== 'undefined' && socket) {
         socket.emit('join', { room: group.id });
     }
+
+    // Hide community/messages global titles when inside a group
+    const subPanelHeader = document.getElementById('subPanelHeaderBlock');
+    const mainContentHeader = document.getElementById('mainContentHeaderBlock');
+    const subPanelTitle = document.getElementById('subPanelTitle');
+    const mainContentTitle = document.getElementById('main-content-title');
+    const messagesSubTabs = document.getElementById('sub-panel-messages-tabs');
+    if (subPanelHeader) subPanelHeader.style.display = 'none';
+    if (mainContentHeader) mainContentHeader.style.display = 'none';
+    if (subPanelTitle) subPanelTitle.style.display = 'none';
+    if (mainContentTitle) mainContentTitle.style.display = 'none';
+    if (messagesSubTabs) messagesSubTabs.style.display = 'none';
 
     // Load specific group data
     loadGroupChannels(group, activeChannelId);
@@ -195,22 +144,182 @@ function loadGroupChannels(group, activeChannel = 'general') {
 
     container.innerHTML = '';
 
-    // Default channel
-    const channels = group.channels || [{ id: 'general', name: 'general' }];
+    const channels = group.channels || [{ id: 'general', name: 'general', type: 'text', category: 'TEXT CHANNELS' }];
 
-    channels.forEach(channel => {
-        const ch = typeof channel === 'string' ? { id: channel, name: channel } : channel;
-        const item = document.createElement('div');
-        item.className = `channel-item ${ch.id === activeChannel ? 'active' : ''}`;
-        item.innerHTML = `
-          <span class="channel-icon">#</span>
-          <span>${ch.name}</span>
-        `;
-        item.onclick = () => {
-            switchGroupChannel(group, ch.id);
-        };
-        container.appendChild(item);
+    const categories = {};
+    channels.forEach(ch => {
+        const c = typeof ch === 'string' ? { id: ch, name: ch, type: 'text', category: 'TEXT CHANNELS' } : ch;
+        const cat = (c.category || 'TEXT CHANNELS').toUpperCase();
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push(c);
     });
+
+    const sortedCats = Object.keys(categories).sort((a, b) => {
+        if (a === 'TEXT CHANNELS') return -1;
+        if (b === 'TEXT CHANNELS') return 1;
+        return a.localeCompare(b);
+    });
+
+    sortedCats.forEach(cat => {
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between px-2 pt-4 pb-1 text-xs font-bold text-discord-gray-400 uppercase hover:text-discord-gray-300 group select-none transition-colors';
+        header.innerHTML = `
+            <div class="flex items-center gap-1 cursor-pointer">
+                <i data-feather="chevron-down" class="w-3 h-3"></i>
+                <span class="tracking-wider">${cat}</span>
+            </div>
+            <i data-feather="plus" class="w-3 h-3 opacity-0 group-hover:opacity-100 cursor-pointer"></i>
+        `;
+        container.appendChild(header);
+
+        categories[cat].forEach(ch => {
+            const btn = document.createElement('button');
+            const isActive = ch.id === activeChannel;
+            const icon = ch.type === 'voice' ? 'volume-2' : (ch.type === 'announcement' ? 'mic' : 'hash');
+
+            btn.className = `sub-panel-item text-left w-[calc(100%-1rem)] group/item ${isActive ? 'active' : ''}`;
+            btn.innerHTML = `
+                <i data-feather="${icon}" class="w-4 h-4 mr-1.5 ${isActive ? 'text-white' : 'text-discord-gray-400'}"></i>
+                <span class="truncate font-medium">${ch.name}</span>
+            `;
+            btn.onclick = () => {
+                if (ch.type === 'voice') {
+                    // Update active state
+                    document.querySelectorAll('#groupChannelsList .sub-panel-item').forEach(el => el.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderVoiceActivity(group, ch);
+                    return;
+                }
+                switchGroupChannel(group, ch.id);
+            };
+            container.appendChild(btn);
+        });
+    });
+    if (window.feather) feather.replace();
+}
+
+function renderVoiceActivity(group, channel) {
+    const container = document.getElementById('groupChatMessages');
+    const header = document.getElementById('chatHeaderTitle');
+    const inputArea = document.getElementById('groupChatInputContainer');
+    
+    if (!container || !header) return;
+
+    // Set header
+    header.innerHTML = `<i data-feather="volume-2" class="w-5 h-5 text-discord-gray-400"></i> <span class="tracking-wide">${channel.name}</span>`;
+
+    // Hide input area for voice
+    if (inputArea) inputArea.style.display = 'none';
+
+    // Build the Voice UI Canvas
+    const username = localStorage.getItem('savedUsername') || localStorage.getItem('username') || 'Me';
+    const otherMembers = (group.members || []).filter(m => m !== username).slice(0, 3);
+    const fallback = '/images/default_avatar.png';
+
+    // Clear any previous mockup intervals
+    if (window.vcSimulationInterval) clearInterval(window.vcSimulationInterval);
+
+    container.innerHTML = `
+        <div class="flex-1 flex flex-col h-full bg-[#000000] relative overflow-hidden group/vc rounded-xl m-2 border border-white/5">
+            
+            <!-- Dark glass background effect -->
+            <div class="absolute inset-0 bg-gradient-to-b from-discord-blurple/10 to-transparent pointer-events-none"></div>
+
+            <!-- Avatar Grid -->
+            <div class="flex-1 flex items-center justify-center p-8 z-10 w-full overflow-y-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 ${otherMembers.length > 2 ? 'lg:grid-cols-3' : ''} gap-6 max-w-5xl w-full" id="vcUserGrid">
+                    
+                    <!-- Me -->
+                    <div class="vc-user-tile aspect-video bg-[#2f3136] rounded-2xl flex flex-col items-center justify-center relative overflow-hidden shadow-xl transition-all border border-transparent">
+                        <img src="${fallback}" data-vc-user="${username}" class="w-24 h-24 rounded-full mb-3 shadow-2xl ring-4 ring-[#2f3136] vc-avatar transition-all">
+                        <div class="absolute bottom-3 left-4 flex items-center gap-2 bg-black/60 px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/5">
+                            <span class="text-white font-medium text-sm w-24 truncate">${username}</span>
+                            <i data-feather="mic-off" class="vc-mic w-3.5 h-3.5 text-red-400 shrink-0"></i>
+                        </div>
+                    </div>
+
+                    <!-- Mock other users -->
+                    ${otherMembers.map(m => `
+                    <div class="vc-user-tile aspect-video bg-[#2f3136] rounded-2xl flex flex-col items-center justify-center relative overflow-hidden border border-white/5 shadow-lg opacity-90 backdrop-blur-sm transition-all">
+                        <img src="${fallback}" data-vc-user="${m}" class="w-20 h-20 rounded-full mb-3 opacity-90 vc-avatar transition-all">
+                        <div class="absolute bottom-3 left-4 flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/5">
+                            <span class="text-white/90 font-medium text-sm w-24 truncate">${m}</span>
+                            <i data-feather="mic-off" class="vc-mic w-3.5 h-3.5 text-red-400 shrink-0"></i>
+                        </div>
+                    </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- Bottom Control Bar -->
+            <div class="h-20 bg-black/60 backdrop-blur-xl border-t border-white/5 flex items-center justify-center gap-4 z-20 px-6 absolute bottom-0 left-0 right-0">
+                <button class="w-12 h-12 rounded-full bg-[#2b2d31] hover:bg-[#383a40] flex items-center justify-center text-white transition-colors border border-white/5" title="Turn On Camera">
+                    <i data-feather="video" class="w-5 h-5"></i>
+                </button>
+                <button class="w-12 h-12 rounded-full bg-[#2b2d31] hover:bg-[#383a40] flex items-center justify-center text-white transition-colors border border-white/5" title="Share Screen">
+                    <i data-feather="monitor" class="w-5 h-5"></i>
+                </button>
+                <div class="w-px h-8 bg-white/10 mx-2"></div>
+                <button class="w-12 h-12 rounded-full bg-[#2b2d31] hover:bg-[#383a40] flex items-center justify-center text-white transition-colors border border-white/5" title="Mute">
+                    <i data-feather="mic-off" class="w-5 h-5"></i>
+                </button>
+                <button class="w-12 h-12 rounded-full bg-[#2b2d31] hover:bg-[#383a40] flex items-center justify-center text-white transition-colors border border-white/5" title="Deafen">
+                    <i data-feather="headphones" class="w-5 h-5"></i>
+                </button>
+                <button onclick="if(window.vcSimulationInterval) clearInterval(window.vcSimulationInterval); switchGroupChannel(groupsData.find(g => g.id === window.currentGroupId), 'general')" class="w-14 h-14 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center text-white shadow-lg shadow-red-500/20 transition-all hover:scale-105 ml-2" title="Disconnect">
+                    <i data-feather="phone-missed" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+        </div>
+    `;
+
+    // Async-load real avatars for all VC tiles
+    if (window.getUserAvatarUrl) {
+        container.querySelectorAll('.vc-avatar').forEach(img => {
+            const u = img.getAttribute('data-vc-user');
+            if (u) getUserAvatarUrl(u).then(url => { img.src = url; });
+        });
+    }
+
+    if (window.feather) feather.replace();
+    if (window.ZyloSounds) ZyloSounds.play('callJoin');
+
+    // Simulate Voice Activity
+    const tiles = Array.from(document.querySelectorAll('.vc-user-tile'));
+    window.vcSimulationInterval = setInterval(() => {
+        // Reset all tiles
+        tiles.forEach(t => {
+            t.classList.remove('ring-2', 'ring-green-500', 'scale-[1.02]', 'opacity-100');
+            t.classList.add('border-white/5', 'opacity-90');
+            const mic = t.querySelector('.vc-mic');
+            if (mic && !mic.hasAttribute('data-muted')) {
+                mic.setAttribute('data-feather', 'mic-off');
+                mic.classList.remove('text-green-400');
+                mic.classList.add('text-red-400');
+            }
+        });
+
+        // Pick 1 or 2 random speakers
+        const speakerCount = Math.random() > 0.7 ? 2 : 1;
+        for (let i = 0; i < speakerCount; i++) {
+            const speaker = tiles[Math.floor(Math.random() * tiles.length)];
+            if (!speaker) continue;
+            
+            speaker.classList.add('ring-2', 'ring-green-500', 'scale-[1.02]', 'opacity-100');
+            speaker.classList.remove('border-white/5', 'opacity-90');
+            
+            const mic = speaker.querySelector('.vc-mic');
+            if (mic) {
+                mic.setAttribute('data-feather', 'mic');
+                mic.classList.add('text-green-400');
+                mic.classList.remove('text-red-400');
+            }
+        }
+        
+        // Re-replace feather icons for updated icons
+        if (window.feather) feather.replace();
+    }, 2000);
 }
 
 function loadGroupMembers(group) {
@@ -223,40 +332,21 @@ function loadGroupMembers(group) {
 
     members.forEach(member => {
         const item = document.createElement('div');
-        item.className = 'flex items-center gap-2 p-1 text-sm cursor-pointer hover:bg-discord-gray-700/50 rounded';
-        
-        let roleIcon = '';
-        let roleColor = 'text-discord-gray-300';
-        let tooltip = 'Member';
-        
+        item.className = 'flex items-center gap-2.5 px-2 py-1.5 rounded hover:bg-discord-gray-700/50 cursor-pointer mb-0.5 group transition-colors';
+
+        // Mock status
+        const statuses = ['online', 'idle', 'dnd', 'offline'];
+        const status = statuses[Math.floor(Math.random() * 3)]; // demo random active statuses
+        let statusColor = 'bg-discord-gray-400';
+        if (status === 'online') statusColor = 'bg-green-500';
+        else if (status === 'idle') statusColor = 'bg-yellow-500';
+        else if (status === 'dnd') statusColor = 'bg-red-500';
+
         const roles = group.roles || {};
         const isAdmin = (roles.admin || []).includes(member);
         const isMod = (roles.moderator || []).includes(member);
         const isOwner = group.owner === member;
 
-        if (isOwner) {
-            roleIcon = '<i data-feather="monitor" class="w-3 h-3 text-yellow-500"></i>';
-            roleColor = 'text-yellow-500 font-bold';
-            tooltip = 'Owner';
-        } else if (isAdmin) {
-            roleIcon = '<i data-feather="shield" class="w-3 h-3 text-red-500"></i>';
-            roleColor = 'text-red-400 font-medium';
-            tooltip = 'Admin';
-        } else if (isMod) {
-            roleIcon = '<i data-feather="shield" class="w-3 h-3 text-green-500"></i>';
-            roleColor = 'text-green-400 font-medium';
-            tooltip = 'Moderator';
-        }
-        
-        item.title = tooltip;
-        item.innerHTML = `
-            <div class="relative">
-                 <div class="w-2 h-2 rounded-full ${isOwner ? 'bg-yellow-500' : (isAdmin ? 'bg-red-500' : (isMod ? 'bg-green-500' : 'bg-green-500'))}"></div>
-            </div>
-            <span class="${roleColor}">${member}</span>
-            ${roleIcon}
-        `;
-        
         // Context menu for owner to assign roles (simple implementation)
         const me = localStorage.getItem('username') || localStorage.getItem('savedUsername');
         if (group.owner === me && member !== me) {
@@ -277,8 +367,78 @@ function loadGroupMembers(group) {
     if (countEl) countEl.textContent = `${members.length} members`;
 }
 
+function loadGroupMembers(group) {
+    const container = document.getElementById('groupMembersList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    const members = group.members || [localStorage.getItem('savedUsername') || localStorage.getItem('username') || 'You'];
+
+    members.forEach(member => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-2.5 px-2 py-1.5 rounded hover:bg-discord-gray-700/50 cursor-pointer mb-0.5 group transition-colors';
+        
+        // Mock status
+        const statuses = ['online', 'idle', 'dnd', 'offline'];
+        const status = statuses[Math.floor(Math.random() * 3)]; // demo random active statuses
+        let statusColor = 'bg-discord-gray-400';
+        if (status === 'online') statusColor = 'bg-green-500';
+        else if (status === 'idle') statusColor = 'bg-yellow-500';
+        else if (status === 'dnd') statusColor = 'bg-red-500';
+
+        const roles = group.roles || {};
+        const isAdmin = (roles.admin || []).includes(member);
+        const isMod = (roles.moderator || []).includes(member);
+        const isOwner = group.owner === member;
+
+        let roleColor = 'text-discord-gray-300';
+        if (isOwner) roleColor = 'text-yellow-500 font-bold';
+        else if (isAdmin) roleColor = 'text-red-400 font-medium';
+        else if (isMod) roleColor = 'text-green-400 font-medium';
+
+        // Build with placeholder, then async-load the real avatar
+        const fallbackAvatar = '/images/default_avatar.png';
+
+        item.innerHTML = `
+            <div class="relative w-8 h-8 shrink-0">
+                <img src="${fallbackAvatar}" class="w-full h-full rounded-full object-cover member-avatar" data-username="${member}">
+                <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 ${statusColor} rounded-full border-[2.5px] border-[#2f3136] z-10 transition-colors"></div>
+            </div>
+            <div class="flex flex-col overflow-hidden">
+                <span class="truncate text-[13px] ${roleColor} group-hover:text-white transition-colors">${member}</span>
+            </div>
+        `;
+
+        // Async load real avatar
+        if (window.getUserAvatarUrl) {
+            getUserAvatarUrl(member).then(url => {
+                const img = item.querySelector('.member-avatar');
+                if (img) img.src = url;
+            });
+        }
+
+        // Context menu for owner to assign roles (simple implementation)
+        const me = localStorage.getItem('username') || localStorage.getItem('savedUsername');
+        if (group.owner === me && member !== me) {
+            item.oncontextmenu = (e) => {
+                e.preventDefault();
+                showGroupMemberContextMenu(e, member, group);
+            };
+        }
+
+        container.appendChild(item);
+    });
+}
+
+window.lastGroupMsgUsername = null;
+window.lastGroupMsgTimestamp = 0;
+
 async function loadGroupMessages(group, channelId) {
     activeChannelId = channelId;
+    window.lastGroupMsgUsername = null;
+    window.lastGroupMsgTimestamp = 0;
+
     const container = document.getElementById('groupChatMessages');
     if (!container) return;
 
@@ -321,6 +481,11 @@ async function loadGroupMessages(group, channelId) {
 }
 
 function switchGroupChannel(group, channelId) {
+    if (window.vcSimulationInterval) clearInterval(window.vcSimulationInterval);
+
+    const inputArea = document.getElementById('groupChatInputContainer');
+    if (inputArea) inputArea.style.display = ''; // Restore text input dynamically
+
     // Re-render channel list to update active states
     loadGroupChannels(group, channelId);
 
@@ -335,6 +500,17 @@ async function appendGroupMessage(msg) {
     // Deduplication: skip if message with this ID already exists
     const msgId = msg.id || msg.timestamp || msg.ts;
     if (msgId && container.querySelector(`[data-msg-id="${msgId}"]`)) return;
+
+    const msgUser = msg.username || msg.from;
+    const msgTime = msg.timestamp || msg.ts || 0;
+
+    // Enable compact mode if same user within 5 minutes (300 seconds)
+    if (window.lastGroupMsgUsername === msgUser && (msgTime - window.lastGroupMsgTimestamp) < 300) {
+        msg.compact = true;
+    }
+
+    window.lastGroupMsgUsername = msgUser;
+    window.lastGroupMsgTimestamp = msgTime;
 
     const el = await createDiscordMessage(msg);
     if (msgId) el.setAttribute('data-msg-id', msgId);

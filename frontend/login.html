@@ -250,32 +250,43 @@
     </div>
 
     <!-- Main Card -->
-    <div class="w-full max-w-[420px] p-8 sm:p-10 rounded-3xl card-glass animate-fadeUp" style="animation-delay: 0.1s;">
+    <div class="w-full max-w-[400px] p-6 sm:p-8 rounded-3xl card-glass animate-fadeUp" style="animation-delay: 0.1s;">
       
       <!-- Avatar -->
       <div class="flex justify-center mb-5">
         <img id="loginAvatar" src="/images/default_avatar.png" alt="User Avatar"
-          class="w-20 h-20 rounded-full shadow-2xl ring-4 ring-blue-500/20 avatar-ring object-cover" />
+          class="w-16 h-16 rounded-full shadow-2xl ring-4 ring-blue-500/20 avatar-ring object-cover" />
       </div>
 
       <!-- Header -->
-      <h1 class="font-display text-3xl font-bold tracking-tight text-center mb-6" data-i18n="auth.welcomeBack">
+      <h1 class="font-display text-2xl font-bold tracking-tight text-center mb-6" data-i18n="auth.welcomeBack">
         Welcome back!
       </h1>
 
+      <!-- Account Switcher -->
+      <div id="account-switcher" class="hidden space-y-3 mb-6">
+        <div id="account-list" class="space-y-2 max-h-48 overflow-y-auto no-scrollbar scrollbar-thumb-discord-gray-900 pr-1">
+          <!-- Populated by JS -->
+        </div>
+        <button onclick="switchToAddAccount()" class="w-full py-3 rounded-xl font-medium text-gray-300 btn-secondary flex items-center justify-center gap-2 hover:bg-white/5 transition-all text-sm">
+          <i data-feather="plus" class="w-4 h-4"></i>
+          Add another account
+        </button>
+      </div>
+
       <!-- Login Inputs -->
-      <div id="login-inputs" class="space-y-5">
+      <div id="login-inputs" class="space-y-4">
         <div>
           <label for="username" class="block text-xs font-semibold text-gray-300 uppercase tracking-widest mb-1.5 ml-1">Account</label>
           <input id="username" type="text" placeholder="Username or Email" data-i18n-placeholder="auth.usernameOrEmail" aria-label="Username or Email"
-            class="input-field w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-500 focus:outline-none font-body text-base transition-all" />
+            class="input-field w-full px-4 py-3 rounded-xl text-white placeholder-gray-500 focus:outline-none font-body text-sm transition-all" />
         </div>
 
         <div>
           <label for="password" class="block text-xs font-semibold text-gray-300 uppercase tracking-widest mb-1.5 ml-1">Password</label>
           <div class="relative">
             <input id="password" type="password" placeholder="Password" data-i18n-placeholder="auth.password" aria-label="Password"
-              class="input-field w-full px-4 py-3.5 pr-12 rounded-xl text-white placeholder-gray-500 focus:outline-none font-body text-base transition-all" />
+              class="input-field w-full px-4 py-3 pr-12 rounded-xl text-white placeholder-gray-500 focus:outline-none font-body text-sm transition-all" />
             <span id="togglePassword" role="button" tabindex="0" aria-label="Toggle password visibility"
               class="password-toggle absolute top-1/2 -translate-y-1/2 right-4 text-gray-400 cursor-pointer p-1 hover:text-white transition-colors">
               <i id="eyeIcon" data-feather="eye" class="w-5 h-5"></i>
@@ -318,7 +329,7 @@
 
       <!-- Login Button -->
       <button id="loginBtn" onclick="login()" aria-label="Sign In"
-        class="btn-primary w-full py-4 mt-6 rounded-xl font-bold text-white text-lg shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-blue-500/40 transition-all">
+        class="btn-primary w-full py-3 mt-5 rounded-xl font-bold text-white text-base shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-blue-500/40 transition-all">
         <svg id="loginSpinner" class="w-5 h-5 animate-spin hidden" fill="none" viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" class="opacity-25"/>
           <path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="4" class="opacity-75"/>
@@ -470,12 +481,115 @@
       passwordInput.addEventListener("keyup", handleCaps);
 
       window.onload = () => {
-        const saved = localStorage.getItem("savedUsername");
-        if (saved) {
-          document.getElementById("username").value = saved;
+        const legacySaved = localStorage.getItem("savedUsername");
+        if (legacySaved) {
+          document.getElementById("username").value = legacySaved;
           document.getElementById("rememberMe").checked = true;
         }
+
+        renderAccountSwitcher();
       };
+
+      function switchToAddAccount() {
+        document.getElementById("account-switcher").classList.add("hidden");
+        document.getElementById("login-inputs").classList.remove("hidden");
+        document.getElementById("rememberMe").parentElement.classList.remove("hidden");
+        document.getElementById("social-login-container").classList.remove("hidden");
+        document.getElementById("loginBtn").classList.remove("hidden");
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        
+        const topAvatar = document.getElementById("loginAvatar");
+        if (topAvatar) topAvatar.parentElement.classList.remove("hidden");
+      }
+
+      async function renderAccountSwitcher() {
+        const accountsRaw = localStorage.getItem("savedZyloAccounts");
+        if (!accountsRaw) return;
+
+        let accounts = [];
+        try { accounts = JSON.parse(accountsRaw); } catch(e) {}
+        if (!Array.isArray(accounts) || accounts.length === 0) return;
+
+        // Fetch live user data to refresh avatars
+        const baseUrl = window.location.origin;
+        for (let i = 0; i < accounts.length; i++) {
+          try {
+            const res = await fetch(`${baseUrl}/api/get-user?identifier=${encodeURIComponent(accounts[i].username)}`);
+            const data = await res.json();
+            if (data.success && data.user) {
+              accounts[i].avatar = data.user.avatar || accounts[i].avatar || "/images/default_avatar.png";
+              accounts[i].usertag = data.user.usertag || accounts[i].usertag;
+            }
+          } catch(e) { /* offline fallback: use cached data */ }
+        }
+        localStorage.setItem("savedZyloAccounts", JSON.stringify(accounts));
+
+        // Update top avatar to first account
+        const topAvatar = document.getElementById("loginAvatar");
+        if (topAvatar && accounts.length > 0) {
+          topAvatar.src = accounts[0].avatar || "/images/default_avatar.png";
+        }
+
+        const list = document.getElementById("account-list");
+        list.innerHTML = "";
+
+        const autoLoginEnabled = localStorage.getItem("autoLoginEnabled") !== "false";
+
+        accounts.forEach(acc => {
+          const btn = document.createElement("button");
+          btn.className = "w-full p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition flex items-center justify-between group";
+          
+          const autoBadge = (autoLoginEnabled && acc.loginCount >= 5) ? `<span class="text-[10px] font-bold bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full ml-2">Auto</span>` : '';
+
+          btn.innerHTML = `
+            <div class="flex items-center gap-3">
+              <img src="${acc.avatar || '/images/default_avatar.png'}" class="w-10 h-10 rounded-full object-cover border border-white/10 group-hover:border-blue-500/50 transition">
+              <div class="text-left flex flex-col">
+                <span class="text-sm font-bold text-white flex items-center">${acc.username} ${autoBadge}</span>
+                <span class="text-xs text-gray-400">${acc.usertag || ''} • ${acc.loginCount || 1} logins</span>
+              </div>
+            </div>
+            <i data-feather="chevron-right" class="w-4 h-4 text-gray-500 group-hover:text-white transition"></i>
+          `;
+          btn.onclick = () => selectAccount(acc);
+          list.appendChild(btn);
+        });
+
+        document.getElementById("account-switcher").classList.remove("hidden");
+        document.getElementById("login-inputs").classList.add("hidden");
+        document.getElementById("rememberMe").parentElement.classList.add("hidden");
+        document.getElementById("social-login-container").classList.add("hidden");
+        document.getElementById("loginBtn").classList.add("hidden");
+        
+        const mainAvatar = document.getElementById("loginAvatar");
+        if (mainAvatar) mainAvatar.parentElement.classList.add("hidden");
+        
+        feather.replace();
+      }
+
+      function selectAccount(acc) {
+        document.getElementById("username").value = acc.username;
+        const autoLoginEnabled = localStorage.getItem("autoLoginEnabled") !== "false";
+        if (autoLoginEnabled && acc.loginCount >= 5 && acc.password) {
+          // Auto login!
+          document.getElementById("password").value = atob(acc.password);
+          login();
+        } else {
+          // Switch to password prompt
+          document.getElementById("account-switcher").classList.add("hidden");
+          document.getElementById("login-inputs").classList.remove("hidden");
+          document.getElementById("loginBtn").classList.remove("hidden");
+          document.getElementById("rememberMe").parentElement.classList.remove("hidden");
+          document.getElementById("social-login-container").classList.remove("hidden");
+          const topAvatar = document.getElementById("loginAvatar");
+          if (topAvatar) {
+            topAvatar.src = acc.avatar || "/images/default_avatar.png";
+            topAvatar.parentElement.classList.remove("hidden");
+          }
+          document.getElementById("password").focus();
+        }
+      }
 
       window.addEventListener("DOMContentLoaded", () => {
         const savedTheme = localStorage.getItem("theme");
@@ -540,9 +654,33 @@
           localStorage.setItem("username", result.username || identifier);
           localStorage.setItem("usertag", result.usertag);
           localStorage.setItem("session_token", result.session_token);
-          remember
-            ? localStorage.setItem("savedUsername", identifier)
-            : localStorage.removeItem("savedUsername");
+          
+          if (remember) {
+            localStorage.setItem("savedUsername", identifier);
+            
+            // Store in savedZyloAccounts
+            let accounts = [];
+            try { accounts = JSON.parse(localStorage.getItem("savedZyloAccounts") || "[]"); } catch(e){}
+            const existingIdx = accounts.findIndex(a => a.username.toLowerCase() === (result.username || identifier).toLowerCase());
+            
+            if (existingIdx >= 0) {
+              accounts[existingIdx].loginCount = (accounts[existingIdx].loginCount || 0) + 1;
+              accounts[existingIdx].usertag = result.usertag;
+              accounts[existingIdx].avatar = result.avatar || accounts[existingIdx].avatar || "/images/default_avatar.png";
+              accounts[existingIdx].password = btoa(password); // Save Base64 for auto-login
+            } else {
+              accounts.push({
+                username: result.username || identifier,
+                usertag: result.usertag,
+                loginCount: 1,
+                password: btoa(password),
+                avatar: result.avatar || "/images/default_avatar.png"
+              });
+            }
+            localStorage.setItem("savedZyloAccounts", JSON.stringify(accounts));
+          } else {
+            localStorage.removeItem("savedUsername");
+          }
           try {
             new Audio("/files/audio/login.mp3").play().catch(() => {});
           } catch {}

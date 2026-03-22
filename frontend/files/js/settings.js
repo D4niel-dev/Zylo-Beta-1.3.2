@@ -139,6 +139,9 @@ var pendingPronouns = null;
 var pendingActiveBadges = null; // null means no changes made
 var accountSettingsChanged = false;
 
+// Expose a reset helper so loadAccountSettingsData can clear stale state
+window.resetPendingActiveBadges = function() { pendingActiveBadges = null; };
+
 window.renderBadgeSelectionUI = function(unlockedBadges, activeBadges) {
     const container = document.getElementById('settingsBadgesContainer');
     const countSpan = document.getElementById('activeBadgesCount');
@@ -182,8 +185,8 @@ window.renderBadgeSelectionUI = function(unlockedBadges, activeBadges) {
                 pendingActiveBadges = pendingActiveBadges.filter(b => b !== id);
             } else {
                 // Select (max 3)
-                if (pendingActiveBadges.length >= 3) {
-                    if (window.showToast) window.showToast("You can only display up to 3 active badges.", 2000, true);
+                if (pendingActiveBadges.length >= 6) {
+                    if (window.showToast) window.showToast("You can only display up to 6 active badges.", 2000, true);
                     return;
                 }
                 pendingActiveBadges.push(id);

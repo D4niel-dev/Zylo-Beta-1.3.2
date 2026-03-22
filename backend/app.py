@@ -653,14 +653,15 @@ def login():
                 })
             # Create session token
             token = create_session(user["username"])
-            
-            # Refresh badges
-            check_badges(user["username"])
+
+            # Refresh badges and track login-based progress
+            check_badges(user["username"], context="login")
             
             return jsonify({
                 "success": True, 
                 "username": user["username"], 
                 "usertag": user.get("usertag", ""),
+                "avatar": user.get("avatar", "/images/default_avatar.png"),
                 "session_token": token
             })
     return jsonify({"success": False, "error": "Invalid credentials"}), 401
@@ -882,15 +883,17 @@ def messages_api():
     # POST - Send community message
     data = request.json or {}
     username = (data.get('username') or '').strip()
-    message = data.get('message')
+    message = data.get('message', '')
+    attachments = data.get('attachments', [])
     
-    if not username or not message:
+    if not username or (not message and not attachments):
         return jsonify({"success": False, "error": "Missing fields"}), 400
         
     msg_entry = {
         "id": data.get('id'),
         "username": username,
         "message": message,
+        "attachments": attachments,
         "replyTo": data.get('replyTo'),
         "type": data.get('type', 'text'),
         "sticker_src": data.get('sticker_src'),
@@ -985,10 +988,13 @@ def dm_messages():
     if not from_user or not to_user:
         return jsonify({"success": False, "error": "Missing from/to"}), 400
     
+    attachments = data.get('attachments', [])
+    
     dm_entry = {
         'from': from_user,
         'to': to_user,
         'message': message,
+        'attachments': attachments,
         'type': msg_type,
         'ts': __import__('time').time(),
         'id': str(uuid.uuid4()),
@@ -1069,7 +1075,13 @@ def handle_send_message(data):
     }
     messages.append(msg_data)
     save_messages(messages)
-    
+
+    # XP + badge progress for chat activity
+    try:
+        _add_xp(username, 5)
+        check_badges(username, context="message")
+    except Exception:
+        pass
     print("Message received from client:", msg_data)
     emit("receive_message", msg_data, broadcast=True)
 
@@ -1103,6 +1115,13 @@ def handle_send_file(data):
     print("File message received from client:", msg_data)
     messages.append(msg_data)
     save_messages(messages)
+
+    # Treat file posts as activity for badge progress
+    try:
+        _add_xp(username, 3)
+        check_badges(username, context="message")
+    except Exception:
+        pass
 
     emit("receive_file", msg_data, broadcast=True)
 
@@ -1302,18 +1321,23 @@ def handle_mark_read(data):
 def get_stats():
     users = load_users()
     user_count = len(users)
-    message_count = len(messages) 
+    message_count = len(messages)
+    dm_count = len(dms) if isinstance(dms, list) else 0
     try:
         current_groups = load_groups()
         # +1 for the public community room
         room_count = (len(current_groups) or 0) + 1
+        group_count = len(current_groups) or 0
     except Exception:
         room_count = 1
+        group_count = 0
 
     return jsonify({
         "users": user_count,
         "messages": message_count,
-        "rooms": room_count
+        "rooms": room_count,
+        "dms": dm_count,
+        "groups": group_count
     })
 
 # Link preview endpoint - fetches OpenGraph metadata
@@ -1393,7 +1417,8 @@ def ai_models():
             if models:
                 return jsonify({"success": True, "provider": "ollama", "models": models})
         except Exception as e:
-            print("Ollama check failed:", e)
+            if "10061" not in str(e):
+                print("Ollama backend not unreachable:", e)
             
     # Fallback list (may not be installed; UI can allow selection anyway)
     fallback_models = [
@@ -2018,6 +2043,10 @@ def update_profile():
                 user["badges"] = data.get("badges")
                 print(f"✅ Updated badges for {username}: {user['badges']}")
 
+            if "badges_active" in data:
+                user["badges_active"] = data.get("badges_active")
+                print(f"✅ Updated active badges for {username}: {user['badges_active']}")
+
             if "badges_pinned" in data:
                 user["badges_pinned"] = data.get("badges_pinned")
                 print(f"✅ Updated pinned badges for {username}: {user['badges_pinned']}")
@@ -2125,23 +2154,136 @@ def check_badges(username, context=None):
         return
         
     users = load_users()
-    user = next((u for u in users if u['username'] == username), None)
+    user = next((u for u in users if u.get('username') == username), None)
     if not user:
         return
-        
-    # 1. Verified Badge (if email is verified)
+
+    updated = False
+
+    # Ensure created_at for account age based badges
+    now_ts = int(_time.time())
+    if not user.get('created_at'):
+        user['created_at'] = now_ts
+        updated = True
+
+    # ---- Login-based progress (streaks, total days) ----
+    if context == 'login':
+        from datetime import datetime, timezone
+
+        stats = user.get('login_stats') or {}
+        last = stats.get('last_login_date')
+        total_days = int(stats.get('total_login_days') or 0)
+        streak = int(stats.get('streak') or 0)
+
+        today = datetime.now(timezone.utc).date()
+        today_str = today.isoformat()
+
+        if last != today_str:
+            # New login day
+            total_days += 1
+            if last:
+                try:
+                    last_dt = datetime.fromisoformat(last)
+                    delta_days = (today - last_dt).days
+                    if delta_days == 1:
+                        streak += 1
+                    else:
+                        streak = 1
+                except Exception:
+                    streak = 1
+            else:
+                streak = 1
+
+            stats['last_login_date'] = today_str
+            stats['total_login_days'] = total_days
+            stats['streak'] = streak
+            user['login_stats'] = stats
+            updated = True
+
+            # Newcomer: first successful login
+            if total_days == 1:
+                grant_badge(username, 'newcomer')
+
+            # Veteran: account age or total distinct login days
+            created_at = int(user.get('created_at') or now_ts)
+            age_days = max(0, (now_ts - created_at) // 86400)
+            if age_days >= 180 or total_days >= 60:
+                grant_badge(username, 'veteran')
+
+            # Eternal: 365-day login streak
+            if streak >= 365:
+                grant_badge(username, 'eternal')
+
+    # ---- Message / activity-based badges ----
+    # Compute total messages across community, DMs, and groups
+    try:
+        community_msgs = 0
+        for m in messages or []:
+            if m.get('username') == username and (m.get('message') or m.get('type') in ('file', 'image', 'video')):
+                community_msgs += 1
+
+        dm_msgs = 0
+        for m in load_dms() or []:
+            if m.get('from') == username:
+                dm_msgs += 1
+
+        group_msgs = 0
+        for g in load_groups() or []:
+            for gm in g.get('messages', []) or []:
+                if gm.get('username') == username:
+                    group_msgs += 1
+
+        total_msgs = community_msgs + dm_msgs + group_msgs
+
+        if total_msgs >= 1:
+            grant_badge(username, 'first_chat')
+
+        if total_msgs >= 100:
+            grant_badge(username, '100_messages')
+            grant_badge(username, 'chatter_1')
+        if total_msgs >= 1000:
+            grant_badge(username, 'chatter_2')
+        if total_msgs >= 5000:
+            grant_badge(username, 'chatter_3')
+        if total_msgs >= 10000:
+            grant_badge(username, 'chatter_4')
+
+        # Power User: lots of activity
+        if total_msgs >= 200:
+            grant_badge(username, 'power_user')
+
+        # Explorer: has used community + DMs + groups
+        if community_msgs > 0 and dm_msgs > 0 and group_msgs > 0:
+            grant_badge(username, 'explorer')
+    except Exception as e:
+        print(f"Badge stats computation failed for {username}: {e}")
+
+    # ---- Night Owl: late-night actions ----
+    if context == 'message':
+        from datetime import datetime
+
+        badge_stats = user.get('badge_stats') or {}
+        night_actions = int(badge_stats.get('night_owl_actions') or 0)
+
+        hour = datetime.now().hour
+        if 0 <= hour < 5:
+            night_actions += 1
+            badge_stats['night_owl_actions'] = night_actions
+            user['badge_stats'] = badge_stats
+            updated = True
+
+            if night_actions >= 50:
+                grant_badge(username, 'night_owl')
+
+    # ---- Verified & developer badges ----
     if user.get('email_verified'):
         grant_badge(username, 'verified')
-        
-    # 2. Developer Badge (hardcoded for devs)
+
     if username in ['Dan', 'Daniel']:
         grant_badge(username, 'developer')
-        
-    # 3. Supporter (Placeholder for future subscription logic)
-    # 4. Thinker/Coder (Context dependent - usually triggered from chat)
-    if context == 'ai_thinking_session':
-        # This would increment a counter in user metadata and grant if threshold met
-        pass
+
+    if updated:
+        save_users(users)
 
 # -------- Settings and Account Management Endpoints -------- #
 
@@ -2586,6 +2728,14 @@ def dm_send():
         emit('receive_dm', entry, room=f"user_{frm}")
     except Exception:
         pass
+
+    # XP + badge progress for DM activity
+    try:
+        _add_xp(frm, 5)
+        check_badges(frm, context="message")
+    except Exception:
+        pass
+
     return jsonify({"success": True})
 
 @socketio.on('join_user')
@@ -2597,32 +2747,43 @@ def handle_join_user(data):
 @socketio.on('send_dm')
 def handle_send_dm(data):
     try:
+        print(f"[DEBUG send_dm] Received data keys: {list((data or {}).keys())}")
         frm = (data or {}).get('from')
         to = (data or {}).get('to')
         if not frm or not to:
+            print(f"[DEBUG send_dm] REJECTED: from={frm}, to={to}")
             return
         entry = {
+            'id': (data or {}).get('id') or str(uuid.uuid4()),
             'from': frm,
             'to': to,
-            'message': (data or {}).get('message'),
+            'message': (data or {}).get('message', ''),
+            'attachments': (data or {}).get('attachments', []),
             'fileName': (data or {}).get('fileName'),
             'fileType': (data or {}).get('fileType'),
             'fileData': (data or {}).get('fileData'),
-            'fileData': (data or {}).get('fileData'),
             'replyTo': (data or {}).get('replyTo'),
+            'ts': (data or {}).get('ts', __import__('time').time()),
             'createdAt': int(__import__('time').time()),
         }
+        print(f"[DEBUG send_dm] Saving entry: from={frm}, to={to}, message='{entry['message'][:50]}', attachments={len(entry['attachments'])}")
         all_dms = load_dms()
         all_dms.append(entry)
         save_dms(all_dms)
         # Emit only to the recipient (sender handles their own message locally)
-        # Emit only to the recipient (sender handles their own message locally)
         emit('receive_dm', entry, room=f"user_{to}")
+        print(f"[DEBUG send_dm] SUCCESS: emitted to room user_{to}")
         
-        # Add XP
-        _add_xp(frm, 5)
-    except Exception:
-        pass
+        # XP + badge progress for DM activity
+        try:
+            _add_xp(frm, 5)
+            check_badges(frm, context="message")
+        except Exception:
+            pass
+    except Exception as e:
+        print(f"[DEBUG send_dm] EXCEPTION: {e}")
+        import traceback
+        traceback.print_exc()
 
 # ---------------- Groups APIs ---------------- #
 
@@ -2869,6 +3030,13 @@ def send_group_message_api():
             messages.append(msg_entry)
             all_groups[idx]['messages'] = messages
             save_groups(all_groups)
+
+            # XP + badge progress for group activity
+            try:
+                _add_xp(username, 5)
+                check_badges(username, context="message")
+            except Exception:
+                pass
             
             # Emit to group room
             socketio.emit('group_message', {

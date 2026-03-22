@@ -629,7 +629,7 @@ class AIChatManager {
             attachmentHtml = '<div class="flex flex-wrap gap-2 mb-2">';
             attachments.forEach(att => {
                 if (att.fileType === 'image') {
-                    attachmentHtml += `<img src="${att.url}" class="max-w-[200px] max-h-[200px] h-auto rounded-lg border border-gray-600 cursor-pointer hover:opacity-90 transition" onclick="window.open('${att.url}', '_blank')">`;
+                    attachmentHtml += `<img src="${att.url}" class="max-w-[200px] max-h-[200px] h-auto rounded-lg border border-gray-600 cursor-pointer hover:opacity-90 transition" onclick="window.openImageViewer('${att.url}')">`;
                 } else {
                     attachmentHtml += `
                         <a href="${att.url}" target="_blank" class="flex items-center gap-2 bg-discord-gray-800 p-2 rounded border border-gray-600 hover:bg-discord-gray-700 transition">
@@ -847,7 +847,7 @@ class AIChatManager {
             // === Unordered lists (- item, * item) ===
             .replace(/^[-*] (.+)$/gm, '<div class="flex gap-2 ml-2"><span class="text-blue-600 dark:text-blue-400">\u2022</span><span class="text-gray-800 dark:text-gray-200">$1</span></div>')
             // === Images ![alt](url) — before links ===
-            .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full rounded-lg my-2 border border-gray-200 dark:border-gray-600">')
+            .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full rounded-lg my-2 border border-gray-200 dark:border-gray-600 cursor-pointer hover:opacity-90 transition" onclick="window.openImageViewer(\'$2\')">')
             // === Links [text](url) ===
             .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-600 dark:text-blue-400 underline hover:text-blue-800 dark:hover:text-blue-300">$1</a>')
             // === Bold + Italic (***text*** or ___text___) ===

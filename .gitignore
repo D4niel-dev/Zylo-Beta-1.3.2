@@ -9,3 +9,5 @@ scripts/plans/
 .env
 dist/
 *.json
+*implementation_plan.md
+*task.md

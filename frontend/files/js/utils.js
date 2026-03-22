@@ -205,3 +205,36 @@ window.getStatusIcon = function(status) {
     if (status === 'delivered') return '<span class="text-gray-400 font-bold" title="Delivered">✓✓</span>';
     return '<span class="text-discord-gray-500 font-bold" title="Sent">✓</span>';
 };
+
+/**
+ * Image Viewer (Global Zoom Modal)
+ */
+window.openImageViewer = function(url) {
+    const modal = document.getElementById('imageViewerModal');
+    const img = document.getElementById('imageViewerImg');
+    if (!modal || !img) return;
+    img.src = url;
+    modal.classList.remove('hidden');
+    // Ensure fade-in transition
+    setTimeout(() => { modal.style.opacity = '1'; }, 10);
+};
+
+window.closeImageViewer = function() {
+    const modal = document.getElementById('imageViewerModal');
+    if (!modal) return;
+    modal.style.opacity = '0';
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        document.getElementById('imageViewerImg').src = '';
+    }, 200);
+};
+
+// Listen for Escape key to close the image viewer
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('imageViewerModal');
+        if (modal && !modal.classList.contains('hidden')) {
+            window.closeImageViewer();
+        }
+    }
+});

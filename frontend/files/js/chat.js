@@ -58,14 +58,27 @@ async function createDiscordMessage(data) {
     // Important: Add timestamp for finding message during updates
     if (data.timestamp || data.ts) msgWrapper.setAttribute('data-timestamp', data.timestamp || data.ts);
 
-    msgWrapper.classList.add("flex", "flex-col", "p-2", "rounded", "hover:bg-discord-gray-600/20", "leading-snug", "group", "relative");
+    msgWrapper.classList.add("flex", "flex-col", data.compact ? "py-0.5" : "py-1.5", data.compact ? "mt-0" : "mt-2", "px-4", "hover:bg-black/5", "dark:hover:bg-white/5", "leading-relaxed", "group", "relative", "w-full", "transition-colors");
 
     const messageRow = document.createElement("div");
-    messageRow.className = "flex items-start gap-3 relative w-full";
+    messageRow.className = "flex items-start gap-4 relative w-full group/msg";
+
+    if (data.compact) {
+        // Compact left gutter (hover timestamp)
+        const compactGutter = document.createElement("div");
+        compactGutter.className = "w-11 min-w-[44px] flex-shrink-0 flex items-center justify-center opacity-0 group-hover/msg:opacity-100 transition-opacity select-none";
+        
+        const cTime = document.createElement("span");
+        cTime.className = "text-[10px] text-discord-gray-400 font-medium tracking-tight mt-1";
+        cTime.textContent = new Date((data.ts || data.timestamp) ? (data.ts || data.timestamp) * 1000 : Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        compactGutter.appendChild(cTime);
+        messageRow.appendChild(compactGutter);
+    }
 
     // Actions (Reply / Edit)
     const actions = document.createElement("div");
-    actions.className = "absolute right-4 -top-4 hidden group-hover:flex bg-discord-gray-900 rounded border border-discord-gray-800 shadow-sm z-20 scale-90 p-0.5";
+    actions.className = "absolute right-4 -top-4 hidden group-hover:flex bg-discord-gray-900/90 backdrop-blur-sm rounded-lg border border-discord-gray-700 shadow-md z-20 scale-90 p-0.5";
 
     const replyBtn = document.createElement("button");
     
@@ -255,85 +268,88 @@ async function createDiscordMessage(data) {
         msgWrapper.appendChild(replyContainer); // Append first
     }
 
-    const avatar = document.createElement("img");
-    const fallbackAvatar = '/images/default_avatar.png';
-    const avatarUrl = await getUserAvatarUrl(data.username || data.from);
-    avatar.src = avatarUrl;
-    avatar.alt = `${data.username || data.from}'s avatar`;
-    avatar.className = "w-10 h-10 rounded-full object-cover cursor-pointer";
-    avatar.onerror = function () { this.onerror = null; this.src = fallbackAvatar; };
     const tUname = data.username || data.from;
-    avatar.onclick = () => showUserProfile(tUname);
-    messageRow.appendChild(avatar);
+
+    // Standard Avatar (only if not compact)
+    if (!data.compact) {
+        const avatar = document.createElement("img");
+        const fallbackAvatar = '/images/default_avatar.png';
+        const avatarUrl = await getUserAvatarUrl(tUname);
+        avatar.src = avatarUrl;
+        avatar.alt = `${tUname}'s avatar`;
+        avatar.className = "w-11 h-11 min-w-[44px] rounded-full object-cover cursor-pointer shadow-sm mt-0.5 hover:opacity-80 transition-opacity";
+        avatar.onerror = function () { this.onerror = null; this.src = fallbackAvatar; };
+        avatar.onclick = () => showUserProfile(tUname);
+        messageRow.appendChild(avatar);
+    }
 
     const contentWrapper = document.createElement("div");
     contentWrapper.className = "msg-content-wrapper relative min-w-0 flex-1";
 
-    const header = document.createElement("div");
-    header.className = "flex items-baseline gap-2";
-    const userSpan = document.createElement("span");
+    // Standard Header (Username + Time) only if not compact
+    if (!data.compact) {
+        const header = document.createElement("div");
+        header.className = "flex items-baseline gap-2 mb-0.5";
+        const userSpan = document.createElement("span");
 
-    // Role-based color styling
-    const roleColorMap = {
-        'admin': 'text-red-500',
-        'mod': 'text-purple-500',
-        'moderator': 'text-purple-500',
-        'vip': 'text-yellow-400',
-        'user': 'text-white'
-    };
+        // Role-based color styling
+        const roleColorMap = {
+            'admin': 'text-red-500',
+            'mod': 'text-purple-500',
+            'moderator': 'text-purple-500',
+            'vip': 'text-yellow-400',
+            'user': 'text-white'
+        };
 
-    // Try to get cached role or default to white
-    let roleColor = 'text-white';
-    let roleTitle = '';
-    try {
-        const cachedUser = avatarCache.get(tUname + '_role');
-        if (cachedUser) {
-            roleColor = roleColorMap[cachedUser.toLowerCase()] || 'text-white';
-            roleTitle = cachedUser;
-        } else {
-            // Async fetch role (non-blocking)
-            if (tUname) {
-                fetch(`/api/get-user?identifier=${encodeURIComponent(tUname)}`)
-                    .then(r => r.json())
-                    .then(d => {
-                        if (d.success && d.user && d.user.role) {
-                            avatarCache.set(tUname + '_role', d.user.role);
-                            const color = roleColorMap[d.user.role.toLowerCase()] || 'text-white';
-                            userSpan.className = `${color} font-semibold cursor-pointer hover:underline`;
-                            if (d.user.role !== 'user') {
-                                userSpan.title = d.user.role.charAt(0).toUpperCase() + d.user.role.slice(1);
+        let roleColor = 'text-white';
+        let roleTitle = '';
+        try {
+            const cachedUser = avatarCache.get(tUname + '_role');
+            if (cachedUser) {
+                roleColor = roleColorMap[cachedUser.toLowerCase()] || 'text-white';
+                roleTitle = cachedUser;
+            } else {
+                if (typeof tUname !== 'undefined' && tUname) {
+                    fetch(`/api/get-user?identifier=${encodeURIComponent(tUname)}`)
+                        .then(r => r.json())
+                        .then(d => {
+                            if (d.success && d.user && d.user.role) {
+                                avatarCache.set(tUname + '_role', d.user.role);
+                                const color = roleColorMap[d.user.role.toLowerCase()] || 'text-white';
+                                userSpan.className = `${color} font-semibold cursor-pointer hover:underline tracking-wide`;
+                                if (d.user.role !== 'user') userSpan.title = d.user.role.charAt(0).toUpperCase() + d.user.role.slice(1);
                             }
-                        }
-                    })
-                    .catch(() => { });
+                        }).catch(() => { });
+                }
             }
+        } catch { }
+
+        userSpan.className = `${roleColor} font-semibold text-[15px] cursor-pointer hover:underline tracking-wide`;
+        if (roleTitle && roleTitle !== 'user') userSpan.title = roleTitle.charAt(0).toUpperCase() + roleTitle.slice(1);
+        if (typeof tUname !== 'undefined') {
+            userSpan.textContent = tUname;
+            userSpan.onclick = () => showUserProfile(tUname);
         }
-    } catch { }
 
-    userSpan.className = `${roleColor} font-semibold cursor-pointer hover:underline`;
-    if (roleTitle && roleTitle !== 'user') {
-        userSpan.title = roleTitle.charAt(0).toUpperCase() + roleTitle.slice(1);
+        const timeSpan = document.createElement("span");
+        timeSpan.className = "text-discord-gray-400 text-xs font-medium ml-1";
+        timeSpan.textContent = new Date((data.ts || data.timestamp) ? (data.ts || data.timestamp) * 1000 : Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        header.appendChild(userSpan);
+        header.appendChild(timeSpan);
+
+        // Status Indicator (Sent/Delivered/Read)
+        if (isOwnMessage) {
+            const statusSpan = document.createElement("span");
+            statusSpan.className = "ml-2 text-[10px] select-none msg-status-icon cursor-help opacity-80 hover:opacity-100";
+            const readList = data.readBy || data.read_by || [];
+            const currentStatus = data.status || (readList.length > 1 ? 'read' : 'sent');
+            statusSpan.innerHTML = getStatusIcon(currentStatus);
+            header.appendChild(statusSpan);
+        }
+
+        contentWrapper.appendChild(header);
     }
-    userSpan.textContent = tUname;
-    userSpan.onclick = () => showUserProfile(tUname);
-    const timeSpan = document.createElement("span");
-    timeSpan.className = "text-discord-gray-400 text-xs";
-    timeSpan.textContent = new Date((data.ts || data.timestamp) ? (data.ts || data.timestamp) * 1000 : Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    header.appendChild(userSpan);
-    header.appendChild(timeSpan);
-
-    // Status Indicator (Sent/Delivered/Read)
-    if (isOwnMessage) {
-        const statusSpan = document.createElement("span");
-        statusSpan.className = "ml-2 text-[10px] select-none msg-status-icon cursor-help opacity-80 hover:opacity-100";
-        const readList = data.readBy || data.read_by || [];
-        const currentStatus = data.status || (readList.length > 1 ? 'read' : 'sent');
-        statusSpan.innerHTML = getStatusIcon(currentStatus);
-        header.appendChild(statusSpan);
-    }
-
-    contentWrapper.appendChild(header);
 
     // Body (text OR file)
     if (data.fileData && data.fileName) {
@@ -494,41 +510,57 @@ async function createDiscordMessage(data) {
         }
 
         contentWrapper.appendChild(body);
+    } else if (data.message) {
+        const body = document.createElement("div");
+        body.className = "text-white msg-body-text whitespace-pre-wrap";
 
-        // Render Attachments (Phase 4)
-        if (data.attachments && data.attachments.length > 0) {
-            const attContainer = document.createElement('div');
-            attContainer.className = 'flex flex-wrap gap-2 mt-2';
-            
-            data.attachments.forEach(att => {
-                if (att.fileType === 'image') {
-                    const img = document.createElement('img');
-                    img.src = att.url;
-                    img.className = 'max-w-xs max-h-60 rounded-lg cursor-pointer hover:opacity-90 transition shadow-sm border border-black/20';
-                    img.onclick = () => window.open(att.url, '_blank');
-                    attContainer.appendChild(img);
-                } else {
-                    const fileLink = document.createElement('a');
-                    fileLink.href = att.url;
-                    fileLink.target = '_blank';
-                    fileLink.className = 'flex items-center gap-3 bg-discord-gray-800 p-3 rounded-lg border border-discord-gray-700 hover:bg-discord-gray-700 transition max-w-xs group';
-                    fileLink.innerHTML = `
-                        <div class="bg-discord-gray-700 p-2 rounded group-hover:bg-discord-gray-600 transition">
-                            <i data-feather="file" class="w-6 h-6 text-blue-400"></i>
-                        </div>
-                        <div class="overflow-hidden">
-                            <div class="text-sm font-medium text-white truncate" title="${att.originalName || att.filename}">${att.originalName || att.filename}</div>
-                            <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide">${att.fileType || 'FILE'}</div>
-                        </div>
-                        <i data-feather="download" class="w-4 h-4 text-gray-500 group-hover:text-gray-300 ml-auto transition"></i>
-                    `;
-                    attContainer.appendChild(fileLink);
-                }
-            });
-            contentWrapper.appendChild(attContainer);
-            // Defer feather replace
-            setTimeout(() => { if(window.feather) feather.replace(); }, 0);
+        // URL detection
+        const urlRegex = /(https?:\/\/[^\s<]+[^<.,:;"')\]\s])/gi;
+        let message = data.message;
+        const urls = message.match(urlRegex) || [];
+
+        // Parse markdown 
+        if (window.parseDiscordMarkdown) {
+            message = window.parseDiscordMarkdown(message);
+        } else {
+            // Fallback safe string
+             message = message.replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
+
+        // Then make URLs clickable (after markdown)
+        if (urls.length > 0) {
+            urls.forEach(url => {
+                const escapedUrl = url.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                message = message.replace(
+                    escapedUrl,
+                    `<a href="${url}" target="_blank" class="text-blue-400 hover:underline">${escapedUrl}</a>`
+                );
+            });
+        }
+
+        body.innerHTML = message;
+
+        // Add (edited) indicator
+        // Add (edited) indicator - supports legacy 'edited' and new 'isEdited'/'history' keys
+        if (data.edited || data.isEdited || (data.history && data.history.length > 0)) {
+            const editedSpan = document.createElement("span");
+            editedSpan.className = "text-discord-gray-400 text-xs ml-1 italic cursor-pointer hover:underline hover:text-white transition-colors select-none";
+            editedSpan.textContent = "(edited)";
+            editedSpan.title = "View edit history";
+            editedSpan.onclick = (e) => {
+                e.stopPropagation();
+                if (window.fetchEditHistory && currentGroupId) {
+                    fetchEditHistory(currentGroupId, data.id, data.timestamp || data.ts);
+                }
+            };
+            editedSpan.onclick = (e) => {
+                e.stopPropagation();
+                if(window.showEditHistory) showEditHistory(data.history || [], data.message, data.editedAt);
+            };
+            body.appendChild(editedSpan);
+        }
+
+        contentWrapper.appendChild(body);
 
         // Create embed cards for URLs
         for (const url of urls.slice(0, 3)) { 
@@ -577,6 +609,41 @@ async function createDiscordMessage(data) {
                     });
             } catch { }
         }
+    }
+
+    // Render Attachments — always rendered regardless of text content
+    if (data.attachments && data.attachments.length > 0) {
+        const attContainer = document.createElement('div');
+        attContainer.className = 'flex flex-wrap gap-2 mt-2';
+        
+        data.attachments.forEach(att => {
+            if (att.fileType === 'image') {
+                const img = document.createElement('img');
+                img.src = att.url;
+                img.className = 'max-w-xs max-h-60 rounded-lg cursor-pointer hover:opacity-90 transition shadow-sm border border-black/20';
+                img.onclick = () => window.openImageViewer(att.url);
+                attContainer.appendChild(img);
+            } else {
+                const fileLink = document.createElement('a');
+                fileLink.href = att.url;
+                fileLink.target = '_blank';
+                fileLink.className = 'flex items-center gap-3 bg-discord-gray-800 p-3 rounded-lg border border-discord-gray-700 hover:bg-discord-gray-700 transition max-w-xs group';
+                fileLink.innerHTML = `
+                    <div class="bg-discord-gray-700 p-2 rounded group-hover:bg-discord-gray-600 transition">
+                        <i data-feather="file" class="w-6 h-6 text-blue-400"></i>
+                    </div>
+                    <div class="overflow-hidden">
+                        <div class="text-sm font-medium text-white truncate" title="${att.originalName || att.filename}">${att.originalName || att.filename}</div>
+                        <div class="text-xs text-gray-400 uppercase font-semibold tracking-wide">${att.fileType || 'FILE'}</div>
+                    </div>
+                    <i data-feather="download" class="w-4 h-4 text-gray-500 group-hover:text-gray-300 ml-auto transition"></i>
+                `;
+                attContainer.appendChild(fileLink);
+            }
+        });
+        contentWrapper.appendChild(attContainer);
+        // Defer feather replace
+        setTimeout(() => { if(window.feather) feather.replace(); }, 0);
     }
 
 
@@ -648,7 +715,7 @@ async function showUserProfile(targetUsername) {
 
             // Render Badges
             if (window.renderBadges) {
-                renderBadges(u.badges_active || u.badges || [], 'uvBadges');
+                renderBadges(('badges_active' in u) ? u.badges_active : (u.badges || []), 'uvBadges');
             }
 
             // Set Up Message Button
