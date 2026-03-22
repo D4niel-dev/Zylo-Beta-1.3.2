@@ -47,8 +47,8 @@ utilities, and AI assistance into a single unified workspace.
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/D4niel-dev/Zylo-Beta-1.x.x.git
-   cd Zylo-Beta-1.x.x
+   git clone https://github.com/D4niel-dev/Zylo-Beta-0.x.x.git
+   cd Zylo-Beta-0.x.x
    ```
 
 2. **Install Dependencies**:
